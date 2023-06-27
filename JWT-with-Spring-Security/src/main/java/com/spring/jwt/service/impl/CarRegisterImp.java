@@ -50,6 +50,16 @@ public class CarRegisterImp implements ICarRegister {
 
 
     }
+    /////////////////////////////////////////////////////////////////////
+    //
+    //  Method Name :  editCarDetails
+    //  Description   :  Used to edit The car Profile
+    //  Input         :  editCarDetails
+    //  Output        :  String
+    //  Date 		  :  27/06/2023
+    //  Author 		  :  Geetesh Gajanan Kumbalkar
+    //
+    /////////////////////////////////////////////////////////////////////
 
     @Override
     public String editCarDetails(CarDto carDto, int id) {
@@ -90,28 +100,23 @@ public class CarRegisterImp implements ICarRegister {
 
     @Override
     public List<CarDto> getAllCarsWithPages(int PageNo) {
-//        carRepo.findById(carId).orElseThrow(()-> new CarNotFoundException("car not found"));
         List<Car> listOfCar = carRepo.findAll();
         System.out.println("list of de"+listOfCar.size());
         List<CarDto> listOfCarDto = new ArrayList<>();
-//        System.out.println("2");
+
         int pageStart=PageNo*10;
         int pageEnd=pageStart+10;
         int diff=(listOfCar.size()) - pageStart;
-//        for(int counter=pageNo*10;counter<(pageNo*10)+10;counter++){
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
             if(pageStart>listOfCar.size()){break;}
 
             System.out.println("*");
             CarDto carDto = new CarDto(listOfCar.get(counter));
-//            System.out.println(responseDealerDto.toString());
             listOfCarDto.add(carDto);
-//            System.out.println(listOfDealerDto.size());
             if(diff == i){
                 break;
             }
         }
-//                   ResponseDealerDto responseDealerDto = new ResponseDealerDto(listOfDealer.get(1));
 
         System.out.println(listOfCar);
         return listOfCarDto;
