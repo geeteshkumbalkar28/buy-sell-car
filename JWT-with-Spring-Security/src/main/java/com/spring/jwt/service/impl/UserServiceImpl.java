@@ -1,7 +1,6 @@
 package com.spring.jwt.service.impl;
 
-import com.spring.jwt.dto.RegisterDto;
-import com.spring.jwt.dto.UserDTO;
+import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Role;
 import com.spring.jwt.entity.User;
@@ -9,24 +8,26 @@ import com.spring.jwt.entity.Userprofile;
 import com.spring.jwt.exception.BaseException;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.RoleRepository;
+import com.spring.jwt.repository.UserProfileRepository;
 import com.spring.jwt.repository.UserRepository;
 import com.spring.jwt.service.UserService;
 import com.spring.jwt.utils.BaseResponseDTO;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final UserProfileRepository userProfileRepository;
 
     private final RoleRepository roleRepository;
 
@@ -110,4 +111,101 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Invalid role");
         }
     }
+
+    @Override
+    public BaseResponseDTO changePassword(int id, PasswordChange passwordChange) {
+        BaseResponseDTO response= new BaseResponseDTO();
+
+        Optional<User> userOptional= userRepository.findById(id);
+
+        if (userOptional.isPresent()) {
+
+            User user= userOptional.get();
+
+            System.out.println(user);
+            if (user != null) {
+                if (passwordEncoder.matches(passwordChange.getOldPassword(), user.getPassword())) {
+                    System.out.println(user.getPassword());
+                    if (passwordChange.getNewPassword().equals(passwordChange.getConfirmPassword())) {
+                        user.setPassword(passwordEncoder.encode(passwordChange.getNewPassword()));
+                        userRepository.save(user);
+                        response.setCode(String.valueOf(HttpStatus.OK.value()));
+                        response.setMessage("Password changed successfully");
+                    } else {
+                        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+                        response.setMessage("New password and confirm password does not match");                    }
+                } else {
+                    response.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+                    response.setMessage("Invalid old password");
+                }
+            } else {
+                response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+                response.setMessage("User not found");
+            }
+        }
+        return response;
+    }
+
+    @Override
+    public List<ResponseUserProfileDto> getAllUsers(int pageNo) {
+        List<Userprofile> listOfUsers = userProfileRepository.findAll();
+        System.out.println("list of User"+listOfUsers.size());
+        List<ResponseUserProfileDto> listOfUserDto = new ArrayList<>();
+//        System.out.println("2");
+        int pageStart=pageNo*25;
+        int pageEnd=pageStart+25;
+        int diff=(listOfUsers.size()) - pageStart;
+
+        for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
+            if(pageStart>listOfUsers.size()){break;}
+
+            System.out.println("*");
+            ResponseUserProfileDto responseUserDto = new ResponseUserProfileDto(listOfUsers.get(counter));
+
+            listOfUserDto.add(responseUserDto);
+
+            if(diff == i){
+                break;
+            }
+        }
+
+        System.out.println(listOfUserDto);
+        return listOfUserDto;
+
+    }
+
+    @Override
+    public String editUser(UserProfileDto userProfileDto, int id) {
+
+        Optional<Userprofile> user = userProfileRepository.findById(id);
+        if(user.isPresent()){
+            user.get().setFirstName(userProfileDto.getFirstName());
+            user.get().setLastName(userProfileDto.getLastName());
+            user.get().setAddress(userProfileDto.getAddress());
+            user.get().getUser().setMobileNo(userProfileDto.getMobile_no());
+            user.get().getUser().setEmail(userProfileDto.getEmail());
+            user.get().setCity(userProfileDto.getCity());
+
+            userProfileRepository.save(user.get());
+            return "User Details Edited of id No= :"+id;
+        }
+        return "invalid id";
+    }
+
+    @Override
+    @Transactional
+    public String removeUser(int id) {
+        Optional<Userprofile> dealer = userProfileRepository.findById(id);
+        if(dealer.isPresent()){
+            try {
+                userProfileRepository.DeleteById(id);
+                return "User Delete Successfully :"+ id;
+            }catch (Exception e){
+                System.err.println(e);
+            }
+
+        }
+        return "id invalid";
+    }
+
 }
