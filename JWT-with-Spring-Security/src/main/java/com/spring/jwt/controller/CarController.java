@@ -44,7 +44,7 @@ public class CarController {
     public ResponseEntity<List<Car>> findByArea(@RequestParam("area") String area) {
         Optional<List<Car>> cars = iCarRegister.FindByArea(area);
         System.out.println("00");
-//        System.out.println(cars.get().get(0).getArea());
+
         return ResponseEntity.ok(cars.get());
     }
     @GetMapping("/mainFilter/{pageNo}")
