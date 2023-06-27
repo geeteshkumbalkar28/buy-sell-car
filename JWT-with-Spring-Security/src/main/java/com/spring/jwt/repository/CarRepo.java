@@ -12,8 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface CarRepo extends JpaRepository<Car,Integer> {
-//    public Car findById(int id);
-    //    @Query("SELECT c FROM Car c WHERE c.area = :area")
+
     @Query(value = "SELECT * FROM car WHERE area = ?1", nativeQuery = true)
     Optional<List<Car>> FindByArea(@Param("area") String area);
 
