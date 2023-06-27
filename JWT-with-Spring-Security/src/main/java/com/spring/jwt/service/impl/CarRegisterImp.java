@@ -45,8 +45,7 @@ public class CarRegisterImp implements ICarRegister {
 
 //        System.out.println("4");
 
-//        byte encrypt[]= Base64.getEncoder().encode(dealerDto.password.getBytes());
-//        String encryptPassword=new String(encrypt);
+
 
 
     }
