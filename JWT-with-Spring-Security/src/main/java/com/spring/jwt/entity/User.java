@@ -49,7 +49,7 @@ public class User {
         this.mobileNo = registerDto.getMobileNo();
         this.password = registerDto.getPassword();
     }
-
+//yes
     @Override
     public String toString() {
         return "User{" +
