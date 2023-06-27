@@ -9,12 +9,18 @@ import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.service.ICarRegister;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CarRegisterImp implements ICarRegister {
@@ -150,33 +156,46 @@ public class CarRegisterImp implements ICarRegister {
     }
     @Override
     public List<CarDto> searchByFilter(FilterDto filterDto, int pageNo) {
-        List<Car> listOfCar =carRepo.findCarsByParameters(filterDto.getMinPrice(),filterDto.getMaxPrice(),filterDto.getArea(),filterDto.getYear(),filterDto.getBrand(),filterDto.getModel(),filterDto.getTransmission(),filterDto.getFuelType()).orElseThrow(()->new CarNotFoundException("car not found"));
-        System.err.println("Filter **********"+filterDto.toString());
-        System.out.println("list of de"+listOfCar.size());
-        List<CarDto> listOfCarDto = new ArrayList<>();
-//        System.out.println("2");
-        int pageStart=pageNo*10;
-        int pageEnd=pageStart+10;
-        int diff=(listOfCar.size()) - pageStart;
-        if(diff ==0){
-            return listOfCarDto;
-        }
-//        for(int counter=pageNo*10;counter<(pageNo*10)+10;counter++){
-        for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
-            if(pageStart>listOfCar.size()){break;}
+        Specification<Car> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-            System.out.println("*");
-            CarDto carDto = new CarDto(listOfCar.get(counter));
-//            System.out.println(responseDealerDto.toString());
-            listOfCarDto.add(carDto);
-//            System.out.println(listOfDealerDto.size());
-            if(diff == i){
-                break;
+            if (filterDto.getMinPrice() != null) {
+                predicates.add(criteriaBuilder.greaterThan(root.get("price"), filterDto.getMinPrice()));
             }
-        }
-//                   ResponseDealerDto responseDealerDto = new ResponseDealerDto(listOfDealer.get(1));
+            if (filterDto.getMaxPrice() != null) {
+                predicates.add(criteriaBuilder.lessThan(root.get("price"), filterDto.getMaxPrice()));
+            }
 
-        System.out.println(listOfCar);
+            if (filterDto.getArea() != null && !filterDto.getArea().isEmpty()) {
+                predicates.add(criteriaBuilder.equal(root.get("area"), filterDto.getArea()));
+            }
+            if (filterDto.getYear() != 0) {
+                predicates.add(criteriaBuilder.equal(root.get("year"), filterDto.getYear()));
+            }
+            if (filterDto.getBrand() != null && !filterDto.getBrand().isEmpty()) {
+                predicates.add(criteriaBuilder.equal(root.get("brand"), filterDto.getBrand()));
+            }
+            if (filterDto.getModel() != null && !filterDto.getModel().isEmpty()) {
+                predicates.add(criteriaBuilder.equal(root.get("model"), filterDto.getModel()));
+            }
+            if (filterDto.getTransmission() != null && !filterDto.getTransmission().isEmpty()) {
+                predicates.add(criteriaBuilder.equal(root.get("transmission"), filterDto.getTransmission()));
+            }
+            if (filterDto.getFuelType() != null && !filterDto.getFuelType().isEmpty()) {
+                predicates.add(criteriaBuilder.equal(root.get("fuelType"), filterDto.getFuelType()));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 5);
+
+        Page<Car> carPage = carRepo.findAll(spec, pageable);
+
+        List<CarDto> listOfCarDto = carPage.getContent().stream()
+                .map(CarDto::new)
+                .collect(Collectors.toList());
+
         return listOfCarDto;
     }
 }
