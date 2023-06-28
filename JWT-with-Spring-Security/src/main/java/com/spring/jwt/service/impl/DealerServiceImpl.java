@@ -66,7 +66,7 @@ public class DealerServiceImpl implements DealerService {
         dealer.setAdharShopact(registerDto.getAdharShopact());
         dealer.setArea(registerDto.getArea());
         dealer.setCity(registerDto.getCity());
-        dealer.setFristname(registerDto.getFirstName());
+        dealer.setFirstname(registerDto.getFirstName());
         dealer.setLastName(registerDto.getLastName());
         dealer.setMobileNo(registerDto.getMobileNo());
         dealer.setShopName(registerDto.getShopName());
@@ -95,7 +95,7 @@ public class DealerServiceImpl implements DealerService {
         dealerDto.setAdharShopact(dealer.getAdharShopact());
         dealerDto.setArea(dealer.getArea());
         dealerDto.setCity(dealer.getCity());
-        dealerDto.setFristname(dealer.getFristname());
+        dealerDto.setFirstname(dealer.getFirstname());
         dealerDto.setLastName(dealer.getLastName());
         dealerDto.setMobileNo(dealer.getMobileNo());
         dealerDto.setShopName(dealer.getShopName());

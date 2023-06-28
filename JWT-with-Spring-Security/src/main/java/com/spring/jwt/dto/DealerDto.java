@@ -14,7 +14,7 @@ public class DealerDto {
 
     public String city;
 
-    public String fristname;
+    public String firstname;
 
     public String lastName;
 

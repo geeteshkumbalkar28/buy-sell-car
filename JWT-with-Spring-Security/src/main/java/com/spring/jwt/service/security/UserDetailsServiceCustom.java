@@ -1,5 +1,6 @@
 package com.spring.jwt.service.security;
 
+import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.User;
 import com.spring.jwt.exception.BaseException;
 import com.spring.jwt.repository.UserRepository;
@@ -43,11 +44,26 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
+        String firstName = null;
+        if (authorities.contains(new SimpleGrantedAuthority("DEALER"))) {
+            Dealer dealer = user.getDealers();
+            if (dealer != null) {
+                firstName = dealer.getFirstname();
+            }
+        } else {
+            if (user.getProfile() != null) {
+                firstName = user.getProfile().getFirstName();
+            }
+        }
+
         return new UserDetailsCustom(
                 user.getEmail(),
                 user.getPassword(),
+                firstName,
                 authorities
+
         );
+
     }
 
     }

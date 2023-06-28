@@ -33,8 +33,8 @@ public class Dealer {
     @Column(name = "city", nullable = false, length = 45)
     private String city;
 
-    @Column(name = "fristname", length = 45)
-    private String fristname;
+    @Column(name = "firstname", length = 45)
+    private String firstname;
 
     @Column(name = "last_name", length = 45)
     private String lastName;
@@ -67,7 +67,7 @@ public class Dealer {
         this.adharShopact = dealerDto.adharShopact;
         this.area = dealerDto.area;
         this.city =dealerDto.city;
-        this.fristname = dealerDto.fristname;
+        this.firstname = dealerDto.firstname;
         this.lastName = dealerDto.lastName;
         this.mobileNo = dealerDto.mobileNo;
         this.shopName = dealerDto.shopName;
