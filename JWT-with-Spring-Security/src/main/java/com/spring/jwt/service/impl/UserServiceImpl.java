@@ -80,13 +80,13 @@ public class UserServiceImpl implements UserService {
             dealer.setAdharShopact(registerDto.getAdharShopact());
             dealer.setArea(registerDto.getArea());
             dealer.setCity(registerDto.getCity());
-            dealer.setFristname(registerDto.getFirstName());
+            dealer.setFirstname(registerDto.getFirstName());
             dealer.setLastName(registerDto.getLastName());
             dealer.setMobileNo(registerDto.getMobileNo());
             dealer.setShopName(registerDto.getShopName());
             dealer.setEmail(registerDto.getEmail());
 
-            user.setDealers(dealer);
+            user.setDealer(dealer);
             dealer.setUser(user); // Set the user instance in the dealer
         }
 

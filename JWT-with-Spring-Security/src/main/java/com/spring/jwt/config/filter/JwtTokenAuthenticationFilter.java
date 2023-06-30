@@ -78,4 +78,15 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
 
     }
+    private void handleAuthenticationException(HttpServletResponse response, Exception e) throws IOException {
+        BaseResponseDTO responseDTO = new BaseResponseDTO();
+        responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+        responseDTO.setMessage(e.getLocalizedMessage());
+
+        String json = HelperUtils.JSON_WRITER.writeValueAsString(responseDTO);
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json; charset=UTF-8");
+        response.getWriter().write(json);
+    }
 }
