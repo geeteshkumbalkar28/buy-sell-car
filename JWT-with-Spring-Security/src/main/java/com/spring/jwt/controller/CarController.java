@@ -83,23 +83,39 @@ public class CarController {
 //        return iCarRegister.getAllCarsWithPages(pageNo);
 //    }
     @DeleteMapping("/removeCar")
-    public String deleteCar(@RequestParam int carId){
-//        try {
-            return iCarRegister.deleteCar(carId);
-//        }
-//        catch (U)
+    public ResponseEntity<ResponseDto> deleteCar(@RequestParam int carId){
+        try {
+            String result =iCarRegister.deleteCar(carId);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success",result));
+        }
+        catch (CarNotFoundException carNotFoundException){
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success","car not found"));
+
+        }
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Car>> findByArea(@RequestParam("area") String area) {
-        Optional<List<Car>> cars = iCarRegister.FindByArea(area);
-        System.out.println("00");
-
-        return ResponseEntity.ok(cars.get());
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<List<Car>> findByArea(@RequestParam("area") String area) {
+//        Optional<List<Car>> cars = iCarRegister.FindByArea(area);
+//        System.out.println("00");
+//
+//        return ResponseEntity.ok(cars.get());
+//    }
     @GetMapping("/mainFilter/{pageNo}")
-    public List<CarDto> searchByFilter(@RequestBody FilterDto filterDto, @PathVariable int pageNo){
-        return iCarRegister.searchByFilter(filterDto,pageNo);
+    public ResponseEntity<ResponseAllCarDto> searchByFilter(@RequestBody FilterDto filterDto, @PathVariable int pageNo){
+        try{
+
+            List<CarDto> listOfCar= iCarRegister.searchByFilter(filterDto,pageNo);
+            ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("success");
+            responseAllCarDto.setList(listOfCar);
+            return ResponseEntity.status(HttpStatus.OK).body(responseAllCarDto);
+
+        }
+        catch (PageNotFoundException pageNotFoundException){
+            ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("unsuccess");
+            responseAllCarDto.setException("page not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
+        }
     }
 
 }

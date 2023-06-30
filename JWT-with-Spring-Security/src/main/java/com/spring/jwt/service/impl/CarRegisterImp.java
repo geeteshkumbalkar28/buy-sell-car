@@ -145,7 +145,7 @@ public class CarRegisterImp implements ICarRegister {
         Car carDetail = carRepo.findById(id).orElseThrow(()->new CarNotFoundException("car not found",HttpStatus.NOT_FOUND));
 
         carRepo.deleteById(id);
-        return "car details deleted ";
+        return "car details deleted";
     }
     @Override
     public Optional<List<Car>> FindByArea(String area) {
@@ -205,6 +205,9 @@ public class CarRegisterImp implements ICarRegister {
         Pageable pageable = PageRequest.of(pageNo - 1, 5);
 
         Page<Car> carPage = carRepo.findAll(spec, pageable);
+        if(carPage.isEmpty()){
+           throw new PageNotFoundException("Page Not found");
+        }
 
         List<CarDto> listOfCarDto = carPage.getContent().stream()
                 .map(CarDto::new)
