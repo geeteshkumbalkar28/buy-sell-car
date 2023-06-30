@@ -65,19 +65,20 @@ public class JwtServiceImpl implements JwtService {
             roles.add(role.getAuthority());
         });
 
-        log.info("Roles: {} ", roles);
+        log.info("Roles: {}", roles);
 
         return Jwts.builder()
                 .setSubject(userDetailsCustom.getUsername())
-                .claim("firstName", userDetailsCustom.getFirstName())
-                .claim("authorities" , userDetailsCustom.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .claim("roles" , roles)
+                .claim("firstname", userDetailsCustom.getFirstName())  // Use "firstname" instead of "firstName"
+                .claim("authorities", userDetailsCustom.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .claim("roles", roles)
                 .claim("isEnable", userDetailsCustom.isEnabled())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plusSeconds(jwtConfig.getExpiration())))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     @Override
     public boolean isValidToken(String token) {

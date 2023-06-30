@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
             dealer.setShopName(registerDto.getShopName());
             dealer.setEmail(registerDto.getEmail());
 
-            user.setDealers(dealer);
+            user.setDealer(dealer);
             dealer.setUser(user); // Set the user instance in the dealer
         }
 

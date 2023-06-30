@@ -62,6 +62,7 @@ public class Dealer {
 //    @OneToMany(mappedBy = "dealerVendor")
 //    private Set<Car> cars = new LinkedHashSet<>();
 
+
     public Dealer(DealerDto dealerDto) {
         this.address = dealerDto.address;
         this.adharShopact = dealerDto.adharShopact;

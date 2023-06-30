@@ -39,7 +39,7 @@ public class DealerServiceImpl implements DealerService {
             User user = userOptional.get();
 
             if (user.getRoles().stream().anyMatch(role -> role.getName().equals("DEALER"))) {
-                Dealer dealer = user.getDealers();
+                Dealer dealer = user.getDealer();
                 if (dealer != null) {
                     updateDealerDetails(dealer, registerDto);
                     dealerRepository.save(dealer);

@@ -66,8 +66,6 @@ public class JwtUsernamePasswordAuthenticationFilter extends AbstractAuthenticat
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        // Use the roles as needed
-
         // Generate and return the JWT token
         String accessToken = jwtService.generateToken(userDetailsCustom);
         String json = HelperUtils.JSON_WRITER.writeValueAsString(accessToken);
@@ -90,5 +88,16 @@ public class JwtUsernamePasswordAuthenticationFilter extends AbstractAuthenticat
         return;
     }
 
+    private void handleAuthenticationException(HttpServletResponse response, Exception e) throws IOException {
+        BaseResponseDTO responseDTO = new BaseResponseDTO();
+        responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+        responseDTO.setMessage(e.getLocalizedMessage());
+
+        String json = HelperUtils.JSON_WRITER.writeValueAsString(responseDTO);
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json; charset=UTF-8");
+        response.getWriter().write(json);
+    }
 
 }

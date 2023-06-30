@@ -21,6 +21,7 @@ public class UserDetailsCustom implements UserDetails {
         return firstName;
     }
 
+
     private List<GrantedAuthority> authorities;
 
     @Override

@@ -7,22 +7,13 @@ import lombok.Setter;
 @Setter
 public class DealerDto {
     public String address;
-
     public String adharShopact;
-
     public String area;
-
     public String city;
-
-    public String firstname;
-
+    public String firstname;  // Change the field name to "firstname"
     public String lastName;
-
     public String mobileNo;
-
     public String shopName;
     public String email;
     public String password;
-
-
 }

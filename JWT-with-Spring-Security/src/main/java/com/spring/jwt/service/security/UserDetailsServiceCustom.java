@@ -2,6 +2,7 @@ package com.spring.jwt.service.security;
 
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.User;
+import com.spring.jwt.entity.Userprofile;
 import com.spring.jwt.exception.BaseException;
 import com.spring.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
         UserDetailsCustom userDetailsCustom = getUserDetails(username);
 
         if(ObjectUtils.isEmpty(userDetailsCustom)){
-            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Invalid username or password!");
+            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Invalid username or password!" );
         }
 
         return userDetailsCustom;
@@ -46,13 +47,15 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
         String firstName = null;
         if (authorities.contains(new SimpleGrantedAuthority("DEALER"))) {
-            Dealer dealer = user.getDealers();
+            Dealer dealer = user.getDealer();
             if (dealer != null) {
                 firstName = dealer.getFirstname();
             }
         } else {
-            if (user.getProfile() != null) {
-                firstName = user.getProfile().getFirstName();
+            // Retrieve the first name from the Userprofile table
+            Userprofile userProfile = user.getProfile();
+            if (userProfile != null) {
+                firstName = userProfile.getFirstName();
             }
         }
 
@@ -61,7 +64,6 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 user.getPassword(),
                 firstName,
                 authorities
-
         );
 
     }
