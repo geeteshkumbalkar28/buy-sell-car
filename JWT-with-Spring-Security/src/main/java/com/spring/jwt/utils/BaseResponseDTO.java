@@ -15,4 +15,6 @@ public class BaseResponseDTO {
 
     private String message;
 
+    private String status;
+
 }
