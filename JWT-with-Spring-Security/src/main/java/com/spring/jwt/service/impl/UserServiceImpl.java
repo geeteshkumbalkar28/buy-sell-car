@@ -5,7 +5,7 @@ import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.Role;
 import com.spring.jwt.entity.User;
 import com.spring.jwt.entity.Userprofile;
-import com.spring.jwt.exception.BaseException;
+import com.spring.jwt.exception.*;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.RoleRepository;
 import com.spring.jwt.repository.UserProfileRepository;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             response.setCode(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("Create account successfully");
-        } catch (Exception e) {
+        } catch (UserAlreadyExistException e) {
             response.setCode(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()));
             response.setMessage("Service unavailable");
         }
@@ -122,8 +122,6 @@ public class UserServiceImpl implements UserService {
 
             User user= userOptional.get();
 
-            System.out.println(user);
-            if (user != null) {
                 if (passwordEncoder.matches(passwordChange.getOldPassword(), user.getPassword())) {
                     System.out.println(user.getPassword());
                     if (passwordChange.getNewPassword().equals(passwordChange.getConfirmPassword())) {
@@ -133,49 +131,53 @@ public class UserServiceImpl implements UserService {
                         response.setMessage("Password changed successfully");
                     } else {
                         response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-                        response.setMessage("New password and confirm password does not match");                    }
+                        throw new InvalidPasswordException("New password and confirm password does not match");
+                    }
                 } else {
                     response.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-                    response.setMessage("Invalid old password");
+                    throw new InvalidPasswordException("Invalid Password");
                 }
-            } else {
-                response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-                response.setMessage("User not found");
-            }
+        }else {
+
+            throw new UserNotFoundException("No user found with this id");
+
         }
         return response;
     }
 
     @Override
-    public List<ResponseUserProfileDto> getAllUsers(int pageNo) {
+    public List<UserProfileDto> getAllUsers(int pageNo) {
         List<Userprofile> listOfUsers = userProfileRepository.findAll();
-        System.out.println("list of User"+listOfUsers.size());
-        List<ResponseUserProfileDto> listOfUserDto = new ArrayList<>();
-//        System.out.println("2");
+        UserNotFoundException userNotFoundException;
+        if((pageNo*10)>listOfUsers.size()-1){
+            throw new PageNotFoundException("page not found");
+
+        }
+        if(listOfUsers.size()<=0){throw new UserNotFoundException("User not found",HttpStatus.NOT_FOUND);}
+        System.out.println("list of de"+listOfUsers.size());
+        List<UserProfileDto> listOfUserDto = new ArrayList<>();
+
         int pageStart=pageNo*25;
         int pageEnd=pageStart+25;
         int diff=(listOfUsers.size()) - pageStart;
-
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
             if(pageStart>listOfUsers.size()){break;}
 
             System.out.println("*");
-            ResponseUserProfileDto responseUserDto = new ResponseUserProfileDto(listOfUsers.get(counter));
-
-            listOfUserDto.add(responseUserDto);
-
+            UserProfileDto userProfileDto = new UserProfileDto(listOfUsers.get(counter));
+            listOfUserDto.add(userProfileDto);
             if(diff == i){
                 break;
             }
         }
-
-        System.out.println(listOfUserDto);
         return listOfUserDto;
 
     }
 
     @Override
-    public String editUser(UserProfileDto userProfileDto, int id) {
+    public BaseResponseDTO editUser(UserProfileDto userProfileDto, int id) {
+
+        BaseResponseDTO response = new BaseResponseDTO();
 
         Optional<Userprofile> user = userProfileRepository.findById(id);
         if(user.isPresent()){
@@ -187,25 +189,30 @@ public class UserServiceImpl implements UserService {
             user.get().setCity(userProfileDto.getCity());
 
             userProfileRepository.save(user.get());
-            return "User Details Edited of id No= :"+id;
+            response.setCode(String.valueOf(HttpStatus.OK.value()));
+            response.setMessage("User details edited successfully");
+        }else {
+            response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
+            throw new UserNotFoundException("No user found with this id");
         }
-        return "invalid id";
+        return response;
     }
 
     @Override
     @Transactional
-    public String removeUser(int id) {
+    public BaseResponseDTO removeUser(int id) {
+        BaseResponseDTO response = new  BaseResponseDTO();
+
         Optional<Userprofile> dealer = userProfileRepository.findById(id);
         if(dealer.isPresent()){
-            try {
                 userProfileRepository.DeleteById(id);
-                return "User Delete Successfully :"+ id;
-            }catch (Exception e){
-                System.err.println(e);
-            }
-
+            response.setCode(String.valueOf(HttpStatus.OK.value()));
+            response.setMessage("User deleted successfully");
+        }else{
+            response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
+            throw new UserNotFoundException("No user found with this id");
         }
-        return "id invalid";
+        return response;
     }
 
 }

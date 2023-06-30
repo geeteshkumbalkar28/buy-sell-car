@@ -1,14 +1,14 @@
 package com.spring.jwt.dto;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import com.spring.jwt.entity.Userprofile;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserProfileDto {
-
-    public String password;
 
     private String mobile_no;
 
@@ -16,13 +16,17 @@ public class UserProfileDto {
 
     private String email;
 
-
     private String city;
-
 
     private String firstName;
 
-
     private String lastName;
+
+    public UserProfileDto(Userprofile userprofile){
+        this.address=userprofile.getAddress();
+        this.city=userprofile.getCity();
+        this.firstName= userprofile.getFirstName();
+        this.lastName=userprofile.getLastName();
+    }
 
 }

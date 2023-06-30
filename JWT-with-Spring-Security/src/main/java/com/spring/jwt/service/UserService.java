@@ -12,9 +12,9 @@ public interface UserService {
     BaseResponseDTO changePassword(int id, PasswordChange passwordChange);
 
 
-    String editUser(UserProfileDto userProfileDto, int id);
+    BaseResponseDTO editUser(UserProfileDto userProfileDto, int id);
 
-    String removeUser(int id);
+    BaseResponseDTO removeUser(int id);
 
-    List<ResponseUserProfileDto> getAllUsers(int pageNo);
+    List<UserProfileDto> getAllUsers(int pageNo);
 }
