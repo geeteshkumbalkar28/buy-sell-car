@@ -45,20 +45,12 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRepository.save(user);
-            response.setStatus("success");
-            response.setCode("200");
-
-            if (user.getRoles().stream().anyMatch(role -> role.getName().equals("DEALER"))) {
-                response.setMessage(user.getEmail()+ " Dealer account created successfully");
-            } else {
-                response.setMessage(user.getEmail()+" account created successfully");
-            }
+            response.setCode(String.valueOf(HttpStatus.OK.value()));
+            response.setMessage("Create account successfully");
         } catch (Exception e) {
-            response.setCode("503");
-            response.setStatus("unsuccessful");
+            response.setCode(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()));
             response.setMessage("Service unavailable");
         }
-
         return response;
     }
 
