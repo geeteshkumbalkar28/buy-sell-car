@@ -90,5 +90,6 @@ public class CarDto {
         this.transmission = car.getTransmission();
         this.tyre = car.getTyre();
         this.year = car.getYear();
+
     }
 }

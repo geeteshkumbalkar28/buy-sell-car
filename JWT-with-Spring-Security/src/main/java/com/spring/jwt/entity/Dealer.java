@@ -68,7 +68,7 @@ public class Dealer {
         this.adharShopact = dealerDto.adharShopact;
         this.area = dealerDto.area;
         this.city =dealerDto.city;
-        this.firstname = dealerDto.firstname;
+        this.firstname = dealerDto.firstName;
         this.lastName = dealerDto.lastName;
         this.mobileNo = dealerDto.mobileNo;
         this.shopName = dealerDto.shopName;

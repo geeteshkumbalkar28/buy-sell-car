@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 public class CarNotFoundException extends RuntimeException{
     private HttpStatus httpStatus;
     public CarNotFoundException() {
+
+
         super("car not found");
     }
 
