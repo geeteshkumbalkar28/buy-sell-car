@@ -2,8 +2,9 @@ package com.spring.jwt.controller;
 
 import com.spring.jwt.dto.PasswordChange;
 import com.spring.jwt.dto.ResponseAllUsersDto;
-import com.spring.jwt.dto.ResponseUserProfileDto;
+import com.spring.jwt.dto.ResponseUserDto;
 import com.spring.jwt.dto.UserProfileDto;
+import com.spring.jwt.entity.Userprofile;
 import com.spring.jwt.exception.InvalidPasswordException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.exception.UserNotFoundException;
@@ -32,9 +33,9 @@ public class UserController {
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<ResponseAllUsersDto> getAllUsers(@RequestParam int pageNo){
+
         try {
             List<UserProfileDto> list= userService.getAllUsers(pageNo);
-
             ResponseAllUsersDto responseAllUsersDto = new ResponseAllUsersDto("success");
             responseAllUsersDto.setList(list);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllUsersDto);
@@ -53,15 +54,12 @@ public class UserController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> editUser(@RequestBody UserProfileDto userProfileDto, @PathVariable int id){
 
-
         try {
             BaseResponseDTO result = userService.editUser(userProfileDto,id);
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",result.getMessage()));
         }catch (UserNotFoundException exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
         }
-
-
     }
 
     @RequestMapping(value = "/delete/{id}" ,method = RequestMethod.DELETE)
@@ -73,6 +71,19 @@ public class UserController {
         }catch (UserNotFoundException exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
         }
+    }
+
+    @PostMapping("/getUser/{id}")
+    public ResponseEntity<?> getUser(@PathVariable int id ){
+
+        try {
+            Userprofile user = userService.getUser(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }catch (UserNotFoundException exception){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
+
+        }
+
     }
 
     @PutMapping("/changePassword/{id}")
