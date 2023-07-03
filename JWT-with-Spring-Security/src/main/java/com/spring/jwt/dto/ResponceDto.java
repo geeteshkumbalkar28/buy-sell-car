@@ -5,7 +5,6 @@ public class ResponceDto {
     public Object object;
 
 
-
     public ResponceDto(String message, Object object) {
         this.message = message;
         this.object = object;

@@ -135,6 +135,8 @@ public class CarRegisterImp implements ICarRegister {
         return listOfCarDto;
     }
 
+
+
     @Override
     public String deleteCar(int id) {
         Car carDetail = carRepo.findById(id).orElseThrow(()->new CarNotFoundException("car not found",HttpStatus.NOT_FOUND));
@@ -163,6 +165,8 @@ public class CarRegisterImp implements ICarRegister {
 //        return carRepo.FindByArea(area);
         return cars;
     }
+
+
     @Override
     public List<CarDto> searchByFilter(FilterDto filterDto, int pageNo) {
         Specification<Car> spec = (root, query, criteriaBuilder) -> {
@@ -210,4 +214,45 @@ public class CarRegisterImp implements ICarRegister {
 
         return listOfCarDto;
     }
-}
+
+    @Override
+    public List<CarDto> getCarsByDealerIdWithStatus(int dealerId, String status) {
+        List<Car> cars = carRepo.findByDealerIdAndCarStatus(dealerId, status);
+        return cars.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private CarDto convertToDto(Car car) {
+        CarDto carDto = new CarDto();
+        carDto.setDealer_id(car.getDealerId());
+        carDto.setBrand(car.getBrand());
+        carDto.setModel(car.getModel());
+        carDto.setYear(car.getYear());
+        carDto.setArea(car.getArea());
+        carDto.setBodyType(car.getBodyType());
+        carDto.setCarInsurance(car.getCarInsurance());
+        carDto.setCarStatus(car.getCarStatus());
+        carDto.setCity(car.getCity());
+        carDto.setColor(car.getColor());
+        carDto.setDescription(car.getDescription());
+        carDto.setFuelType(car.getFuelType());
+        carDto.setKmDriven(car.getKmDriven());
+        carDto.setNoOfWheels(car.getNoOfWheels());
+        carDto.setOwnerSerial(car.getOwnerSerial());
+        carDto.setPrice(car.getPrice());
+        carDto.setRegistration(car.getRegistration());
+        carDto.setTransmission(car.getTransmission());
+        carDto.setTyre(car.getTyre());
+        carDto.setAcFeature(car.getAcFeature());
+        carDto.setMusicFeature(car.getMusicFeature());
+        carDto.setPowerWindowFeature(car.getPowerWindowFeature());
+        carDto.setRearParkingCameraFeature(car.getRearParkingCameraFeature());
+        carDto.setSafetyDescription(car.getSafetyDescription());
+        // Map other properties of the Car entity to corresponding properties of CarDto
+        return carDto;
+    }
+    }
+
+
+
