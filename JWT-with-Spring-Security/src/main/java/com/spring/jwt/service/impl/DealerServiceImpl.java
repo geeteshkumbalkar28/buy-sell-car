@@ -113,15 +113,31 @@ public class DealerServiceImpl implements DealerService {
     public BaseResponseDTO deleteDealer(Integer dealerId) {
         BaseResponseDTO response = new BaseResponseDTO();
 
-        dealerRepository.findById(dealerId).ifPresent(dealer -> {
-            userRepository.deleteById(dealer.getUser().getId());
-            dealerRepository.delete(dealer);
-        });
+        Optional<Dealer> dealerOptional = dealerRepository.findById(dealerId);
+        if (dealerOptional.isPresent()) {
+            Dealer dealer = dealerOptional.get();
+            User user = dealer.getUser();
 
-        response.setCode(String.valueOf(HttpStatus.OK.value()));
-        response.setMessage("Dealer deleted successfully");
+            // Delete user roles associated with the dealer
+            user.getRoles().clear();
+            userRepository.save(user);
+
+            // Delete the dealer
+            dealerRepository.deleteById(dealerId);
+            userRepository.delete(user);
+
+            response.setCode(String.valueOf(HttpStatus.OK.value()));
+            response.setMessage("Dealer deleted successfully");
+        } else {
+            response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
+            response.setMessage("Dealer not found");
+        }
+
         return response;
     }
+
+
+
     @Override
     public BaseResponseDTO changePassword(Integer userId, ChangePasswordDto changePasswordDto) {
         BaseResponseDTO response = new BaseResponseDTO();
