@@ -1,5 +1,6 @@
 package com.spring.jwt.entity;
 
+import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.RegisterDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class User {
     private Userprofile profile;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Dealer dealers;
+    private Dealer dealer;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -44,10 +45,15 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
     private Set<Role> roles;
 
-    public User(RegisterDto registerDto) {
+    public User(RegisterDto registerDto, DealerDto dealerDto) {
         this.email = registerDto.getEmail();
         this.mobileNo = registerDto.getMobileNo();
         this.password = registerDto.getPassword();
+        if (dealerDto != null) {
+            this.dealer = new Dealer(dealerDto);
+            this.dealer.setUser(this);
+        }
+
     }
 //yes
     @Override

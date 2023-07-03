@@ -5,6 +5,7 @@ import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.RegisterDto;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.User;
+import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.RoleRepository;
 import com.spring.jwt.repository.UserRepository;
@@ -39,7 +40,7 @@ public class DealerServiceImpl implements DealerService {
             User user = userOptional.get();
 
             if (user.getRoles().stream().anyMatch(role -> role.getName().equals("DEALER"))) {
-                Dealer dealer = user.getDealers();
+                Dealer dealer = user.getDealer();
                 if (dealer != null) {
                     updateDealerDetails(dealer, registerDto);
                     dealerRepository.save(dealer);
@@ -66,7 +67,7 @@ public class DealerServiceImpl implements DealerService {
         dealer.setAdharShopact(registerDto.getAdharShopact());
         dealer.setArea(registerDto.getArea());
         dealer.setCity(registerDto.getCity());
-        dealer.setFristname(registerDto.getFirstName());
+        dealer.setFirstname(registerDto.getFirstName());
         dealer.setLastName(registerDto.getLastName());
         dealer.setMobileNo(registerDto.getMobileNo());
         dealer.setShopName(registerDto.getShopName());
@@ -78,6 +79,9 @@ public class DealerServiceImpl implements DealerService {
     @Override
     public List<DealerDto> getAllDealers() {
         List<Dealer> dealers = dealerRepository.findAll();
+        if (dealers.size() < 0) {
+            throw new CarNotFoundException("Dealer not found", HttpStatus.NOT_FOUND);
+        }
         return dealers.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -91,11 +95,12 @@ public class DealerServiceImpl implements DealerService {
 
     private DealerDto convertToDto(Dealer dealer) {
         DealerDto dealerDto = new DealerDto();
+        dealerDto.setDealer_id(dealer.getId());
         dealerDto.setAddress(dealer.getAddress());
         dealerDto.setAdharShopact(dealer.getAdharShopact());
         dealerDto.setArea(dealer.getArea());
         dealerDto.setCity(dealer.getCity());
-        dealerDto.setFristname(dealer.getFristname());
+        dealerDto.setFirstName(dealer.getFirstname());
         dealerDto.setLastName(dealer.getLastName());
         dealerDto.setMobileNo(dealer.getMobileNo());
         dealerDto.setShopName(dealer.getShopName());

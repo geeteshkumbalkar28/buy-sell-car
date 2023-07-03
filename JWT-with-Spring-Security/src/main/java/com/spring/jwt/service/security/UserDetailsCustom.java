@@ -16,6 +16,12 @@ public class UserDetailsCustom implements UserDetails {
 
     private String password;
 
+    private String firstName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+
     private List<GrantedAuthority> authorities;
 
     @Override

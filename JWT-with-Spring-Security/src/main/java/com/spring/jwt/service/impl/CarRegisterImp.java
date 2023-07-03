@@ -6,6 +6,7 @@ import com.spring.jwt.dto.FilterDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.exception.CarNotFoundException;
+import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.service.ICarRegister;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,9 +35,9 @@ public class CarRegisterImp implements ICarRegister {
 
     @Override
     public String AddCarDetails(CarDto carDto) {
-        System.out.println(carDto.getDealer_id());
-        Dealer dealer=dealerRepo.findById(carDto.getDealer_id()).orElseThrow(()->new CarNotFoundException("Dealer Not Found For ID "+carDto.getDealer_id()));
-        System.out.println(dealer.toString());
+//        System.out.println(carDto.getDealer_id());
+        Dealer dealer=dealerRepo.findById(carDto.getDealer_id()).orElseThrow(()->new CarNotFoundException(("Dealer Not Found For ID "+carDto.getDealer_id()),HttpStatus.NOT_FOUND));
+//        System.out.println(dealer.toString());
 //        List<Car> dealerCar = new ArrayList<>();
 
 
@@ -69,7 +71,7 @@ public class CarRegisterImp implements ICarRegister {
     @Override
     public String editCarDetails(CarDto carDto, int id) {
         System.err.println(carDto.getCarStatus()+""+id);
-        Car car = carRepo.findById(id).orElseThrow(()->new CarNotFoundException("car not found"));
+        Car car = carRepo.findById(id).orElseThrow(()->new CarNotFoundException(("car not found"),HttpStatus.NOT_FOUND));
         System.err.println(car.toString());
 
             System.err.println();
@@ -106,7 +108,13 @@ public class CarRegisterImp implements ICarRegister {
     @Override
     public List<CarDto> getAllCarsWithPages(int PageNo) {
         List<Car> listOfCar = carRepo.findAll();
-        System.out.println("list of de"+listOfCar.size());
+        CarNotFoundException carNotFoundException;
+        if((PageNo*10)>listOfCar.size()-1){
+            throw new PageNotFoundException("page not found");
+
+        }
+        if(listOfCar.size()<=0){throw new CarNotFoundException("car not found",HttpStatus.NOT_FOUND);}
+//        System.out.println("list of de"+listOfCar.size());
         List<CarDto> listOfCarDto = new ArrayList<>();
 
         int pageStart=PageNo*10;
@@ -115,7 +123,7 @@ public class CarRegisterImp implements ICarRegister {
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
             if(pageStart>listOfCar.size()){break;}
 
-            System.out.println("*");
+//            System.out.println("*");
             CarDto carDto = new CarDto(listOfCar.get(counter));
             listOfCarDto.add(carDto);
             if(diff == i){
@@ -123,37 +131,38 @@ public class CarRegisterImp implements ICarRegister {
             }
         }
 
-        System.out.println(listOfCar);
+//        System.out.println(listOfCar);
         return listOfCarDto;
     }
 
     @Override
     public String deleteCar(int id) {
-        Car carDetail = carRepo.findById(id).orElseThrow(()->new CarNotFoundException("car Id not found"));
+        Car carDetail = carRepo.findById(id).orElseThrow(()->new CarNotFoundException("car not found",HttpStatus.NOT_FOUND));
+
         carRepo.deleteById(id);
-        return "car details deleted ";
+        return "car details deleted";
     }
-    @Override
-    public Optional<List<Car>> FindByArea(String area) {
-        Optional<List<Car>> cars = carRepo.FindByArea(area);
-        if (cars.isPresent()) {
-
-            try {
-
-                return cars;
-
-            } catch (Exception r)
-            {
-                System.err.println(r);
-            }
-        } else {
-            System.err.println("car is not present");
-
-        }
-//        System.out.println("11");
-//        return carRepo.FindByArea(area);
-        return cars;
-    }
+//    @Override
+//    public Optional<List<Car>> FindByArea(String area) {
+//        Optional<List<Car>> cars = carRepo.FindByArea(area);
+//        if (cars.isPresent()) {
+//
+//            try {
+//
+//                return cars;
+//
+//            } catch (Exception r)
+//            {
+//                System.err.println(r);
+//            }
+//        } else {
+//            System.err.println("car is not present");
+//
+//        }
+////        System.out.println("11");
+////        return carRepo.FindByArea(area);
+//        return cars;
+//    }
     @Override
     public List<CarDto> searchByFilter(FilterDto filterDto, int pageNo) {
         Specification<Car> spec = (root, query, criteriaBuilder) -> {
@@ -191,11 +200,24 @@ public class CarRegisterImp implements ICarRegister {
         Pageable pageable = PageRequest.of(pageNo - 1, 5);
 
         Page<Car> carPage = carRepo.findAll(spec, pageable);
+        if(carPage.isEmpty()){
+           throw new PageNotFoundException("Page Not found");
+        }
 
         List<CarDto> listOfCarDto = carPage.getContent().stream()
                 .map(CarDto::new)
                 .collect(Collectors.toList());
 
         return listOfCarDto;
+    }
+
+    @Override
+    public CarDto findById(int carId) {
+        Optional<Car> car = carRepo.findById(carId);
+        if (car.isEmpty()){
+            throw new CarNotFoundException("car not found",HttpStatus.NOT_FOUND);
+        }
+        CarDto carDto = new CarDto(car.get());
+        return carDto;
     }
 }

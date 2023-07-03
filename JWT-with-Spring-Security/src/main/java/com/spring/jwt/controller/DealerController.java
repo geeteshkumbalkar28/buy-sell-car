@@ -38,7 +38,7 @@ public class DealerController {
         }
 
     }
-    @DeleteMapping("/{dealerId}")
+    @DeleteMapping("/delete/{dealerId}")
     public ResponseEntity<BaseResponseDTO> deleteDealer(@PathVariable("dealerId") Integer dealerId) {
         return ResponseEntity.ok(dealerService.deleteDealer(dealerId));
     }
