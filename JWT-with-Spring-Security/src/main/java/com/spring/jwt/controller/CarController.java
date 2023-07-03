@@ -17,25 +17,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/car")
 public class CarController {
     @Autowired
     private ICarRegister iCarRegister;
-    @Autowired
-    private ICarRegister carRegister;
 
     @PostMapping(value = "/carregister")
     public ResponseEntity<ResponseDto> carRegistration(@RequestBody CarDto carDto) {
-        try {
-            carDto.setDealer_id(carDto.getDealer_id()); // Set the dealer ID
+        try{
             String result = iCarRegister.AddCarDetails(carDto);
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success", result));
-        } catch (CarNotFoundException carNotFoundException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess", "Dealer not found"));
-        }
-    }
 
+
+            return (ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success",result)));
+
+        }catch (CarNotFoundException carNotFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","Dealer not found"));
+        }
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<ResponseDto> carEdit(@RequestBody CarDto carDto, @PathVariable int id) {
@@ -114,16 +113,6 @@ public class CarController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
         }
     }
-
-    @GetMapping("/dealer/{dealerId}/status/{carStatus}")
-    public ResponseEntity<List<CarDto>> getCarsByDealerIdAndStatus(
-            @PathVariable("dealerId") Integer dealerId,
-            @PathVariable("carStatus") String carStatus
-    ) {
-        List<CarDto> cars = iCarRegister.getCarsByDealerIdWithStatus(dealerId, carStatus);
-        return ResponseEntity.ok(cars);
-    }
-
 
 }
 

@@ -10,13 +10,10 @@ public class DealerDto {
     public String adharShopact;
     public String area;
     public String city;
-    public String firstName;
+    public String firstname;  // Change the field name to "firstname"
     public String lastName;
     public String mobileNo;
     public String shopName;
     public String email;
     public String password;
-    private Integer dealer_id;
-
-
 }

@@ -96,8 +96,7 @@ public class Car {
 //    @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //    @JoinColumn(name = "dealer_vendor_id", nullable = false)
 //    private Dealer dealerVendor;
-       @Column(name = "dealer_id")
-       private int dealerId;
+      private int dealer_id;
 
 //    private Carphoto carphotoCarPhoto;
 @ManyToMany
