@@ -56,6 +56,7 @@ public class FilterServiceImpl implements FilterService {
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+//        spec
 
         Pageable pageable = PageRequest.of(pageNo - 1, 5);
 

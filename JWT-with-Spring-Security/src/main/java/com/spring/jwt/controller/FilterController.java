@@ -18,5 +18,6 @@ public class FilterController {
     @GetMapping("/mainFilter/{pageNo}")
     public List<CarDto> searchByFilter(@RequestBody FilterDto filterDto, @PathVariable int pageNo){
         return filterService.searchByFilter(filterDto, pageNo);
+
     }
 }
