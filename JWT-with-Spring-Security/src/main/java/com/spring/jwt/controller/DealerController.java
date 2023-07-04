@@ -1,11 +1,11 @@
 package com.spring.jwt.controller;
 
-import com.spring.jwt.dto.ChangePasswordDto;
-import com.spring.jwt.dto.DealerDto;
-import com.spring.jwt.dto.RegisterDto;
+import com.spring.jwt.dto.*;
+import com.spring.jwt.exception.*;
 import com.spring.jwt.service.DealerService;
 import com.spring.jwt.utils.BaseResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,36 +18,99 @@ public class DealerController {
     private final DealerService dealerService;
 
     @PutMapping("/updateDealer/{userId}")
-    public ResponseEntity<BaseResponseDTO> updateDealer(@PathVariable("userId") Integer userId, @RequestBody RegisterDto registerDto) {
-        return ResponseEntity.ok(dealerService.updateDealer(userId, registerDto));
+    public ResponseEntity<ResponseDto> updateDealer(@PathVariable("userId") Integer userId, @RequestBody RegisterDto registerDto) {
+        try{
+
+            BaseResponseDTO baseResponseDTO = dealerService.updateDealer(userId, registerDto);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success",baseResponseDTO.getMessage()));
+
+        }
+        catch (DealerDeatilsNotFoundException dealerDeatilsNotFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","dealer deatils not found exception"));
+
+        }
+        catch (UserNotDealerException userNotDealerException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","user not dealer Exception"));
+
+        }
+        catch (UserNotFoundException userNotFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","user not found exception"));
+        }
     }
 
     @GetMapping("/allDealers")
-    public ResponseEntity<List<DealerDto>> getAllDealers() {
-        List<DealerDto> dealers = dealerService.getAllDealers();
-        return ResponseEntity.ok(dealers);
+    public ResponseEntity<ResponseAllDealerDto> getAllDealers() {
+        try{
+
+            List<DealerDto> dealers = dealerService.getAllDealers();
+            ResponseAllDealerDto responseAllDealerDto = new ResponseAllDealerDto("success");
+            responseAllDealerDto.setList(dealers);
+            return ResponseEntity.status(HttpStatus.OK).body(responseAllDealerDto);
+        }catch (DealerNotFoundException dealerNotFoundException){
+            ResponseAllDealerDto responseAllDealerDto = new ResponseAllDealerDto("unsuccess");
+            responseAllDealerDto.setException("Dealer not found by id");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllDealerDto);
+        }
     }
 
     @GetMapping("/{dealerId}")
-    public ResponseEntity<DealerDto> getDealerById(@PathVariable("dealerId") Integer dealerId) {
-        DealerDto dealer = dealerService.getDealerById(dealerId);
-        if (dealer != null) {
-            return ResponseEntity.ok(dealer);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<DealerResponseForSingleDealerDto> getDealerById(@PathVariable("dealerId") Integer dealerId) {
+       try{
+
+           DealerDto dealer = dealerService.getDealerById(dealerId);
+           DealerResponseForSingleDealerDto dealerResponseForSingleDealerDto = new DealerResponseForSingleDealerDto("success");
+           dealerResponseForSingleDealerDto.setDealerDto(dealer);
+
+           return ResponseEntity.status(HttpStatus.OK).body(dealerResponseForSingleDealerDto);
+       }
+       catch (DealerNotFoundException dealerNotFoundException){
+           DealerResponseForSingleDealerDto dealerResponseForSingleDealerDto = new DealerResponseForSingleDealerDto("unsuccess");
+           dealerResponseForSingleDealerDto.setException("dealer not found by id");
+
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dealerResponseForSingleDealerDto);
+
+       }
+
 
     }
     @DeleteMapping("/delete/{dealerId}")
-    public ResponseEntity<BaseResponseDTO> deleteDealer(@PathVariable("dealerId") Integer dealerId) {
-        return ResponseEntity.ok(dealerService.deleteDealer(dealerId));
+    public ResponseEntity<ResponseDto> deleteDealer(@PathVariable("dealerId") Integer dealerId) {
+       try{
+            BaseResponseDTO baseResponseDTO = dealerService.deleteDealer(dealerId);
+           return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success",baseResponseDTO.getMessage()));
+
+       }catch (DealerNotFoundException dealerNotFoundException) {
+
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","dealer not found by id"));
+
+       }
     }
 
     @PutMapping("/changePassword/{userId}")
-    public ResponseEntity<BaseResponseDTO> changePassword(
+    public ResponseEntity<ResponseDto> changePassword(
             @PathVariable("userId") Integer userId,
             @RequestBody ChangePasswordDto changePasswordDto
     ) {
-        return ResponseEntity.ok(dealerService.changePassword(userId, changePasswordDto));
+        try{
+            BaseResponseDTO baseResponseDTO =dealerService.changePassword(userId, changePasswordDto);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("success",baseResponseDTO.getMessage()));
+
+        }catch (NewAndOldPasswordDoseNotMatchException newAndOldPasswordDoseNotMatchException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","New And Old Password Dose Not Match Exception"));
+
+        }catch (InvalidOldPasswordException invalidOldPasswordException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","Invalid Old Password Exception"));
+
+        }catch (UserNotDealerException userNotDealerException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","User Not Dealer Exception"));
+
+        }catch (UserNotFoundException userNotFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","User Not Found Exception"));
+
+        }
+
+
+
+
     }
 }

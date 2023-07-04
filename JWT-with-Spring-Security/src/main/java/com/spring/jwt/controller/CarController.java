@@ -1,10 +1,7 @@
 package com.spring.jwt.controller;
 
 
-import com.spring.jwt.dto.CarDto;
-import com.spring.jwt.dto.FilterDto;
-import com.spring.jwt.dto.ResponseAllCarDto;
-import com.spring.jwt.dto.ResponseDto;
+import com.spring.jwt.dto.*;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.service.ICarRegister;
