@@ -2,12 +2,11 @@ package com.spring.jwt.controller;
 
 import com.spring.jwt.dto.PasswordChange;
 import com.spring.jwt.dto.ResponseAllUsersDto;
-import com.spring.jwt.dto.ResponseUserDto;
 import com.spring.jwt.dto.UserProfileDto;
 import com.spring.jwt.entity.Userprofile;
 import com.spring.jwt.exception.InvalidPasswordException;
 import com.spring.jwt.exception.PageNotFoundException;
-import com.spring.jwt.exception.UserNotFoundException;
+import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.service.UserService;
 import com.spring.jwt.utils.BaseResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ public class UserController {
             ResponseAllUsersDto responseAllUsersDto = new ResponseAllUsersDto("success");
             responseAllUsersDto.setList(list);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllUsersDto);
-        } catch (UserNotFoundException exception){
+        } catch (UserNotFoundExceptions exception){
             ResponseAllUsersDto responseAllCarDto = new ResponseAllUsersDto("unsuccess");
             responseAllCarDto.setException("car not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
@@ -57,7 +56,7 @@ public class UserController {
         try {
             BaseResponseDTO result = userService.editUser(userProfileDto,id);
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",result.getMessage()));
-        }catch (UserNotFoundException exception){
+        }catch (UserNotFoundExceptions exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
         }
     }
@@ -68,7 +67,7 @@ public class UserController {
         try {
             BaseResponseDTO result= userService.removeUser(id);
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",result.getMessage()));
-        }catch (UserNotFoundException exception){
+        }catch (UserNotFoundExceptions exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
         }
     }
@@ -79,7 +78,7 @@ public class UserController {
         try {
             Userprofile user = userService.getUser(id);
             return ResponseEntity.status(HttpStatus.OK).body(user);
-        }catch (UserNotFoundException exception){
+        }catch (UserNotFoundExceptions exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
 
         }
@@ -92,7 +91,7 @@ public class UserController {
         try{
             BaseResponseDTO result =userService.changePassword(id,passwordChange);
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",result.getMessage()));
-        }catch (UserNotFoundException exception){
+        }catch (UserNotFoundExceptions exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","UserNotFoundException"));
         } catch (InvalidPasswordException exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","InvalidPasswordException"));

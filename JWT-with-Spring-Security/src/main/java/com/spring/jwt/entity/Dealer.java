@@ -47,7 +47,7 @@ public class Dealer {
     @Column(name = "Email",nullable = false)
     private String email;
 
-    @OneToOne
+    @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 

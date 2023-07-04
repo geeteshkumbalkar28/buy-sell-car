@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
 
         } else {
             // Throw an exception if no user is found with the given id
-            throw new UserNotFoundException("No user found with this id");
+            throw new UserNotFoundExceptions("No user found with this id");
         }
 
         // Return the response object
@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
 
         // Check if there are no user profiles available
         if (listOfUsers.size() <= 0) {
-            throw new UserNotFoundException("User not found", HttpStatus.NOT_FOUND);
+            throw new UserNotFoundExceptions("User not found", HttpStatus.NOT_FOUND);
         }
 
        // System.out.println("List of users: " + listOfUsers.size());
@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
                 break;
             }
             Optional<User> users=userRepository.findById(listOfUsers.get(counter).getUser().getId());
-            if(users.isEmpty()){throw new UserNotFoundException("User not found ");}
+            if(users.isEmpty()){throw new UserNotFoundExceptions("User not found ");}
           // System.out.println("*");
 
             // Convert the user profile to a UserProfileDto object and add it to the list
@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
 
         }else {
 
-         throw new UserNotFoundException("No user found with this id");
+         throw new UserNotFoundExceptions("No user found with this id");
         }
     }
 
@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService {
         } else {
             // if the user is not found, set the response code and throw a UserNotFoundException
             response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
-            throw new UserNotFoundException("No user found with this id");
+            throw new UserNotFoundExceptions("No user found with this id");
         }
 
         // return the response object
@@ -281,7 +281,7 @@ public class UserServiceImpl implements UserService {
             // Set the error code and message in the response DTO
             response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
             // Throw a UserNotFoundException indicating that no user was found with the given ID
-            throw new UserNotFoundException("No user found with this id");
+            throw new UserNotFoundExceptions("No user found with this id");
         }
 
         // Return the response DTO
