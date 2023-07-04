@@ -3,6 +3,8 @@ package com.spring.jwt.service.impl;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.FilterDto;
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.exception.CarNotFoundException;
+import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.service.FilterService;
 import jakarta.persistence.criteria.Predicate;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,11 +64,43 @@ public class FilterServiceImpl implements FilterService {
         Pageable pageable = PageRequest.of(pageNo - 1, 5);
 
         Page<Car> carPage = carRepo.findAll(spec, pageable);
+        if(carPage.isEmpty()){
+            throw new PageNotFoundException("Page Not found");
+        }
 
         List<CarDto> listOfCarDto = carPage.getContent().stream()
                 .map(CarDto::new)
                 .collect(Collectors.toList());
 
+        return listOfCarDto;
+    }
+    @Override
+    public List<CarDto> getAllCarsWithPages(int PageNo) {
+        List<Car> listOfCar = carRepo.findAll();
+        CarNotFoundException carNotFoundException;
+        if((PageNo*10)>listOfCar.size()-1){
+            throw new PageNotFoundException("page not found");
+
+        }
+        if(listOfCar.size()<=0){throw new CarNotFoundException("car not found", HttpStatus.NOT_FOUND);}
+//        System.out.println("list of de"+listOfCar.size());
+        List<CarDto> listOfCarDto = new ArrayList<>();
+
+        int pageStart=PageNo*10;
+        int pageEnd=pageStart+10;
+        int diff=(listOfCar.size()) - pageStart;
+        for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
+            if(pageStart>listOfCar.size()){break;}
+
+//            System.out.println("*");
+            CarDto carDto = new CarDto(listOfCar.get(counter));
+            listOfCarDto.add(carDto);
+            if(diff == i){
+                break;
+            }
+        }
+
+//        System.out.println(listOfCar);
         return listOfCarDto;
     }
 }

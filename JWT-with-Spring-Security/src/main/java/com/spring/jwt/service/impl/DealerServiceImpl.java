@@ -17,9 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -83,15 +83,41 @@ public class DealerServiceImpl implements DealerService {
         userRepository.save(user); // Save the updated User entity
     }
     @Override
-    public List<DealerDto> getAllDealers() {
+    public List<DealerDto> getAllDealers(int pageNo) {
         List<Dealer> dealers = dealerRepository.findAll();
         if (dealers.size() < 0) {
             throw new DealerNotFoundException("Dealer not found");
         }
+        if((pageNo*10)>dealers.size()-1){
+            throw new PageNotFoundException("page not found");
 
-        return dealers.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        }
+        //////
+//        List<Car> listOfCar = carRepo.findAll();
+//        CarNotFoundException carNotFoundException;
+
+//        if(dealers.size()<=0){throw new CarNotFoundException("car not found",HttpStatus.NOT_FOUND);}
+//        System.out.println("list of de"+listOfCar.size());
+        List<DealerDto> listOfDealerDto = new ArrayList<>();
+
+        int pageStart=pageNo*10;
+        int pageEnd=pageStart+10;
+        int diff=(dealers.size()) - pageStart;
+        for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
+            if(pageStart>listOfDealerDto.size()){break;}
+            System.err.println("inside dealer");
+            System.out.println("*");
+            DealerDto dealerDto = new DealerDto(dealers.get(counter));
+            listOfDealerDto.add(dealerDto);
+            if(diff == i){
+                break;
+            }
+        }
+
+//        return dealers.stream()
+//                .map(this::convertToDto)
+//                .collect(Collectors.toList());
+        return listOfDealerDto;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.spring.jwt.dto;
 
+import com.spring.jwt.entity.Dealer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,5 +19,20 @@ public class DealerDto {
     public String password;
     private Integer dealer_id;
 
+    public DealerDto() {
+    }
 
+    public DealerDto(Dealer dealer) {
+        this.address = dealer.getAddress();
+        this.adharShopact = dealer.getAdharShopact();
+        this.area = dealer.getArea();
+        this.city =dealer.getCity();
+        this.firstName = dealer.getLastName();
+        this.lastName =dealer.getLastName();
+        this.mobileNo = dealer.getMobileNo();
+        this.shopName = dealer.getShopName();
+        this.email = dealer.getEmail();
+
+        this.dealer_id = dealer.getId();
+    }
 }
