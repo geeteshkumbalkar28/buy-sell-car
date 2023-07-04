@@ -5,7 +5,7 @@ import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.RegisterDto;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.User;
-import com.spring.jwt.exception.CarNotFoundException;
+import com.spring.jwt.exception.*;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.RoleRepository;
 import com.spring.jwt.repository.UserRepository;
@@ -46,20 +46,24 @@ public class DealerServiceImpl implements DealerService {
                     dealerRepository.save(dealer);
                     response.setCode(String.valueOf(HttpStatus.OK.value()));
                     response.setMessage("Dealer details updated successfully");
+                    return response;
+
                 } else {
-                    response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
-                    response.setMessage("Dealer details not found");
+
+                    throw new DealerDeatilsNotFoundException("Dealer details not found");
                 }
             } else {
-                response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-                response.setMessage("User is not a dealer");
+
+
+                throw new UserNotDealerException("User is not a dealer");
             }
         } else {
-            response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
-            response.setMessage("User not found");
+
+            throw new UserNotFoundException("User not found");
+
         }
 
-        return response;
+
     }
 
     private void updateDealerDetails(Dealer dealer, RegisterDto registerDto) {
@@ -72,16 +76,19 @@ public class DealerServiceImpl implements DealerService {
         dealer.setMobileNo(registerDto.getMobileNo());
         dealer.setShopName(registerDto.getShopName());
         dealer.setEmail(registerDto.getEmail());
+
         User user = dealer.getUser();
         user.setEmail(registerDto.getEmail()); // Update email in User table as well
+        user.setMobileNo(registerDto.getMobileNo());
         userRepository.save(user); // Save the updated User entity
     }
     @Override
     public List<DealerDto> getAllDealers() {
         List<Dealer> dealers = dealerRepository.findAll();
         if (dealers.size() < 0) {
-            throw new CarNotFoundException("Dealer not found", HttpStatus.NOT_FOUND);
+            throw new DealerNotFoundException("Dealer not found");
         }
+
         return dealers.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -90,6 +97,10 @@ public class DealerServiceImpl implements DealerService {
     @Override
     public DealerDto getDealerById(Integer dealerId) {
         Optional<Dealer> dealerOptional = dealerRepository.findById(dealerId);
+        if(dealerOptional.isEmpty())
+        {
+            throw new DealerNotFoundException("dealer not found by id");
+        }
         return dealerOptional.map(this::convertToDto).orElse(null);
     }
 
@@ -128,12 +139,13 @@ public class DealerServiceImpl implements DealerService {
 
             response.setCode(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("Dealer deleted successfully");
+            return response;
         } else {
-            response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
-            response.setMessage("Dealer not found");
+
+            throw new DealerNotFoundException("Dealer not found");
         }
 
-        return response;
+
     }
 
 
@@ -154,20 +166,20 @@ public class DealerServiceImpl implements DealerService {
                         response.setCode(String.valueOf(HttpStatus.OK.value()));
                         response.setMessage("Password changed successfully");
                     } else {
-                        response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-                        response.setMessage("New password and confirm password do not match");
+                        throw new NewAndOldPasswordDoseNotMatchException("New password and confirm password do not match");
                     }
                 } else {
-                    response.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-                    response.setMessage("Invalid old password");
+
+                    throw new InvalidOldPasswordException("Invalid old password");
+
                 }
             } else {
-                response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-                response.setMessage("User is not a dealer");
+
+                throw new UserNotDealerException("User is not a dealer");
             }
         } else {
-            response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
-            response.setMessage("User not found");
+            throw new UserNotFoundException("User not found");
+
         }
 
         return response;
