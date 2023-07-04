@@ -10,7 +10,7 @@ import java.util.List;
 public interface DealerService {
     BaseResponseDTO updateDealer(Integer userId, RegisterDto registerDto);
 
-    List<DealerDto> getAllDealers();
+    List<DealerDto> getAllDealers(int pageNo);
     DealerDto getDealerById(Integer dealerId);
 
     BaseResponseDTO deleteDealer(Integer dealerId);

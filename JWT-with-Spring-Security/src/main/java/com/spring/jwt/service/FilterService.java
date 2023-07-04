@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface FilterService {
     public List<CarDto> searchByFilter(FilterDto filterDto, int pageNo);
+    public List<CarDto> getAllCarsWithPages(int PageNo);
+
 }

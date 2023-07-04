@@ -26,11 +26,11 @@ public class DealerController {
 
         }
         catch (DealerDeatilsNotFoundException dealerDeatilsNotFoundException){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","dealer deatils not found exception"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","dealer details not found exception"));
 
         }
         catch (UserNotDealerException userNotDealerException){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","user not dealer Exception"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","user not a dealer Exception"));
 
         }
         catch (UserNotFoundException userNotFoundException){
@@ -38,11 +38,11 @@ public class DealerController {
         }
     }
 
-    @GetMapping("/allDealers")
-    public ResponseEntity<ResponseAllDealerDto> getAllDealers() {
+    @GetMapping("/allDealers/{pageNo}")
+    public ResponseEntity<ResponseAllDealerDto> getAllDealers(@PathVariable int pageNo) {
         try{
 
-            List<DealerDto> dealers = dealerService.getAllDealers();
+            List<DealerDto> dealers = dealerService.getAllDealers(pageNo);
             ResponseAllDealerDto responseAllDealerDto = new ResponseAllDealerDto("success");
             responseAllDealerDto.setList(dealers);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllDealerDto);
@@ -50,8 +50,14 @@ public class DealerController {
             ResponseAllDealerDto responseAllDealerDto = new ResponseAllDealerDto("unsuccess");
             responseAllDealerDto.setException("Dealer not found by id");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllDealerDto);
+        }catch (PageNotFoundException pageNotFoundException){
+            ResponseAllDealerDto responseAllDealerDto = new ResponseAllDealerDto("unsuccess");
+            responseAllDealerDto.setException("page not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllDealerDto);
+
         }
     }
+
 
     @GetMapping("/{dealerId}")
     public ResponseEntity<DealerResponseForSingleDealerDto> getDealerById(@PathVariable("dealerId") Integer dealerId) {
