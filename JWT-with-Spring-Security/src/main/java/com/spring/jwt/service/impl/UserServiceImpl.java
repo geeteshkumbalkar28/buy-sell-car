@@ -118,12 +118,11 @@ public class UserServiceImpl implements UserService {
         BaseResponseDTO response = new BaseResponseDTO();
 
         // Retrieve the user with the given id from the userRepository
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<Userprofile> userOptional = userProfileRepository.findById(id);
 
         // Check if the user exists
         if (userOptional.isPresent()) {
-            // Get the user object from the Optional
-            User user = userOptional.get();
+            User user= userOptional.get().getUser();
 
             // Check if the old password matches the stored password for the user
             if (passwordEncoder.matches(passwordChange.getOldPassword(), user.getPassword())) {
@@ -193,7 +192,7 @@ public class UserServiceImpl implements UserService {
                 break;
             }
             Optional<User> users=userRepository.findById(listOfUsers.get(counter).getUser().getId());
-            if(users.isEmpty()){throw new UserNotFoundException("user not found ");}
+            if(users.isEmpty()){throw new UserNotFoundException("User not found ");}
           // System.out.println("*");
 
             // Convert the user profile to a UserProfileDto object and add it to the list
