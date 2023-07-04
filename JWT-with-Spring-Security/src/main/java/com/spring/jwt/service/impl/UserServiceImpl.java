@@ -80,13 +80,13 @@ public class UserServiceImpl implements UserService {
             dealer.setAdharShopact(registerDto.getAdharShopact());
             dealer.setArea(registerDto.getArea());
             dealer.setCity(registerDto.getCity());
-            dealer.setFristname(registerDto.getFirstName());
+            dealer.setFirstname(registerDto.getFirstName());
             dealer.setLastName(registerDto.getLastName());
             dealer.setMobileNo(registerDto.getMobileNo());
             dealer.setShopName(registerDto.getShopName());
             dealer.setEmail(registerDto.getEmail());
 
-            user.setDealers(dealer);
+            user.setDealer(dealer);
             dealer.setUser(user); // Set the user instance in the dealer
         }
 
@@ -160,7 +160,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserProfileDto> getAllUsers(int pageNo) {
         // Retrieve all user profiles from the repository
+        User user= new User();
         List<Userprofile> listOfUsers = userProfileRepository.findAll();
+
 
         // Check if the specified page number exceeds the available number of user profiles
         if ((pageNo * 10) > listOfUsers.size() - 1) {
@@ -190,11 +192,13 @@ public class UserServiceImpl implements UserService {
             if (pageStart > listOfUsers.size()) {
                 break;
             }
-
+            Optional<User> users=userRepository.findById(listOfUsers.get(counter).getUser().getId());
+            if(users.isEmpty()){throw new UserNotFoundException("user not found ");}
           // System.out.println("*");
 
             // Convert the user profile to a UserProfileDto object and add it to the list
-            UserProfileDto userProfileDto = new UserProfileDto(listOfUsers.get(counter));
+            UserProfileDto userProfileDto = new UserProfileDto(listOfUsers.get(counter),users.get());
+
             listOfUserDto.add(userProfileDto);
 
             // If the remaining number of profiles is equal to the current iteration, exit the loop
@@ -261,12 +265,15 @@ public class UserServiceImpl implements UserService {
         BaseResponseDTO response = new BaseResponseDTO();
 
         // Find the user with the given ID in the user profile repository
-        Optional<Userprofile> dealer = userProfileRepository.findById(id);
-
+        Optional<Userprofile> user = userProfileRepository.findById(id);
         // Check if the user exists in the repository
-        if(dealer.isPresent()){
+        if(user.isPresent()){
+
+           User users= user.get().getUser();
+
             // Delete the user from the repository
-            userProfileRepository.DeleteById(id);
+            userRepository.DeleteById(users.getId());
+
             // Set the success code and message in the response DTO
             response.setCode(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("User deleted successfully");
