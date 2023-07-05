@@ -43,19 +43,23 @@ public class UserServiceImpl implements UserService {
 
         User user = insertUser(registerDto);
 
+
         try {
             userRepository.save(user);
             response.setCode(String.valueOf(HttpStatus.OK.value()));
-            response.setMessage("Create account successfully");
+            response.setMessage("Account Created");
         } catch (UserAlreadyExistException e) {
-            response.setCode(String.valueOf(HttpStatus.SERVICE_UNAVAILABLE.value()));
-            response.setMessage("Service unavailable");
+            response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+            response.setMessage("User already exist");
         }
         return response;
     }
 
     private User insertUser(RegisterDto registerDto) {
         User user = new User();
+
+       User users= userRepository.findByEmail(registerDto.getEmail());
+
         user.setEmail(registerDto.getEmail());
         user.setMobileNo(registerDto.getMobileNo());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
@@ -102,7 +106,7 @@ public class UserServiceImpl implements UserService {
         // validate duplicate username
         User user = userRepository.findByEmail(registerDto.getEmail());
         if (!ObjectUtils.isEmpty(user)) {
-            throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Username already exists");
+            throw new UserAlreadyExistException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Username already exists");
         }
 
         // validate role
@@ -135,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
                     // Set the response code and message for a successful password change
                     response.setCode(String.valueOf(HttpStatus.OK.value()));
-                    response.setMessage("Password changed successfully");
+                    response.setMessage("Password changed");
                 } else {
                     // Set the response code and throw an exception for password mismatch
                     response.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
@@ -149,7 +153,7 @@ public class UserServiceImpl implements UserService {
 
         } else {
             // Throw an exception if no user is found with the given id
-            throw new UserNotFoundExceptions("No user found with this id");
+            throw new UserNotFoundExceptions("No user found");
         }
 
         // Return the response object
@@ -209,19 +213,36 @@ public class UserServiceImpl implements UserService {
         return listOfUserDto;
     }
 
+    private UserProfileDto convertToDto(Userprofile userprofile,User user ) {
+        //User user = new User();
+        UserProfileDto userProfileDto = new UserProfileDto();
+        userProfileDto.setId(userprofile.getId());
+        userProfileDto.setAddress(userprofile.getAddress());
+        userProfileDto.setCity(userprofile.getCity());
+        userProfileDto.setFirstName(userprofile.getFirstName());
+        userProfileDto.setLastName(userprofile.getLastName());
+        userProfileDto.setMobile_no(user.getMobileNo());
+        userProfileDto.setEmail(user.getEmail());
+        return userProfileDto;
+    }
+
     @Override
-    public Userprofile getUser(int id) {
+    public UserProfileDto getUser(int id) {
+        // Retrieve the user profile by ID from the repository
+        Optional<Userprofile> userOptional = userProfileRepository.findById(id);
 
-        Optional<Userprofile> userProfile= userProfileRepository.findById(id);
-
-        if (userProfile.isPresent()){
-            System.out.println("printing "+userProfile);
-            return userProfile.get();
-
-        }else {
-
-         throw new UserNotFoundExceptions("No user found with this id");
+        // Check if the user profile is present
+        if (userOptional.isEmpty()) {
+            // Throw an exception if the user profile is not found
+            throw new UserNotFoundExceptions("User not found");
         }
+
+        // Assuming the Userprofile entity has a "user" field representing the associated User
+        // Retrieve the User object associated with the Userprofile
+        User user = userOptional.get().getUser();
+
+        // Convert the Userprofile and User objects to a UserProfileDto object
+        return convertToDto(userOptional.get(), user);
     }
 
     @Override
@@ -246,11 +267,11 @@ public class UserServiceImpl implements UserService {
 
             // set the response code and message indicating the success of the operation
             response.setCode(String.valueOf(HttpStatus.OK.value()));
-            response.setMessage("User details edited successfully");
+            response.setMessage("User edited");
         } else {
             // if the user is not found, set the response code and throw a UserNotFoundException
             response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
-            throw new UserNotFoundExceptions("No user found with this id");
+            throw new UserNotFoundExceptions("No user found");
         }
 
         // return the response object
@@ -275,13 +296,13 @@ public class UserServiceImpl implements UserService {
 
             // Set the success code and message in the response DTO
             response.setCode(String.valueOf(HttpStatus.OK.value()));
-            response.setMessage("User deleted successfully");
+            response.setMessage("User deleted");
 
         } else {
             // Set the error code and message in the response DTO
             response.setCode(String.valueOf(HttpStatus.NOT_FOUND.value()));
             // Throw a UserNotFoundException indicating that no user was found with the given ID
-            throw new UserNotFoundExceptions("No user found with this id");
+            throw new UserNotFoundExceptions("No user found");
         }
 
         // Return the response DTO

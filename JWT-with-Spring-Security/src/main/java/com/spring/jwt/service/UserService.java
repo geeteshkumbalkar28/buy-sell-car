@@ -43,5 +43,12 @@ public interface UserService {
      */
     List<UserProfileDto> getAllUsers(int pageNo);
 
-    Userprofile getUser(int id);
+    /**
+     * Retrieves a user profile by ID and converts it to a DTO (Data Transfer Object).
+     *
+     * @param id The ID of the user profile to retrieve.
+     * @return The user profile DTO.
+     * @throws UserNotFoundExceptions If the user profile is not found by the provided ID.
+     */
+    UserProfileDto getUser(int id);
 }

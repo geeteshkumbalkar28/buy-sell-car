@@ -81,7 +81,7 @@ public class AppConfig {
                 .requestMatchers("/account/**").permitAll()
                 .requestMatchers("/cars/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                .requestMatchers("/user/**").hasAuthority("USER")
+                .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers("/dealer/**").hasAnyAuthority("DEALER", "ADMIN")
                 .requestMatchers("/car/**").hasAnyAuthority("DEALER", "ADMIN")
 
