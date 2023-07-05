@@ -2,6 +2,7 @@ package com.spring.jwt.entity;
 
 import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.RegisterDto;
+import com.spring.jwt.dto.UserProfileDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -63,6 +64,11 @@ public class User {
                 ", mobileNo='" + mobileNo + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public User(UserProfileDto userProfileDto) {
+        this.email = userProfileDto.getEmail();
+        this.mobileNo = userProfileDto.getMobile_no();
     }
 }
 

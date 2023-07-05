@@ -59,7 +59,7 @@ public class DealerServiceImpl implements DealerService {
             }
         } else {
 
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundExceptions("User not found");
 
         }
 
@@ -204,7 +204,7 @@ public class DealerServiceImpl implements DealerService {
                 throw new UserNotDealerException("User is not a dealer");
             }
         } else {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundExceptions("User not found");
 
         }
 

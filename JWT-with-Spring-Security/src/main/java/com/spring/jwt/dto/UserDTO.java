@@ -13,5 +13,7 @@ public class UserDTO {
 
     private String password;
 
+    private String mobile_no;
+
     private String role;
 }

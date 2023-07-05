@@ -16,4 +16,5 @@ public class CarNotFoundException extends RuntimeException{
         this.httpStatus = httpStatus;
 
     }
+
 }

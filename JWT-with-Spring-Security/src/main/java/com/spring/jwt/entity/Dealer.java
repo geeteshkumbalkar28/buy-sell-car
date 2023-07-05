@@ -74,4 +74,5 @@ public class Dealer {
         this.shopName = dealerDto.shopName;
         this.email = dealerDto.email;
     }
+
 }

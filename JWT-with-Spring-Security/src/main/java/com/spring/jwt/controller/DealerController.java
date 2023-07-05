@@ -33,7 +33,7 @@ public class DealerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","user not a dealer Exception"));
 
         }
-        catch (UserNotFoundException userNotFoundException){
+        catch (UserNotFoundExceptions userNotFoundExceptions){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","user not found exception"));
         }
     }
@@ -110,7 +110,7 @@ public class DealerController {
         }catch (UserNotDealerException userNotDealerException){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","User Not Dealer Exception"));
 
-        }catch (UserNotFoundException userNotFoundException){
+        }catch (UserNotFoundExceptions userNotFoundExceptions){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","User Not Found Exception"));
 
         }
