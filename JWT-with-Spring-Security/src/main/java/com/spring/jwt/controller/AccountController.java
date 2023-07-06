@@ -2,6 +2,7 @@ package com.spring.jwt.controller;
 
 import com.spring.jwt.dto.RegisterDto;
 import com.spring.jwt.dto.UserDTO;
+import com.spring.jwt.exception.BaseException;
 import com.spring.jwt.exception.UserAlreadyExistException;
 import com.spring.jwt.service.UserService;
 import com.spring.jwt.utils.BaseResponseDTO;
@@ -28,6 +29,8 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",response.getMessage()));
         }catch (UserAlreadyExistException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful","User already exists"));
+        }catch (BaseException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponseDTO("Unsuccessful","Invalid role"));
         }
     }
 }

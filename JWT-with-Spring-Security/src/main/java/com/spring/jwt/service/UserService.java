@@ -51,4 +51,10 @@ public interface UserService {
      * @throws UserNotFoundExceptions If the user profile is not found by the provided ID.
      */
     UserProfileDto getUser(int id);
+
+    void updateResetPassword(String token, String email);
+
+    ResponseDto forgotPass(String email, String resetPasswordlink);
+
+    ResponseDto updatePassword(String token, String newPassword);
 }
