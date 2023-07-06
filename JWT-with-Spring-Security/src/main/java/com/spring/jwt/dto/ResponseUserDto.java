@@ -28,4 +28,8 @@ public class ResponseUserDto {
         this.firstName = userprofile.getFirstName();
         this.lastName = userprofile.getLastName();
     }
+
+    public ResponseUserDto() {
+
+    }
 }

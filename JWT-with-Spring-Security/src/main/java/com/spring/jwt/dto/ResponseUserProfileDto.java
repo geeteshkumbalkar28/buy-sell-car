@@ -2,25 +2,20 @@ package com.spring.jwt.dto;
 
 
 import com.spring.jwt.entity.Userprofile;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
+@Getter
+@Setter
 public class ResponseUserProfileDto {
-    public String address;
+    private String message;
+    private UserProfileDto userProfileDto;
+    private String exception;
 
-    public String city;
-
-    public String fristname;
-
-    public String lastName;
-
-    public ResponseUserProfileDto(Userprofile userprofile) {
-        this.address = userprofile.getAddress();
-        this.city = userprofile.getCity();
-        this.fristname = userprofile.getFirstName();
-        this.lastName =userprofile.getLastName();
-
+    public ResponseUserProfileDto(String message) {
+        this.message=message;
     }
-
 }
 

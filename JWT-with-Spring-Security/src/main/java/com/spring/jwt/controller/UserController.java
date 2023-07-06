@@ -57,7 +57,7 @@ public class UserController {
             BaseResponseDTO result = userService.editUser(userProfileDto,id);
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",result.getMessage()));
         }catch (UserNotFoundExceptions exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessful","user not found"));
         }
     }
 
@@ -68,18 +68,18 @@ public class UserController {
             BaseResponseDTO result= userService.removeUser(id);
             return ResponseEntity.status(HttpStatus.OK).body(new BaseResponseDTO("Successful",result.getMessage()));
         }catch (UserNotFoundExceptions exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessful","user not found"));
         }
     }
 
-    @PostMapping("/getUser/{id}")
+    @GetMapping("/getUser/{id}")
     public ResponseEntity<?> getUser(@PathVariable int id ){
 
         try {
-            Userprofile user = userService.getUser(id);
-            return ResponseEntity.status(HttpStatus.OK).body(user);
+            UserProfileDto userProfileDto = userService.getUser(id);
+            return ResponseEntity.status(HttpStatus.OK).body(userProfileDto);
         }catch (UserNotFoundExceptions exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessfully","user not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseResponseDTO("Unsuccessful","user not found"));
 
         }
 

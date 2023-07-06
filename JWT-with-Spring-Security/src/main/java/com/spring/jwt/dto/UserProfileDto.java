@@ -35,5 +35,4 @@ public class UserProfileDto {
         this.mobile_no=user.getMobileNo();
     }
 
-
 }
