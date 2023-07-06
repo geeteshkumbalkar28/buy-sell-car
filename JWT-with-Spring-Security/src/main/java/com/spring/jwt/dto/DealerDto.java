@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class DealerDto {
     public String address;
-    public String adharShopact;
+    public int document;
     public String area;
     public String city;
     public String firstName;
@@ -24,7 +24,7 @@ public class DealerDto {
 
     public DealerDto(Dealer dealer) {
         this.address = dealer.getAddress();
-        this.adharShopact = dealer.getAdharShopact();
+        this.document = dealer.getDocument();
         this.area = dealer.getArea();
         this.city =dealer.getCity();
         this.firstName = dealer.getLastName();

@@ -24,6 +24,7 @@ public interface CarRepo extends JpaRepository<Car,Integer> , JpaSpecificationEx
 //    List<Car> findCarsByDealerIdAndStatus(@Param("dealerId") int dealerId, @Param("status") String status);
 
     List<Car> findByDealerIdAndCarStatus(Integer dealerId, String carStatus);
+
 }
 
 

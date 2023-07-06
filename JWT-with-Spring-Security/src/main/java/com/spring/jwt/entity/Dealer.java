@@ -24,8 +24,8 @@ public class Dealer {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "adhar_shopact", nullable = false, length = 250)
-    private String adharShopact;
+    @Column(name = "document", nullable = false, length = 250)
+    private int document;
 
     @Column(name = "area", nullable = false, length = 45)
     private String area;
@@ -46,7 +46,7 @@ public class Dealer {
     private String shopName;
     @Column(name = "Email",nullable = false)
     private String email;
-
+private long dealerDocumentPhoto;
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
@@ -65,7 +65,7 @@ public class Dealer {
 
     public Dealer(DealerDto dealerDto) {
         this.address = dealerDto.address;
-        this.adharShopact = dealerDto.adharShopact;
+        this.document = dealerDto.document;
         this.area = dealerDto.area;
         this.city =dealerDto.city;
         this.firstname = dealerDto.firstName;
