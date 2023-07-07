@@ -319,7 +319,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseDto forgotPass(String email, String resetPasswordLink) throws UserNotFoundExceptions {
+    public ResponseDto forgotPass(String email, String resetPasswordLink, String domain) throws UserNotFoundExceptions {
         ResponseDto response= new ResponseDto();
         User user=userRepository.findByEmail(email);
         if (user!= null) {
@@ -340,7 +340,7 @@ public class UserServiceImpl implements UserService {
             String to = email;
 
             // Send the email using the sendEmail() method
-            sendEmail(message, subject, to, from, resetLink);
+            sendEmail(message, subject, to, from, resetLink, domain);
             response.setStatus(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("Email sent");
         }else {
@@ -352,7 +352,8 @@ public class UserServiceImpl implements UserService {
     }
 
     // @Override
-    public void sendEmail(String message, String subject, String to, String from, String resetLink) {
+    public void sendEmail(String message, String subject, String to, String from, String resetLink, String domain) {
+
 
         // SMTP server for Gmail
         String host = "smtp.gmail.com";
@@ -379,7 +380,7 @@ public class UserServiceImpl implements UserService {
         });
 
         // Composing the email content
-        String content = "To reset your password click hear " + resetLink;
+        String content = "To reset your password, click here: " + resetLink.replace("169.254.63.118:5173", domain);
 
         // Creating a MimeMessage object for the session
         MimeMessage m = new MimeMessage(session);

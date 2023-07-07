@@ -76,8 +76,9 @@ public class FilterController {
             LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(1); // Set the expiration time to 24 hours from now
 
             userService.updateResetPassword(token, email);
-            String resetPasswordlink = "http://169.254.63.118:5173/reset-password?token=" + token;
-            ResponseDto response = userService.forgotPass(email, resetPasswordlink);
+            String resetPasswordLink = "http://" + request.getServerName() + "/reset-password?token=" + token;
+            ResponseDto response = userService.forgotPass(email, resetPasswordLink, request.getServerName());
+
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("Successful",response.getMessage()));
         }catch (UserNotFoundExceptions e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("Unsuccessful","Invalid email please register"));
