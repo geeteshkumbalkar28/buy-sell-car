@@ -123,4 +123,17 @@ public class DealerController {
 
 
     }
+@GetMapping("/getDealerId")
+    public ResponseEntity<?> getDealerId(@RequestParam String email){
+
+        try
+        {
+
+            int id=dealerService.getDealerIdByEmail(email);
+            return ResponseEntity.status(HttpStatus.OK).body(id);
+        }catch (EmailNotExistException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email Not Exist Exception");
+
+        }
+    }
 }

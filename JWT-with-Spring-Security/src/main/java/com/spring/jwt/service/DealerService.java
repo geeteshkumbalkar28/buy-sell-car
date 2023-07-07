@@ -17,4 +17,5 @@ public interface DealerService {
 
     BaseResponseDTO changePassword(Integer userId, ChangePasswordDto changePasswordDto);
 
+    public int getDealerIdByEmail(String email);
 }
