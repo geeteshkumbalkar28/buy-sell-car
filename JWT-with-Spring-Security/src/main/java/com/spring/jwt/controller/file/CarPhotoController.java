@@ -147,9 +147,9 @@ public class CarPhotoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePhoto(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deletePhoto(@PathVariable("id") Long id,int carId) {
         try {
-            carPhotoService.deletePhoto(id);
+            carPhotoService.deletePhoto(id,carId);
             return ResponseEntity.ok("Photo deleted");
         } catch (Exception e) {
             e.printStackTrace();

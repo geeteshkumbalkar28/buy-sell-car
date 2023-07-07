@@ -57,8 +57,10 @@ public class CarPhotoServiceImpl implements CarPhotoService {
     }
 
     @Override
-    public void deletePhoto(Long id) {
+    public void deletePhoto(Long id,int carId) {
         // Delete the photo from the database based on the provided ID
+        Optional<Car> car = carRepo.findById(carId);
+        car.get().setCarPhotoId(0);
         photoRepo.deleteById(id);
     }
 

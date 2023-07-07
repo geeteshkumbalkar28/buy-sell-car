@@ -61,8 +61,10 @@ public class DealerDocumentImp implements IDealerPhoto {
     }
 
     @Override
-    public void deletePhoto(Long id) {
+    public void deletePhoto(Long id,int dealerId) {
         // Delete the photo from the database based on the provided ID
+        Optional<Dealer> dealer = dealerRepository.findById(dealerId);
+        dealer.get().setDealerDocumentPhoto(0);
         photoRepo.deleteById(id);
     }
 

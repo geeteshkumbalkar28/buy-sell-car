@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.util.Set;
 
 @Entity
@@ -36,12 +35,15 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
+    private Long profilePhotoId;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Userprofile profile;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Dealer dealer;
+
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

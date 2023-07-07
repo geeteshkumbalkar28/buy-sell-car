@@ -1,31 +1,36 @@
 package com.spring.jwt.service.impl;
 
 import com.spring.jwt.entity.ProfilePhoto;
+import com.spring.jwt.entity.User;
 import com.spring.jwt.repository.ProfilePhotoRepo;
+import com.spring.jwt.repository.UserRepository;
 import com.spring.jwt.service.ProfilePhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProfilePhotoServiceImpl implements ProfilePhotoService {
 @Autowired
-private final ProfilePhotoRepo profilePhotoRepo;
-      @Autowired
-      public ProfilePhotoServiceImpl(ProfilePhotoRepo profilePhotoRepo)
-        {
-            this.profilePhotoRepo = profilePhotoRepo;
-        }
-        @Override
-        public void addprofilephoto(byte[] data){
-            ProfilePhoto profilePhoto = new ProfilePhoto();
-            profilePhoto.setProfilephoto(data);
-            profilePhotoRepo.save(profilePhoto);
-        }
+private  ProfilePhotoRepo profilePhotoRepo;
+@Autowired
+private UserRepository userRepository;
 
+//public ProfilePhotoServiceImpl
 
 
     @Override
-    public byte[] getprofilePhotoData(int id) {
+    public Long addprofilephoto(byte[] data) {
+        ProfilePhoto profilePhoto = new ProfilePhoto();
+        profilePhoto.setProfilephoto(data);
+        profilePhotoRepo.save(profilePhoto);
+        return profilePhoto.getId();
+
+    }
+
+    @Override
+    public byte[] getprofilePhotoData(Long id) {
         ProfilePhoto profilePhoto = profilePhotoRepo.findById(id).orElse(null);
 
         if (profilePhoto != null) {
@@ -35,10 +40,11 @@ private final ProfilePhotoRepo profilePhotoRepo;
         }
     }
 
-
     @Override
-    public void updateprofilePhoto(int id, byte[] data) {
+    public void updateprofilePhoto(Long id, byte[] data) {
+
         ProfilePhoto profilePhoto = profilePhotoRepo.findById(id).orElse(null);
+
         if (profilePhoto != null) {
             // Update the photo data
             profilePhoto.setProfilephoto(data);
@@ -50,7 +56,17 @@ private final ProfilePhotoRepo profilePhotoRepo;
     }
 
     @Override
-    public void deleteprofilePhoto(int id) {
+    public void deleteprofilePhoto(Long id)
+    {
         profilePhotoRepo.deleteById(id);
+
+    }
+
+    @Override
+    public void setUserPhotoID(int UserId, long profilePhotId) {
+        Optional<User> dealer = userRepository.findById(UserId);
+        dealer.get().setProfilePhotoId(profilePhotId);
+        userRepository.save(dealer.get());
+
     }
 }

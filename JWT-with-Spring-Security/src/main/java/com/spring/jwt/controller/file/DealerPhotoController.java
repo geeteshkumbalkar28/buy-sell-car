@@ -149,9 +149,9 @@ public class DealerPhotoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePhoto(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deletePhoto(@PathVariable("id") Long id,@RequestParam int dealerId) {
         try {
-            iDealerPhoto.deletePhoto(id);
+            iDealerPhoto.deletePhoto(id,dealerId);
             return ResponseEntity.ok("Photo deleted");
         } catch (Exception e) {
             e.printStackTrace();
