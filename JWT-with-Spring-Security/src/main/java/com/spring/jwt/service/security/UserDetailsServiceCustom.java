@@ -46,13 +46,15 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 .collect(Collectors.toList());
 
         String firstName = null;
+        String dealerId = null;
+
         if (authorities.contains(new SimpleGrantedAuthority("DEALER"))) {
             Dealer dealer = user.getDealer();
             if (dealer != null) {
                 firstName = dealer.getFirstname();
+                dealerId = String.valueOf(dealer.getId());
             }
         } else {
-            // Retrieve the first name from the Userprofile table
             Userprofile userProfile = user.getProfile();
             if (userProfile != null) {
                 firstName = userProfile.getFirstName();
@@ -63,6 +65,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 user.getEmail(),
                 user.getPassword(),
                 firstName,
+                dealerId,
                 authorities
         );
 
