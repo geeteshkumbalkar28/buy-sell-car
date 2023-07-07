@@ -17,7 +17,7 @@ public class RegisterDto {
     public String address;
     public String city;
     public String roles;
-    public String adharShopact;
+    public int document;
     public String shopName;
     public String area;
     public String userType;

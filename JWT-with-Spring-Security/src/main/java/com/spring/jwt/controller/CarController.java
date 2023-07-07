@@ -54,7 +54,6 @@ public class CarController {
             responseAllCarDto.setList(listOfCar);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllCarDto);
 
-
         }
     catch (CarNotFoundException carNotFoundException){
 //            List<CarDto> emptyList;

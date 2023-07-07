@@ -98,6 +98,7 @@ public class Car {
 //    private Dealer dealerVendor;
        @Column(name = "dealer_id")
        private int dealerId;
+    private long carPhotoId;
 
 //    private Carphoto carphotoCarPhoto;
 @ManyToMany
@@ -132,5 +133,6 @@ private Set<Bidding> biddings = new LinkedHashSet<>();
         this.transmission = carDto.getTransmission();
         this.tyre = carDto.getTyre();
         this.year = carDto.getYear();
+        this.dealerId=carDto.getDealer_id();
     }
 }
