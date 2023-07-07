@@ -17,6 +17,13 @@ public class UserDetailsCustom implements UserDetails {
     private String password;
 
     private String firstName;
+
+    private String dealerId;
+
+    public String getDealerId() {
+        return dealerId;
+    }
+
     public String getFirstName() {
         return firstName;
     }
