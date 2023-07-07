@@ -17,4 +17,5 @@ public interface ICarRegister {
     public List<CarDto> searchByFilter(FilterDto filterDto, int pageNo);
 
     public CarDto findById(int carId);
+    List<CarDto> getCarsByDealerIdWithStatus(int dealerId, String status);
 }

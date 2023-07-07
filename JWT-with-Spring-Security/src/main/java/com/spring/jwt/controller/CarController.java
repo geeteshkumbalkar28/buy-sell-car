@@ -121,6 +121,15 @@ public class CarController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
         }
     }
+    @GetMapping("/dealer/{dealerId}/status/{carStatus}")
+    public ResponseEntity<List<CarDto>> getCarsByDealerIdAndStatus(
+            @PathVariable("dealerId") Integer dealerId,
+            @PathVariable("carStatus") String carStatus
+    ) {
+        List<CarDto> cars = iCarRegister.getCarsByDealerIdWithStatus(dealerId, carStatus);
+        return ResponseEntity.ok(cars);
+    }
+
 
 }
 
