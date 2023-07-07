@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "LEFT JOIN userprofile ON user_role.user_id = userprofile.user_id " +
             "LEFT JOIN users ON user_role.user_id = users.user_id WHERE user_role.user_id = ?1", nativeQuery = true)
     public void DeleteById(int user_id);
+
+    User findByResetPasswordToken(String token);
 }
