@@ -2,6 +2,7 @@ package com.spring.jwt.service;
 
 import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Userprofile;
+import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.utils.BaseResponseDTO;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public interface UserService {
 
     void updateResetPassword(String token, String email);
 
-    ResponseDto forgotPass(String email, String resetPasswordlink);
+    ResponseDto forgotPass(String email, String resetPasswordLink, String domain) throws UserNotFoundExceptions;
 
     ResponseDto updatePassword(String token, String newPassword);
 }
