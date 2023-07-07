@@ -18,6 +18,7 @@ public class DealerDto {
     public String email;
     public String password;
     private Integer dealer_id;
+    private Integer userId;
 
     public DealerDto() {
     }
@@ -34,5 +35,7 @@ public class DealerDto {
         this.email = dealer.getEmail();
 
         this.dealer_id = dealer.getId();
+        this.userId = dealer.getUser().getId();
+
     }
 }

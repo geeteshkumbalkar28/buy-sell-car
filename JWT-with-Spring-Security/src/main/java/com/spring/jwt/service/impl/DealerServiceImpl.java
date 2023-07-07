@@ -92,7 +92,7 @@ public class DealerServiceImpl implements DealerService {
             throw new PageNotFoundException("page not found");
 
         }
-        //////
+        ///////
 //        List<Car> listOfCar = carRepo.findAll();
 //        CarNotFoundException carNotFoundException;
 
@@ -108,6 +108,8 @@ public class DealerServiceImpl implements DealerService {
             System.err.println("inside dealer");
             System.out.println("*");
             DealerDto dealerDto = new DealerDto(dealers.get(counter));
+            System.err.println(dealerDto.toString());
+//            dealerDto.setUserId(dealers.get(counter).getUser().getId());
             listOfDealerDto.add(dealerDto);
             if(diff == i){
                 break;
