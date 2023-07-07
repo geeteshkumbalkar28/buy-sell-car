@@ -21,4 +21,5 @@ public class RegisterDto {
     public String shopName;
     public String area;
     public String userType;
+
 }
