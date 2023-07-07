@@ -41,9 +41,13 @@ public class DealerController {
     @GetMapping("/allDealers/{pageNo}")
     public ResponseEntity<ResponseAllDealerDto> getAllDealers(@PathVariable int pageNo) {
         try{
-
+            System.out.println("1");
             List<DealerDto> dealers = dealerService.getAllDealers(pageNo);
+            System.out.println("2");
+
             ResponseAllDealerDto responseAllDealerDto = new ResponseAllDealerDto("success");
+            System.out.println("3");
+
             responseAllDealerDto.setList(dealers);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllDealerDto);
         }catch (DealerNotFoundException dealerNotFoundException){

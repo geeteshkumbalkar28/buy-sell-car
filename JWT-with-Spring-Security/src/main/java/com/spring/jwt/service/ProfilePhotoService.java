@@ -2,9 +2,12 @@ package com.spring.jwt.service;
 
 public interface ProfilePhotoService {
 
-    void addprofilephoto(byte[] data);
-    byte[] getprofilePhotoData(int id);
-    void updateprofilePhoto(int id, byte[] data);
-    void deleteprofilePhoto(int id);
+    public Long addprofilephoto(byte[] data);
+    public byte[] getprofilePhotoData(Long id);
+    public void updateprofilePhoto(Long id, byte[] data);
+    public void deleteprofilePhoto(Long id);
+
+     public void setUserPhotoID(int UserId, long profilePhotId);
+
 
 }

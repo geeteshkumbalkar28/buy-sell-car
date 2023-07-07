@@ -4,11 +4,14 @@ package com.spring.jwt.service.impl;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.FilterDto;
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.Carphoto;
 import com.spring.jwt.entity.Dealer;
+import com.spring.jwt.entity.Photo;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
+import com.spring.jwt.repository.PhotoRepo;
 import com.spring.jwt.service.ICarRegister;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class CarRegisterImp implements ICarRegister {
     private CarRepo carRepo;
     @Autowired
     private DealerRepository dealerRepo;
+    @Autowired
+    private PhotoRepo photoRepo;
 
 
 
@@ -138,6 +143,14 @@ public class CarRegisterImp implements ICarRegister {
     @Override
     public String deleteCar(int id) {
         Car carDetail = carRepo.findById(id).orElseThrow(()->new CarNotFoundException("car not found",HttpStatus.NOT_FOUND));
+        Long carDocumentPhotoId=carDetail.getCarPhotoId();
+
+        if(carDocumentPhotoId == 0){
+            carRepo.deleteById(id);
+            return "car details deleted";
+        }
+        carDetail.setCarPhotoId(0);
+        photoRepo.deleteById(carDocumentPhotoId);
 
         carRepo.deleteById(id);
         return "car details deleted";

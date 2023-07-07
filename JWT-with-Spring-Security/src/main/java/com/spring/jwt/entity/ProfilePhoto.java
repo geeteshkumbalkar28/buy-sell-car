@@ -17,7 +17,7 @@ public class ProfilePhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Lob
     @Column(name = "profilephoto", nullable = false, length = 500000)
