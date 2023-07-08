@@ -67,10 +67,14 @@ public class FilterServiceImpl implements FilterService {
         if(carPage.isEmpty()){
             throw new PageNotFoundException("Page Not found");
         }
+        List<CarDto> listOfCarDto =new ArrayList<>();
 
-        List<CarDto> listOfCarDto = carPage.getContent().stream()
-                .map(CarDto::new)
-                .collect(Collectors.toList());
+        for (int counter=0;counter<carPage.getContent().size();counter++){
+
+            CarDto carDto = new CarDto(carPage.getContent().get(counter));
+            carDto.setCarId(carPage.getContent().get(counter).getId());
+            listOfCarDto.add(carDto);
+        }
 
         return listOfCarDto;
     }
@@ -94,6 +98,7 @@ public class FilterServiceImpl implements FilterService {
 
 //            System.out.println("*");
             CarDto carDto = new CarDto(listOfCar.get(counter));
+            carDto.setCarId(listOfCarDto.get(counter).getCarId());
             listOfCarDto.add(carDto);
             if(diff == i){
                 break;
@@ -103,4 +108,6 @@ public class FilterServiceImpl implements FilterService {
 //        System.out.println(listOfCar);
         return listOfCarDto;
     }
+
+
 }

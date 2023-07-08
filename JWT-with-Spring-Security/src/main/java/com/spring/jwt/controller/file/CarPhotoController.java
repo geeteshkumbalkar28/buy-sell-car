@@ -80,18 +80,25 @@ package com.spring.jwt.controller.file;
 //        }
 //        }
 //}
+import com.spring.jwt.entity.Car;
+import com.spring.jwt.exception.CarNotFoundException;
+import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.service.CarPhotoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/photo")
 public class CarPhotoController {
         private final CarPhotoService carPhotoService;
+        @Autowired
+        private CarRepo carRepo;
 
 
     public CarPhotoController(CarPhotoService carPhotoService) {
@@ -115,16 +122,24 @@ public class CarPhotoController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<byte[]> getPhoto(@PathVariable("id") Long id) {
+    public ResponseEntity<byte[]> getPhoto(@PathVariable("id") int carId) {
         try {
-            byte[] photoData = carPhotoService.getPhotoData(id);
+            Optional<Car> car =carRepo.findById(carId);
+            if(car.isEmpty()){
+                throw new CarNotFoundException();
+            }
+            byte[] photoData = carPhotoService.getPhotoData(car.get().getCarPhotoId());
 
             if (photoData != null) {
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoData);
             } else {
                 return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
+        }catch (CarNotFoundException carNotFoundException){
+            return ResponseEntity.badRequest().body(new byte[0]);
+
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new byte[0]);
         }
