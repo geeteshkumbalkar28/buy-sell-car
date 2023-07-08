@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.spring.jwt</groupId>
 	<artifactId>JWT-with-Spring-Security</artifactId>
-
+<!--	<packaging>war</packaging>-->
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>JWT-with-Spring-Security</name>
@@ -32,6 +32,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.12.0</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

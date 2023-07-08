@@ -130,6 +130,7 @@ public class CarRegisterImp implements ICarRegister {
 
 //            System.out.println("*");
             CarDto carDto = new CarDto(listOfCar.get(counter));
+            carDto.setCarId(listOfCar.get(counter).getId());
             listOfCarDto.add(carDto);
             if(diff == i){
                 break;
@@ -214,12 +215,16 @@ public class CarRegisterImp implements ICarRegister {
 
         Page<Car> carPage = carRepo.findAll(spec, pageable);
         if(carPage.isEmpty()){
-           throw new PageNotFoundException("Page Not found");
+            throw new PageNotFoundException("Page Not found");
         }
+        List<CarDto> listOfCarDto =new ArrayList<>();
 
-        List<CarDto> listOfCarDto = carPage.getContent().stream()
-                .map(CarDto::new)
-                .collect(Collectors.toList());
+        for (int counter=0;counter<carPage.getContent().size();counter++){
+
+            CarDto carDto = new CarDto(carPage.getContent().get(counter));
+            carDto.setCarId(carPage.getContent().get(counter).getId());
+            listOfCarDto.add(carDto);
+        }
 
         return listOfCarDto;
     }
@@ -231,6 +236,7 @@ public class CarRegisterImp implements ICarRegister {
             throw new CarNotFoundException("car not found",HttpStatus.NOT_FOUND);
         }
         CarDto carDto = new CarDto(car.get());
+        carDto.setCarId(carId);
         return carDto;
     }
     @Override
@@ -243,6 +249,7 @@ public class CarRegisterImp implements ICarRegister {
 
     private CarDto convertToDto(Car car) {
         CarDto carDto = new CarDto();
+        carDto.setCarId(car.getId());
         carDto.setDealer_id(car.getDealerId());
         carDto.setBrand(car.getBrand());
         carDto.setModel(car.getModel());

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CarDto {
+    private int carId;
 
     private Boolean acFeature;
 
@@ -90,6 +91,7 @@ public class CarDto {
         this.transmission = car.getTransmission();
         this.tyre = car.getTyre();
         this.year = car.getYear();
+        this.dealer_id=car.getDealerId();
 
     }
 }

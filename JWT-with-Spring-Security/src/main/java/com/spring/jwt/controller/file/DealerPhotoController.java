@@ -80,6 +80,9 @@ package com.spring.jwt.controller.file;
 //        }
 //        }
 //}
+import com.spring.jwt.entity.Dealer;
+import com.spring.jwt.exception.DealerNotFoundException;
+import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.service.CarPhotoService;
 import com.spring.jwt.service.IDealerPhoto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,12 +92,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/dealerDocument")
 public class DealerPhotoController {
     @Autowired
     private IDealerPhoto iDealerPhoto;
+    @Autowired
+    private DealerRepository dealerRepository;
 
     public DealerPhotoController(IDealerPhoto iDealerPhoto) {
         this.iDealerPhoto =iDealerPhoto;
@@ -117,16 +123,24 @@ public class DealerPhotoController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<byte[]> getPhoto(@PathVariable("id") Long id) {
+    public ResponseEntity<byte[]> getPhoto(@PathVariable("id") int dealerId) {
         try {
-            byte[] photoData = iDealerPhoto.getPhotoData(id);
+            Optional<Dealer> dealer=dealerRepository.findById(dealerId);
+            if(dealer.isEmpty()){
+                throw new DealerNotFoundException("dealer not found");
+            }
+            byte[] photoData = iDealerPhoto.getPhotoData(dealer.get().getDealerDocumentPhoto());
 
             if (photoData != null) {
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoData);
             } else {
                 return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
+        }catch (DealerNotFoundException dealerNotFoundException){
+            return ResponseEntity.badRequest().body(new byte[0]);
+
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new byte[0]);
         }

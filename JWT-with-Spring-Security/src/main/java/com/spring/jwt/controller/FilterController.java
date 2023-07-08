@@ -5,6 +5,7 @@ import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.service.FilterService;
+import com.spring.jwt.service.ICarRegister;
 import com.spring.jwt.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ public class FilterController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ICarRegister iCarRegister;
 
 
     @GetMapping("/mainFilter/{pageNo}")
@@ -42,7 +45,24 @@ public class FilterController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
         }
     }
+    @GetMapping("/getCar")
+    public ResponseEntity<ResponseSingleCarDto> findByArea(@RequestParam int carId) {
+        try {
+            ResponseSingleCarDto responseSingleCarDto = new ResponseSingleCarDto("success");
 
+            CarDto car = iCarRegister.findById(carId);
+
+            responseSingleCarDto.setObject(car);
+            return ResponseEntity.status(HttpStatus.OK).body(responseSingleCarDto);
+        }catch (CarNotFoundException carNotFoundException){
+            ResponseSingleCarDto responseSingleCarDto = new ResponseSingleCarDto("unsuccess");
+            responseSingleCarDto.setException("car not found by car id");
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseSingleCarDto);
+        }
+
+//        return ResponseEntity.ok(cars.get());*
+    }
     @GetMapping("/getAllCars")
     public ResponseEntity<ResponseAllCarDto> getAllCars(@RequestParam int pageNo){
         try

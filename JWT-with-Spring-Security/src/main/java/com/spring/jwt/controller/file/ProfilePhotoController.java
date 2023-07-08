@@ -1,18 +1,25 @@
 package com.spring.jwt.controller.file;
 
+import com.spring.jwt.entity.User;
+import com.spring.jwt.exception.UserNotDealerException;
+import com.spring.jwt.exception.UserNotFoundExceptions;
+import com.spring.jwt.repository.UserRepository;
 import com.spring.jwt.service.ProfilePhotoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/userProfilePhoto")
 public class ProfilePhotoController {
     private final ProfilePhotoService carPhotoService;
-
+    @Autowired
+    private UserRepository userRepository;
 
     public ProfilePhotoController(ProfilePhotoService carPhotoService) {
         this.carPhotoService = carPhotoService;
@@ -35,16 +42,24 @@ public class ProfilePhotoController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<byte[]> getPhoto(@PathVariable("id") Long id) {
+    public ResponseEntity<byte[]> getPhoto(@PathVariable("id") int userId) {
         try {
-            byte[] photoData = carPhotoService.getprofilePhotoData(id);
+            Optional<User> user=userRepository.findById(userId);
+            if(user.isEmpty()){
+                throw new UserNotDealerException("user not found");
+            }
+            byte[] photoData = carPhotoService.getprofilePhotoData(user.get().getProfilePhotoId());
 
             if (photoData != null) {
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoData);
             } else {
                 return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
+        } catch (UserNotFoundExceptions userNotFoundExceptions){
+            return ResponseEntity.badRequest().body(new byte[0]);
+
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new byte[0]);
         }
