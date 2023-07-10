@@ -122,12 +122,29 @@ public class CarController {
         }
     }
     @GetMapping("/dealer/{dealerId}/status/{carStatus}")
-    public ResponseEntity<List<CarDto>> getCarsByDealerIdAndStatus(
+    public ResponseEntity<ResponseAllCarDto> getCarsByDealerIdAndStatus(
             @PathVariable("dealerId") Integer dealerId,
-            @PathVariable("carStatus") String carStatus
+            @PathVariable("carStatus") String carStatus,
+            @RequestParam int pageNo
     ) {
-        List<CarDto> cars = iCarRegister.getCarsByDealerIdWithStatus(dealerId, carStatus);
-        return ResponseEntity.ok(cars);
+        try{
+
+            List<CarDto> cars = iCarRegister.getCarsByDealerIdWithStatus(dealerId, carStatus,pageNo);
+            ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("success");
+            responseAllCarDto.setList(cars);
+            return ResponseEntity.status(HttpStatus.OK).body(responseAllCarDto);
+
+
+        }catch (CarNotFoundException carNotFoundException){
+            ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("unsuccess");
+            responseAllCarDto.setException("car not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
+
+        }catch (PageNotFoundException pageNotFoundException){
+            ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("unsuccess");
+            responseAllCarDto.setException("page not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
+        }
     }
 
 
