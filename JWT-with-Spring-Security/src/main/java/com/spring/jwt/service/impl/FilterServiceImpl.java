@@ -86,7 +86,7 @@ public class FilterServiceImpl implements FilterService {
             throw new PageNotFoundException("page not found");
 
         }
-        if(listOfCar.size()<=0){throw new CarNotFoundException("car not found", HttpStatus.NOT_FOUND);}
+        if(listOfCar.size()<=0){throw new CarNotFoundException("car not found",HttpStatus.NOT_FOUND);}
 //        System.out.println("list of de"+listOfCar.size());
         List<CarDto> listOfCarDto = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public class FilterServiceImpl implements FilterService {
 
 //            System.out.println("*");
             CarDto carDto = new CarDto(listOfCar.get(counter));
-            carDto.setCarId(listOfCarDto.get(counter).getCarId());
+            carDto.setCarId(listOfCar.get(counter).getId());
             listOfCarDto.add(carDto);
             if(diff == i){
                 break;
