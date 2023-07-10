@@ -32,14 +32,30 @@ public class FilterController {
 
 
     @GetMapping("/mainFilter/{pageNo}")
-    public ResponseEntity<ResponseAllCarDto> searchByFilter(@RequestBody FilterDto filterDto, @PathVariable int pageNo){
-        try{
-            List<CarDto> listOfCar= filterService.searchByFilter(filterDto,pageNo);
+    public ResponseEntity<ResponseAllCarDto> searchByFilter(
+            @RequestParam(required = false) Integer minPrice,
+            @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) String area,
+            @RequestParam(required = false) String year,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String model,
+            @RequestParam(required = false) String transmission,
+            @RequestParam(required = false) String fuelType,
+            @PathVariable int pageNo) {
+
+
+        Integer convertedYear = year != null && !year.isEmpty() ? Integer.valueOf(year) : null;
+
+
+        FilterDto filterDto = new FilterDto(minPrice, maxPrice, area, brand, model, transmission, fuelType, convertedYear);
+
+
+        try {
+            List<CarDto> listOfCar = filterService.searchByFilter(filterDto, pageNo);
             ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("success");
             responseAllCarDto.setList(listOfCar);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllCarDto);
-        }
-        catch (PageNotFoundException pageNotFoundException){
+        } catch (PageNotFoundException pageNotFoundException) {
             ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("unsuccess");
             responseAllCarDto.setException("page not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
