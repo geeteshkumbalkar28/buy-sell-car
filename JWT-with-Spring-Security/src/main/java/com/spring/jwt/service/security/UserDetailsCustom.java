@@ -20,6 +20,13 @@ public class UserDetailsCustom implements UserDetails {
 
     private String dealerId;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    private String userId;
+
+
     public String getDealerId() {
         return dealerId;
     }
