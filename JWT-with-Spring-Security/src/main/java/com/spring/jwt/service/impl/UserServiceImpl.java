@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
         } else if (role.getName().equals("DEALER")) {
             Dealer dealer = new Dealer();
             dealer.setAddress(registerDto.getAddress());
-            dealer.setDocument(registerDto.getDocument());
             dealer.setArea(registerDto.getArea());
             dealer.setCity(registerDto.getCity());
             dealer.setFirstname(registerDto.getFirstName());

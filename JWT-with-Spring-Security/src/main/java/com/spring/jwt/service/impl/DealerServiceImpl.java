@@ -68,7 +68,6 @@ public class DealerServiceImpl implements DealerService {
 
     private void updateDealerDetails(Dealer dealer, RegisterDto registerDto) {
         dealer.setAddress(registerDto.getAddress());
-        dealer.setDocument(registerDto.getDocument());
         dealer.setArea(registerDto.getArea());
         dealer.setCity(registerDto.getCity());
         dealer.setFirstname(registerDto.getFirstName());
@@ -136,7 +135,6 @@ public class DealerServiceImpl implements DealerService {
         DealerDto dealerDto = new DealerDto();
         dealerDto.setDealer_id(dealer.getId());
         dealerDto.setAddress(dealer.getAddress());
-        dealerDto.setDocument(dealer.getDocument());
         dealerDto.setArea(dealer.getArea());
         dealerDto.setCity(dealer.getCity());
         dealerDto.setFirstName(dealer.getFirstname());

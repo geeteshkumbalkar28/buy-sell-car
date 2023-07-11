@@ -24,8 +24,6 @@ public class Dealer {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "document", nullable = false, length = 250)
-    private int document;
 
     @Column(name = "area", nullable = false, length = 45)
     private String area;
@@ -65,7 +63,6 @@ private long dealerDocumentPhoto;
 
     public Dealer(DealerDto dealerDto) {
         this.address = dealerDto.address;
-        this.document = dealerDto.document;
         this.area = dealerDto.area;
         this.city =dealerDto.city;
         this.firstname = dealerDto.firstName;
