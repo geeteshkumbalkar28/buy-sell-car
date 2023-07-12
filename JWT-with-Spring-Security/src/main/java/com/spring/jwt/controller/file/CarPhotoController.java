@@ -80,11 +80,15 @@ package com.spring.jwt.controller.file;
 //        }
 //        }
 //}
+import com.spring.jwt.dto.PhotoResopnseDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.exception.CarNotFoundException;
+import com.spring.jwt.exception.NoImageFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.service.CarPhotoService;
+import com.spring.jwt.service.security.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -99,6 +103,14 @@ public class CarPhotoController {
         private final CarPhotoService carPhotoService;
         @Autowired
         private CarRepo carRepo;
+
+    @Autowired
+    private ImageService imageService;
+
+    @RequestMapping("/")
+    public String home(){
+        return "home";
+    }
 
 
     public CarPhotoController(CarPhotoService carPhotoService) {
@@ -169,6 +181,30 @@ public class CarPhotoController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Failed to delete photo");
+        }
+    }
+
+
+
+
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("image") MultipartFile multipartFile,@RequestParam String type,@RequestParam int carId) throws IOException {
+        String imageUrl = imageService.uploadFile(multipartFile);
+        if (imageUrl != null){
+            imageService.saveLink(imageUrl,type,carId);
+            return "image saved";
+        }else {
+            return "Something went wrong";
+        }
+    }
+
+    @GetMapping("/getImage")
+    public ResponseEntity<?> getImage(@RequestParam int carId){
+        System.out.println(carId);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(imageService.findById(carId));
+        }catch (NoImageFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no");
         }
     }
 }
