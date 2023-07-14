@@ -2,10 +2,11 @@ package com.spring.jwt.service.impl;
 
 
 import com.cloudinary.Cloudinary;
-import com.spring.jwt.dto.PhotoDto;
+import com.cloudinary.utils.ObjectUtils;
+import com.spring.jwt.dto.ImageUploadDto;
 import com.spring.jwt.dto.PhotoResopnseDto;
-import com.spring.jwt.entity.Car;
-import com.spring.jwt.entity.Carphoto;
+import com.spring.jwt.entity.CarPhoto;
+import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.NoImageFoundException;
 import com.spring.jwt.repository.ImageRepository;
 import com.spring.jwt.service.security.ImageService;
@@ -16,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,33 +31,73 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String uploadFile(MultipartFile multipartFile) throws IOException {
+        if (multipartFile.isEmpty()){
+            throw new IOException();
+        }
         return cloudinary.uploader()
                 .upload(multipartFile.getBytes(),
-                        Map.of("public_id", UUID.randomUUID().toString()))
+                        ObjectUtils.asMap("public_id", multipartFile.getOriginalFilename()))
                 .get("url")
                 .toString();
     }
 
     @Override
-    public void saveLink(String imageUrl, String type,int carId) {
-        Carphoto image = new Carphoto();
-        image.setPhoto_link(imageUrl);
-        image.setCar_id(carId);
-        image.setType(type);
+    public CarPhoto saveLink(String imageUrl, String type, int carId) throws IOException {
 
-        imageRepository.save(image);
-
+        if (imageUrl!= null){
+            if (type != null){
+              // Optional<Carphoto> car= imageRepository.findById(carId);
+                //if (car.isPresent()){
+                    CarPhoto image = new CarPhoto();
+                    image.setPhoto_link(imageUrl);
+                    image.setCar_id(carId);
+                    image.setType(type);
+                   return imageRepository.save(image);
+                /*}else {
+                    throw new CarNotFoundException("No car found with this id");
+                }*/
+            }
+        }
+        throw new IOException("Something went wrong");
     }
 
     @Override
     public PhotoResopnseDto findById(int car_photo_id) {
-        Optional<Carphoto> optionalImage = imageRepository.findById(car_photo_id);
+        Optional<CarPhoto> optionalImage = imageRepository.findById(car_photo_id);
         if (optionalImage.isPresent()) {
             String link = optionalImage.get().getPhoto_link();
             PhotoResopnseDto photoResopnseDto = new PhotoResopnseDto(link,optionalImage.get().getType(),optionalImage.get().getId(),optionalImage.get().getCar_id());
             return photoResopnseDto;
         }else {
             throw new NoImageFoundException("Image not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public ImageUploadDto deleteImage(int id,String imageName) throws IOException {
+        Optional<CarPhoto> carPhoto= imageRepository.findById(id);
+        if (carPhoto.isPresent()){
+            imageRepository.deleteById(carPhoto.get().getId());
+            cloudinary.uploader().destroy(imageName,ObjectUtils.emptyMap());
+            ImageUploadDto imageUploadDto= new ImageUploadDto();
+            imageUploadDto.setMessage("Successful");
+            return imageUploadDto;
+        }else {
+           throw new CarNotFoundException();
+        }
+    }
+
+    @Override
+    public ImageUploadDto updateImage(int id, String imageUrl) {
+        Optional<CarPhoto> photo=imageRepository.findById(id);
+        if (photo.isPresent()){
+            photo.get().setPhoto_link(imageUrl);
+            ImageUploadDto imageUploadDto= new ImageUploadDto();
+            imageUploadDto.setMessage("Successful");
+            imageRepository.save(photo.get());
+            return imageUploadDto;
+        }else {
+            throw new CarNotFoundException();
         }
     }
 }

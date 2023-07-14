@@ -80,6 +80,10 @@ package com.spring.jwt.controller.file;
 //        }
 //        }
 //}
+
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.spring.jwt.dto.ImageUploadDto;
 import com.spring.jwt.dto.PhotoResopnseDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.exception.CarNotFoundException;
@@ -100,15 +104,18 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/photo")
 public class CarPhotoController {
-        private final CarPhotoService carPhotoService;
-        @Autowired
-        private CarRepo carRepo;
+    private final CarPhotoService carPhotoService;
+    @Autowired
+    private CarRepo carRepo;
+
+    @Autowired
+    private  Cloudinary cloudinary;
 
     @Autowired
     private ImageService imageService;
 
     @RequestMapping("/")
-    public String home(){
+    public String home() {
         return "home";
     }
 
@@ -118,11 +125,11 @@ public class CarPhotoController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addPhoto(@RequestParam("file") MultipartFile file,@RequestParam int carId) {
+    public ResponseEntity<String> addPhoto(@RequestParam("file") MultipartFile file, @RequestParam int carId) {
         if (!file.isEmpty()) {
             try {
-                long carPhotoId= carPhotoService.addphoto(file.getBytes());
-                carPhotoService.setCarPhotoIdInCar(carId,carPhotoId);
+                long carPhotoId = carPhotoService.addphoto(file.getBytes());
+                carPhotoService.setCarPhotoIdInCar(carId, carPhotoId);
 
                 return ResponseEntity.ok("Photo added");
             } catch (IOException e) {
@@ -136,8 +143,8 @@ public class CarPhotoController {
     @GetMapping("/get/{id}")
     public ResponseEntity<byte[]> getPhoto(@PathVariable("id") int carId) {
         try {
-            Optional<Car> car =carRepo.findById(carId);
-            if(car.isEmpty()){
+            Optional<Car> car = carRepo.findById(carId);
+            if (car.isEmpty()) {
                 throw new CarNotFoundException();
             }
             byte[] photoData = carPhotoService.getPhotoData(car.get().getCarPhotoId());
@@ -147,11 +154,9 @@ public class CarPhotoController {
             } else {
                 return ResponseEntity.notFound().build();
             }
-        }catch (CarNotFoundException carNotFoundException){
+        } catch (CarNotFoundException carNotFoundException) {
             return ResponseEntity.badRequest().body(new byte[0]);
-
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body(new byte[0]);
         }
@@ -174,9 +179,9 @@ public class CarPhotoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePhoto(@PathVariable("id") Long id,int carId) {
+    public ResponseEntity<String> deletePhoto(@PathVariable("id") Long id, int carId) {
         try {
-            carPhotoService.deletePhoto(id,carId);
+            carPhotoService.deletePhoto(id, carId);
             return ResponseEntity.ok("Photo deleted");
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,27 +189,54 @@ public class CarPhotoController {
         }
     }
 
-
-
-
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("image") MultipartFile multipartFile,@RequestParam String type,@RequestParam int carId) throws IOException {
-        String imageUrl = imageService.uploadFile(multipartFile);
-        if (imageUrl != null){
-            imageService.saveLink(imageUrl,type,carId);
-            return "image saved";
-        }else {
-            return "Something went wrong";
+    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile multipartFile, @RequestParam String type, @RequestParam int carId) throws IOException {
+        try {
+            String imageUrl = imageService.uploadFile(multipartFile);
+            imageService.saveLink(imageUrl, type, carId);
+            ImageUploadDto imageUploadDto= new ImageUploadDto();
+            imageUploadDto.setMessage("Successful");
+            return ResponseEntity.status(HttpStatus.OK).body(imageUploadDto);
+        } catch (CarNotFoundException e) {
+            ImageUploadDto imageUploadDto= new ImageUploadDto();
+            imageUploadDto.setMessage("Unsuccessful");
+            imageUploadDto.setException("Car not found with this id");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(imageUploadDto);
+        }catch (IOException e){
+            ImageUploadDto imageUploadDto= new ImageUploadDto();
+            imageUploadDto.setMessage("Unsuccessful");
+            imageUploadDto.setException("Something went wrong");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(imageUploadDto);
         }
     }
 
     @GetMapping("/getImage")
-    public ResponseEntity<?> getImage(@RequestParam int carId){
+    public ResponseEntity<?> getImage(@RequestParam int carId) {
         System.out.println(carId);
         try {
             return ResponseEntity.status(HttpStatus.OK).body(imageService.findById(carId));
-        }catch (NoImageFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no");
+        } catch (NoImageFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No image found");
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteImage( @RequestParam int id,@RequestParam String imageName) throws IOException {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(imageService.deleteImage(id,imageName));
+        }catch (CarNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found with this id");
+        }
+    }
+
+    @PutMapping("/updateImage")
+    public ResponseEntity<?> updateImage(@RequestParam("image") MultipartFile multipartFile,@RequestParam int id,@RequestParam String imageName) throws IOException {
+        try {
+            cloudinary.uploader().destroy(imageName, ObjectUtils.emptyMap());
+            String imageUrl = imageService.uploadFile(multipartFile);
+            return ResponseEntity.status(HttpStatus.OK).body(imageService.updateImage(id,imageUrl));
+        }catch (CarNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found with this id");
         }
     }
 }
