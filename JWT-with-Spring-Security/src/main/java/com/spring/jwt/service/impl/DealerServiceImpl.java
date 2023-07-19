@@ -103,7 +103,7 @@ public class DealerServiceImpl implements DealerService {
         int pageEnd=pageStart+10;
         int diff=(dealers.size()) - pageStart;
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
-            if(pageStart>listOfDealerDto.size()){break;}
+            if(pageStart>dealers.size()){break;}
             System.err.println("inside dealer");
             System.out.println("*");
             DealerDto dealerDto = new DealerDto(dealers.get(counter));
