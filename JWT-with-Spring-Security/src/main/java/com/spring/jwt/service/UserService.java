@@ -2,6 +2,7 @@ package com.spring.jwt.service;
 
 import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Userprofile;
+import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.utils.BaseResponseDTO;
 
@@ -19,7 +20,6 @@ public interface UserService {
     BaseResponseDTO changePassword(int id, PasswordChange passwordChange);
 
     /**
-
      This method edits the details of a user.
      @param userProfileDto - the DTO object containing the updated user details
      @param id - the id of the user to be edited
@@ -53,9 +53,32 @@ public interface UserService {
      */
     UserProfileDto getUser(int id);
 
+    /**
+     Updates the reset password token for a user with the specified email.
+     @param token The reset password token to be set for the user.
+     @param email The email of the user whose reset password token is being updated.
+     @throws UserNotFoundExceptions If no user is found with the given email.
+     */
     void updateResetPassword(String token, String email);
 
+    /**
+     Sends a password reset email to the specified email address.
+     If the email belongs to a registered user, an email is sent with a password reset link.
+     If the email does not belong to any registered user, a UserNotFoundException is thrown.
+     @param email The email address of the user requesting a password reset.
+     @param resetPasswordLink The password reset link to be included in the email.
+     @param domain The domain of the application.
+     @return A ResponseDto indicating the status of the operation.
+     @throws UserNotFoundExceptions If the email does not belong to any registered user.
+     */
     ResponseDto forgotPass(String email, String resetPasswordLink, String domain) throws UserNotFoundExceptions;
 
+    /**
+     * Updates the password for a user based on a reset password token.
+     *
+     * @param token         The reset password token used to identify the user.
+     * @param newPassword  The new password to be set for the user.
+     * @return              A ResponseDto object indicating the status and message of the operation.
+     */
     ResponseDto updatePassword(String token, String newPassword);
 }
