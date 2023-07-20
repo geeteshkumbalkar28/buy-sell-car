@@ -2,6 +2,7 @@ package com.spring.jwt.dto;
 
 
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class CarDto {
 
     private Boolean carInsurance;
 
-    private String carStatus;
+    private Status carStatus;
 
     private String city;
 
@@ -61,10 +62,6 @@ public class CarDto {
     private int year;
 
     private int dealer_id;
-
-//    private Dealer dealerVendor;
-//
-//    private Carphoto carphotoCarPhoto;
 
 
     public CarDto(Car car){

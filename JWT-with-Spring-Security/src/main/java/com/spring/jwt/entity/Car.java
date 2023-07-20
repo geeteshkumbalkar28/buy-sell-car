@@ -1,6 +1,5 @@
 package com.spring.jwt.entity;
 
-
 import com.spring.jwt.dto.CarDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,8 +41,8 @@ public class Car {
     @Column(name = "car_insurance")
     private Boolean carInsurance;
 
-    @Column(name = "car_status", length = 45)
-    private String carStatus;
+    @Enumerated(EnumType.STRING)
+    private Status carStatus;
 
     @Column(name = "city", length = 50)
     private String city;
@@ -106,9 +105,9 @@ public class Car {
         inverseJoinColumns = @JoinColumn(name = "bidding_id"))
 private Set<Bidding> biddings = new LinkedHashSet<>();
 
+
     @OneToMany(mappedBy = "carCar")
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
-
     public Car(CarDto carDto){
         this.acFeature = carDto.getAcFeature();
         this.musicFeature =carDto.getMusicFeature();
