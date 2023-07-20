@@ -1,6 +1,5 @@
 package com.spring.jwt.entity;
 
-
 import com.spring.jwt.dto.CarDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -42,8 +42,8 @@ public class Car {
     @Column(name = "car_insurance")
     private Boolean carInsurance;
 
-    @Column(name = "car_status", length = 45)
-    private String carStatus;
+    @Enumerated(EnumType.STRING)
+    private Status carStatus;
 
     @Column(name = "city", length = 50)
     private String city;
@@ -93,6 +93,10 @@ public class Car {
     @Column(name = "year")
     private int year;
 
+    @Column(name = "date")
+    private LocalDate date;
+
+
 //    @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //    @JoinColumn(name = "dealer_vendor_id", nullable = false)
 //    private Dealer dealerVendor;
@@ -106,11 +110,12 @@ public class Car {
         inverseJoinColumns = @JoinColumn(name = "bidding_id"))
 private Set<Bidding> biddings = new LinkedHashSet<>();
 
+
     @OneToMany(mappedBy = "carCar")
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
-
     public Car(CarDto carDto){
         this.acFeature = carDto.getAcFeature();
+        this.date=carDto.getDate();
         this.musicFeature =carDto.getMusicFeature();
         this.area =carDto.getArea();
         this.bodyType = carDto.getBodyType();

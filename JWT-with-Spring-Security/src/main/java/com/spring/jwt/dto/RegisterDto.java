@@ -20,6 +20,7 @@ public class RegisterDto {
     public int document;
     public String shopName;
     public String area;
+    public boolean status;
     public String userType;
 
 }

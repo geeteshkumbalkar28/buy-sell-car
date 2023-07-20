@@ -80,6 +80,7 @@ public class AppConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/account/**").permitAll()
                 .requestMatchers("/cars/**").permitAll()
+                .requestMatchers("/booking/**").permitAll()
                 .requestMatchers("/userProfilePhoto/**").permitAll()
                 .requestMatchers("/photo/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")

@@ -29,8 +29,17 @@ public class PendingBooking {
     @Column(name = "price", length = 45)
     private int price;
 
-    @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    @Column(name = "dealerId", length = 45)
+    private int dealerId;
+
+    @Column(name = "userId", length = 45)
+    private int userId;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Column (name = "asking_price", nullable = false)
+    private int askingPrice;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "car_car_id", nullable = false)

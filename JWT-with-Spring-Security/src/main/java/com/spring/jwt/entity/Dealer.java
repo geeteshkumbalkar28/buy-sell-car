@@ -44,7 +44,11 @@ public class Dealer {
     private String shopName;
     @Column(name = "Email",nullable = false)
     private String email;
-private long dealerDocumentPhoto;
+
+    private long dealerDocumentPhoto;
+
+    private Boolean status;
+
     @OneToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
@@ -63,6 +67,7 @@ private long dealerDocumentPhoto;
 
     public Dealer(DealerDto dealerDto) {
         this.address = dealerDto.address;
+        this.status=dealerDto.getStatus();
         this.area = dealerDto.area;
         this.city =dealerDto.city;
         this.firstname = dealerDto.firstName;
