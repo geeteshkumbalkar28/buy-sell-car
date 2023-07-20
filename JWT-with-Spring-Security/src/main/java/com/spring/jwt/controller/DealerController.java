@@ -118,10 +118,6 @@ public class DealerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("unsuccess","User Not Found Exception"));
 
         }
-
-
-
-
     }
 @GetMapping("/getDealerId")
     public ResponseEntity<?> getDealerId(@RequestParam String email){

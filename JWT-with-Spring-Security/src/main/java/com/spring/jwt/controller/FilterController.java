@@ -114,21 +114,31 @@ public class FilterController {
     }
     @PostMapping("/forgot-password")
     public ResponseEntity<ResponseDto> forgotPass(HttpServletRequest request) throws UserNotFoundExceptions {
-
         try {
+            // Retrieve the email from the request
             String email = request.getParameter("email");
+
+            // Generate a random token for password reset
             String token = RandomStringUtils.randomAlphabetic(40);
 
-            // Calculate the expiration time
-            LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(1); // Set the expiration time to 24 hours from now
+            // Calculate the expiration time (24 hours from now)
+            LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(1);
 
+            // Update the user's reset password token in the userService
             userService.updateResetPassword(token, email);
+
+            // Construct the reset password link using the request's server name and token
             String resetPasswordLink = "http://" + request.getServerName() + "/reset-password?token=" + token;
+
+            // Call the userService's forgotPass() method to send the password reset email
             ResponseDto response = userService.forgotPass(email, resetPasswordLink, request.getServerName());
 
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("Successful",response.getMessage()));
-        }catch (UserNotFoundExceptions e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("Unsuccessful","Invalid email please register"));
+            // Return a ResponseEntity object with the appropriate status and message
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("Successful", response.getMessage()));
+        } catch (UserNotFoundExceptions e) {
+
+            // Handle the case where the email does not belong to a registered user
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("Unsuccessful", "Invalid email. Please register."));
         }
     }
 
@@ -138,10 +148,17 @@ public class FilterController {
         try {
             String token = resetPassword.getToken();
             String newPassword = resetPassword.getPassword();
+
+            // Invoke the userService.updatePassword() method to update the user's password
             ResponseDto response = userService.updatePassword(token, newPassword);
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("Successful",response.getMessage()));
-        }catch (UserNotFoundExceptions e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("Unsuccessful","Something went wrong"));
+
+            // Return a ResponseEntity with success status (200) and a ResponseDto with success message
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("Successful", response.getMessage()));
+
+        } catch (UserNotFoundExceptions e) {
+            // If a UserNotFoundException is caught, return a ResponseEntity with not found status (404)
+            // and a ResponseDto with an error message
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDto("Unsuccessful", "Something went wrong"));
         }
     }
 

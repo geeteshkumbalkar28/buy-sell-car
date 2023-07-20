@@ -318,10 +318,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDto forgotPass(String email, String resetPasswordLink, String domain) throws UserNotFoundExceptions {
-        ResponseDto response= new ResponseDto();
-        User user=userRepository.findByEmail(email);
-        if (user!= null) {
+        ResponseDto response = new ResponseDto();
 
+        // Find the user with the specified email
+        User user = userRepository.findByEmail(email);
+
+        if (user != null) {
             // Set the email message content
             String message = "Hello this is Aniket";
 
@@ -339,13 +341,19 @@ public class UserServiceImpl implements UserService {
 
             // Send the email using the sendEmail() method
             sendEmail(message, subject, to, from, resetLink, domain);
+
+            // Update the response with success status and message
             response.setStatus(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("Email sent");
-        }else {
+
+        } else {
+            // The user with the specified email was not found
             response.setStatus(String.valueOf(HttpStatus.NOT_FOUND.value()));
             response.setMessage("User not found");
             throw new UserNotFoundExceptions("User not found");
         }
+
+        // Return the response
         return response;
     }
 
@@ -405,28 +413,30 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*public User get(String resetPasswordToken) {
-
-        return userRepo.findByResetPasswordToken(resetPasswordToken);
-    }
-*/
     public void updateResetPassword(String token, String email) throws UserNotFoundExceptions {
+        // Find the user with the specified email in the user repository
         User user = userRepository.findByEmail(email);
+
+        // Check if a user was found with the given email
         if (user != null) {
+            // Set the reset password token for the user
             user.setResetPasswordToken(token);
+            // Save the updated user in the user repository
             userRepository.save(user);
         } else {
+            // Throw a UserNotFoundExceptions indicating that no user was found with the given email
             throw new UserNotFoundExceptions("could not find any user with this email");
         }
     }
 
     public ResponseDto updatePassword(String token, String newPassword) {
-        ResponseDto response= new ResponseDto();
+        // Create a new ResponseDto object to hold the response details
+        ResponseDto response = new ResponseDto();
+
         // Find the user based on the reset password token
         User user = userRepository.findByResetPasswordToken(token);
 
         if (user != null) {
-
             // Create an instance of BCryptPasswordEncoder to encode the new password
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -441,15 +451,21 @@ public class UserServiceImpl implements UserService {
 
             // Save the updated user object in the repository
             userRepository.save(user);
+
+            // Set the status and message in the response indicating a successful password update
             response.setStatus(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("Successful");
-        }else {
+        } else {
+            // If the user is not found based on the reset password token, handle the error
             response.setStatus(String.valueOf(HttpStatus.OK.value()));
             response.setMessage("Email sent");
+
+            // Throw a UserNotFoundExceptions indicating that something went wrong
             throw new UserNotFoundExceptions("Something went wrong");
         }
+
+        // Return the response object
         return response;
     }
-
 
 }
