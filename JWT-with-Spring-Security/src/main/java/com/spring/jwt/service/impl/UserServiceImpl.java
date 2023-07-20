@@ -62,9 +62,6 @@ public class UserServiceImpl implements UserService {
 
     private User insertUser(RegisterDto registerDto) {
         User user = new User();
-
-       //User users= userRepository.findByEmail(registerDto.getEmail());
-
         user.setEmail(registerDto.getEmail());
         user.setMobileNo(registerDto.getMobileNo());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
@@ -88,6 +85,7 @@ public class UserServiceImpl implements UserService {
             dealer.setAddress(registerDto.getAddress());
             dealer.setArea(registerDto.getArea());
             dealer.setCity(registerDto.getCity());
+            dealer.setStatus(registerDto.status);
             dealer.setFirstname(registerDto.getFirstName());
             dealer.setLastName(registerDto.getLastName());
             dealer.setMobileNo(registerDto.getMobileNo());
@@ -95,7 +93,7 @@ public class UserServiceImpl implements UserService {
             dealer.setEmail(registerDto.getEmail());
 
             user.setDealer(dealer);
-            dealer.setUser(user); // Set the user instance in the dealer
+            dealer.setUser(user);
         }
 
         return user;

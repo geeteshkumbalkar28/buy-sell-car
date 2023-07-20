@@ -17,9 +17,6 @@ private  ProfilePhotoRepo profilePhotoRepo;
 @Autowired
 private UserRepository userRepository;
 
-//public ProfilePhotoServiceImpl
-
-
     @Override
     public Long addprofilephoto(byte[] data) {
         ProfilePhoto profilePhoto = new ProfilePhoto();

@@ -81,6 +81,7 @@ public class CarRegisterImp implements ICarRegister {
         car.setAcFeature(carDto.getAcFeature());
         car.setMusicFeature(carDto.getMusicFeature());
         car.setArea(carDto.getArea());
+        car.setDate(carDto.getDate());
         car.setBodyType(carDto.getBodyType());
         car.setBrand(carDto.getBrand());
         car.setCarInsurance(carDto.getCarInsurance());
