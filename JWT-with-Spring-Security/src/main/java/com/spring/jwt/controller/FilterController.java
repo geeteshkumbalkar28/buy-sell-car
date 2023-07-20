@@ -61,6 +61,17 @@ public class FilterController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
         }
     }
+
+    /**
+     * Retrieves a single car by its ID.
+     *
+     * @param carId The ID of the car to retrieve.
+     * @return ResponseEntity containing the response for the request.
+     *         If the car is found, the response will have a status of OK (200)
+     *         and the car details will be included in the body.
+     *         If the car is not found, the response will have a status of NOT_FOUND (404)
+     *         and an error message will be included in the body.
+     */
     @GetMapping("/getCar")
     public ResponseEntity<ResponseSingleCarDto> findByArea(@RequestParam int carId) {
         try {

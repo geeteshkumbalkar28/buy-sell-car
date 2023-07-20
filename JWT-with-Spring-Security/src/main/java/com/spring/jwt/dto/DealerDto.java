@@ -25,10 +25,9 @@ public class DealerDto {
 
     public DealerDto(Dealer dealer) {
         this.address = dealer.getAddress();
-        this.document = dealer.getDocument();
         this.area = dealer.getArea();
         this.city =dealer.getCity();
-        this.firstName = dealer.getLastName();
+        this.firstName = dealer.getFirstname();
         this.lastName =dealer.getLastName();
         this.mobileNo = dealer.getMobileNo();
         this.shopName = dealer.getShopName();

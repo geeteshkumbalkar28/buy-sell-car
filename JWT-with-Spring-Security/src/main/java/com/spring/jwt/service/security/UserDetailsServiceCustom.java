@@ -4,6 +4,7 @@ import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.User;
 import com.spring.jwt.entity.Userprofile;
 import com.spring.jwt.exception.BaseException;
+import com.spring.jwt.repository.UserProfileRepository;
 import com.spring.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -37,6 +39,8 @@ public class UserDetailsServiceCustom implements UserDetailsService {
     private UserDetailsCustom getUserDetails(String username) {
         User user = userRepository.findByEmail(username);
 
+
+
         if (ObjectUtils.isEmpty(user)) {
             throw new BaseException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Invalid username or password!");
         }
@@ -47,6 +51,8 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
         String firstName = null;
         String dealerId = null;
+        String userId = null;
+        String userProfileId = null;
 
         if (authorities.contains(new SimpleGrantedAuthority("DEALER"))) {
             Dealer dealer = user.getDealer();
@@ -54,11 +60,10 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 firstName = dealer.getFirstname();
                 dealerId = String.valueOf(dealer.getId());
             }
-        } else {
-            Userprofile userProfile = user.getProfile();
-            if (userProfile != null) {
-                firstName = userProfile.getFirstName();
-            }
+        } else if (authorities.contains(new SimpleGrantedAuthority("USER"))) {
+            firstName = user.getProfile().getFirstName();
+            userProfileId = String.valueOf(user.getProfile().getId());
+            userId = String.valueOf(user.getId());
         }
 
         return new UserDetailsCustom(
@@ -66,10 +71,12 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 user.getPassword(),
                 firstName,
                 dealerId,
+                userId,
+                userProfileId,
                 authorities
         );
 
     }
 
-    }
+}
 

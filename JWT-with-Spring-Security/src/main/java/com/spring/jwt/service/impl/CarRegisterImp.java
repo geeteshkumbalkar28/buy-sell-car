@@ -238,11 +238,35 @@ public class CarRegisterImp implements ICarRegister {
         return carDto;
     }
     @Override
-    public List<CarDto> getCarsByDealerIdWithStatus(int dealerId, String status) {
-        List<Car> cars = carRepo.findByDealerIdAndCarStatus(dealerId, status);
-        return cars.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public List<CarDto> getCarsByDealerIdWithStatus(int dealerId, String status,int pageNo) {
+        List<Car> listOfCar = carRepo.findByDealerIdAndCarStatus(dealerId, status);
+
+        if((pageNo*10)>listOfCar.size()-1){
+            throw new PageNotFoundException("page not found");
+
+        }
+        if(listOfCar.size()<=0){throw new CarNotFoundException("car not found",HttpStatus.NOT_FOUND);}
+//        System.out.println("list of de"+listOfCar.size());
+        List<CarDto> listOfCarDto = new ArrayList<>();
+
+        int pageStart=pageNo*10;
+        int pageEnd=pageStart+10;
+        int diff=(listOfCar.size()) - pageStart;
+        for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
+            if(pageStart>listOfCar.size()){break;}
+
+//            System.out.println("*");
+            CarDto carDto = new CarDto(listOfCar.get(counter));
+            carDto.setCarId(listOfCar.get(counter).getId());
+            listOfCarDto.add(carDto);
+            if(diff == i){
+                break;
+            }
+        }
+
+//        System.out.println(listOfCar);
+        return listOfCarDto;
+
     }
 
     private CarDto convertToDto(Car car) {

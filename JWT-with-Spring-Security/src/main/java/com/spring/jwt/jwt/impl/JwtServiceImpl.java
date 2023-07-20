@@ -66,17 +66,27 @@ public class JwtServiceImpl implements JwtService {
         });
 
         log.info("Roles: {}", roles);
+
         String dealerId = null;
+
+        String userId = null;
+
+        String userProfileId = null;
+
         if (roles.contains("DEALER")) {
-            // Retrieve the dealer ID from the UserDetailsCustom object
             dealerId = userDetailsCustom.getDealerId();
+        } else if (roles.contains("USER")) {
+            userId = userDetailsCustom.getUserId();
+            userProfileId = userDetailsCustom.getUserProfileId();
         }
 
 
         return Jwts.builder()
                 .setSubject(userDetailsCustom.getUsername())
-                .claim("firstname", userDetailsCustom.getFirstName())  // Use "firstname" instead of "firstName"
+                .claim("firstname", userDetailsCustom.getFirstName())
                 .claim("dealerId", dealerId)
+                .claim("userId", userId)
+                .claim("userProfileId", userProfileId)
                 .claim("authorities", userDetailsCustom.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .claim("roles", roles)
                 .claim("isEnable", userDetailsCustom.isEnabled())
