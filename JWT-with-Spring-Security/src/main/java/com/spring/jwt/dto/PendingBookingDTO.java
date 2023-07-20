@@ -18,5 +18,7 @@ public class PendingBookingDTO {
     private Status status;
     private Integer carId;
     private CarDto carDto;
+    private Integer dealerId;
+    private Integer userId;
 
 }

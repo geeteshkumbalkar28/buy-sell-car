@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -63,10 +65,13 @@ public class CarDto {
 
     private int dealer_id;
 
+    private LocalDate date;
+
 
     public CarDto(Car car){
         this.acFeature = car.getAcFeature();
         this.musicFeature = car.getMusicFeature();
+        this.date=car.getDate();
         this.area = car.getArea();
         this.bodyType =car.getBodyType();
         this.brand = car.getBrand();

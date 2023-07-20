@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -92,6 +93,10 @@ public class Car {
     @Column(name = "year")
     private int year;
 
+    @Column(name = "date")
+    private LocalDate date;
+
+
 //    @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //    @JoinColumn(name = "dealer_vendor_id", nullable = false)
 //    private Dealer dealerVendor;
@@ -110,6 +115,7 @@ private Set<Bidding> biddings = new LinkedHashSet<>();
     private Set<PendingBooking> pendingBookings = new LinkedHashSet<>();
     public Car(CarDto carDto){
         this.acFeature = carDto.getAcFeature();
+        this.date=carDto.getDate();
         this.musicFeature =carDto.getMusicFeature();
         this.area =carDto.getArea();
         this.bodyType = carDto.getBodyType();

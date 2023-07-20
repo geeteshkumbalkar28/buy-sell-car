@@ -19,12 +19,14 @@ public class DealerDto {
     public String password;
     private Integer dealer_id;
     private Integer userId;
+    private Boolean status;
 
     public DealerDto() {
     }
 
     public DealerDto(Dealer dealer) {
         this.address = dealer.getAddress();
+        this.status=dealer.getStatus();
         this.area = dealer.getArea();
         this.city =dealer.getCity();
         this.firstName = dealer.getFirstname();

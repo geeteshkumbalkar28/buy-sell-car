@@ -29,6 +29,11 @@ public class PendingBooking {
     @Column(name = "price", length = 45)
     private int price;
 
+    @Column(name = "dealerId", length = 45)
+    private int dealerId;
+
+    @Column(name = "userId", length = 45)
+    private int userId;
 
     @Enumerated(EnumType.STRING)
     private Status status;
