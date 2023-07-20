@@ -2,6 +2,8 @@ package com.spring.jwt.controller;
 
 
 import com.spring.jwt.dto.PendingBookingDTO;
+import com.spring.jwt.dto.ResponceDto;
+import com.spring.jwt.dto.ResponseDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
@@ -10,6 +12,7 @@ import com.spring.jwt.exception.DealerNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.service.PendingBookingService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +31,8 @@ public class PendingBookingController {
 
     private final PendingBookingService pendingBookingService;
 
-
     @PostMapping("/request")
-    public ResponseEntity<String> requestCarBooking(@RequestBody PendingBookingDTO pendingBookingDTO) {
-
+    public ResponseEntity<ResponceDto> requestCarBooking(@RequestBody PendingBookingDTO pendingBookingDTO) {
         int carId = pendingBookingDTO.getCarId();
         Optional<Car> optionalCar = carRepo.findById(carId);
 
@@ -45,7 +46,7 @@ public class PendingBookingController {
             car.setCarStatus(pendingBookingDTO.getStatus());
 
             int dealerId = car.getDealerId();
-            Dealer dealer = dealerRepository.findById(dealerId).orElseThrow(() -> new DealerNotFoundException("Dealer not found"));;
+            Dealer dealer = dealerRepository.findById(dealerId).orElseThrow(() -> new DealerNotFoundException("Dealer not found"));
 
             if (dealer != null) {
                 pendingBookingDTO.setAskingPrice(pendingBookingDTO.getAskingPrice());
@@ -54,14 +55,15 @@ public class PendingBookingController {
 
                 carRepo.save(car);
 
-                return ResponseEntity.ok("Car booking request is pending.");
+                ResponceDto responseDto = new ResponceDto("Car booking request is pending.", savePendingBooking);
+                return ResponseEntity.ok(responseDto);
             } else {
                 return ResponseEntity.notFound().build();
             }
         } else {
             return ResponseEntity.notFound().build();
         }
-}
+    }
 
 }
 
