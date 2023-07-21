@@ -6,6 +6,9 @@ import com.spring.jwt.dto.PendingBookingDTO;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
+import com.spring.jwt.entity.Status;
+import com.spring.jwt.exception.BookingNotFound;
+import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.PendingBookingRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
@@ -28,6 +31,36 @@ import java.util.Optional;
     public PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO) {
         PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
         return pendingBookingRepository.save(pendingBooking);
+    }
+
+    @Override
+    public void deleteBooking(int id) {
+       Optional<PendingBooking> pendingBooking= pendingBookingRepository.findById(id);
+       if (pendingBooking.isPresent()){
+           pendingBookingRepository.deleteById(id);
+       }else {
+           throw new BookingNotFound("Booking not found");
+       }
+    }
+
+    @Override
+    public void statusUpdate(PendingBookingDTO pendingBookingDTO) {
+        Optional<PendingBooking> pendingBookingOptional= pendingBookingRepository.findById(pendingBookingDTO.getId());
+        if (pendingBookingOptional.isPresent()) {
+            PendingBooking pendingBooking = pendingBookingOptional.get();
+            pendingBooking.setStatus(pendingBookingDTO.getStatus());
+            Optional<Car> carOptional = carRepository.findById(pendingBookingDTO.getCarId());
+            if (carOptional.isPresent()) {
+                Car car = carOptional.get();
+                car.setCarStatus(pendingBookingDTO.getStatus());
+                carRepository.save(car);
+            }else {
+                throw new CarNotFoundException("No car found with this id");
+            }
+            pendingBookingRepository.save(pendingBooking);
+        }else {
+            throw new BookingNotFound("Booking not found");
+        }
     }
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {

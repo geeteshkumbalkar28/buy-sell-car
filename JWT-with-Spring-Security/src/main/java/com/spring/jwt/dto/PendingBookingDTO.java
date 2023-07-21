@@ -15,12 +15,13 @@ public class PendingBookingDTO {
     public static final String STATUS_ACTIVE = "Active";
     public static final String STATUS_SOLD = "Sold";
 
+    private int id;
     private LocalDate date;
     private int price;
     private int askingPrice;
     private Status status;
     private Integer carId;
-    private Integer dealerId; // Change the type to int (primitive) here
+    private Integer dealerId;
     private Integer userId;
     private List<PendingBooking> pendingBookings;
 

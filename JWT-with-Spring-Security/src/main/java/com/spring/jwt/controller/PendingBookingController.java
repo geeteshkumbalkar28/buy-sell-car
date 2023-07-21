@@ -8,11 +8,15 @@ import com.spring.jwt.dto.ResponceDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
+import com.spring.jwt.entity.Status;
+import com.spring.jwt.exception.BookingNotFound;
+import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.DealerNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,13 +78,29 @@ public class PendingBookingController {
             DealerDto dealerDto = new DealerDto(dealer);
             carDto.setDealer(dealerDto);
         }
-
-
         carDto.setDealer_id(car.getDealerId());
-
         return carDto;
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteBooking(@RequestParam int id){
+        try {
+            pendingBookingService.deleteBooking(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Successful");
+        }catch (BookingNotFound e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unsuccessful");
+        }
+    }
+
+    @PatchMapping("/bookingStatus")
+    public ResponseEntity<?> statusUpdate(@RequestBody PendingBookingDTO pendingBookingDTO){
+        try {
+            pendingBookingService.statusUpdate(pendingBookingDTO);
+            return ResponseEntity.status(HttpStatus.OK).body("Successful");
+        }catch (BookingNotFound | CarNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unsuccessful");
+        }
+    }
 }
 
 
