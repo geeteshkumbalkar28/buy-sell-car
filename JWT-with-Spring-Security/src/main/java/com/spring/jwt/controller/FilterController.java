@@ -1,6 +1,8 @@
 package com.spring.jwt.controller;
 
+import com.spring.jwt.Interfaces.PendingBookingService;
 import com.spring.jwt.dto.*;
+import com.spring.jwt.exception.BookingNotFound;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.exception.UserNotFoundExceptions;
@@ -29,6 +31,8 @@ public class FilterController {
     private UserService userService;
     @Autowired
     private ICarRegister iCarRegister;
+
+    private PendingBookingService pendingBookingService;
 
 
     @GetMapping("/mainFilter/{pageNo}")

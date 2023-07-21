@@ -15,6 +15,7 @@ public class PendingBookingDTO {
     public static final String STATUS_ACTIVE = "Active";
     public static final String STATUS_SOLD = "Sold";
 
+    private int id;
     private LocalDate date;
     private int price;
     private int askingPrice;
