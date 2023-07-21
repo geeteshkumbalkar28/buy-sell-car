@@ -1,6 +1,6 @@
 package com.spring.jwt.dto;
 
-import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.Booking;
 import com.spring.jwt.entity.PendingBooking;
 import com.spring.jwt.entity.Status;
 import lombok.Data;
@@ -20,8 +20,22 @@ public class PendingBookingDTO {
     private int askingPrice;
     private Status status;
     private Integer carId;
-    private Integer dealerId; // Change the type to int (primitive) here
+    private Integer dealerId;
     private Integer userId;
-    private List<PendingBooking> pendingBookings;
+    private List<Booking> pendingBookings;
+
+
+    public PendingBookingDTO(PendingBooking pendingBooking) {
+        this.date = pendingBooking.getDate();
+        this.price = pendingBooking.getPrice();
+        this.askingPrice = pendingBooking.getAskingPrice();
+        this.status = pendingBooking.getStatus();
+        this.carId = pendingBooking.getId();
+        this.dealerId = pendingBooking.getDealerId();
+        this.userId = pendingBooking.getUserId();
+        this.pendingBookings = pendingBooking.getBookings();
+    }
+
 
 }
+

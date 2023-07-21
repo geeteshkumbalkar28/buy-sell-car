@@ -3,16 +3,22 @@ package com.spring.jwt.service;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
+import com.spring.jwt.entity.Booking;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
+import com.spring.jwt.exception.CarNotFoundException;
+import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.PendingBookingRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,6 +35,37 @@ import java.util.Optional;
         PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
         return pendingBookingRepository.save(pendingBooking);
     }
+
+    @Override
+    public List<PendingBookingDTO> getAllPendingBookingWithPage(int PageNo) {
+
+        List<PendingBooking> listofPendingBooking = pendingBookingRepository.findAll();
+        if((PageNo*10)>listofPendingBooking.size()-1){
+            throw new PageNotFoundException("page not found");
+
+        }
+        if(listofPendingBooking.size()<=0){throw new CarNotFoundException("Pending Booking not found", HttpStatus.NOT_FOUND);}
+//        System.out.println("list of de"+listOfCar.size());
+        List<PendingBookingDTO> listOfPendingBookingdto = new ArrayList<>();
+
+        int pageStart=PageNo*10;
+        int pageEnd=pageStart+10;
+        int diff=(listofPendingBooking.size()) - pageStart;
+        for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
+            if(pageStart>listofPendingBooking.size()){break;}
+
+//            System.out.println("*");
+            PendingBookingDTO pendingBookingDTO = new PendingBookingDTO (listofPendingBooking.get(counter));
+            pendingBookingDTO.setCarId(listofPendingBooking.get(counter).getId());
+            listOfPendingBookingdto.add(pendingBookingDTO);
+            if(diff == i){
+                break;
+            }
+        }
+
+        return listOfPendingBookingdto;
+    }
+
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {
         Optional<Car> optionalCar = carRepository.findById(pendingBookingDTO.getCarId());
@@ -48,7 +85,7 @@ import java.util.Optional;
         return pendingBooking;
     }
 
-    // Other methods for mapping CarDto and DealerDto to Car and Dealer entities...
+
 
     private Car mapToCar(CarDto carDto) {
         return new Car(carDto);
@@ -57,5 +94,6 @@ import java.util.Optional;
     private Dealer mapToDealer(DealerDto dealerDto) {
         return new Dealer(dealerDto);
     }
+
 
 }
