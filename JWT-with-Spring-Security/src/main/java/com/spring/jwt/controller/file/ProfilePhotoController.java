@@ -4,7 +4,7 @@ import com.spring.jwt.entity.User;
 import com.spring.jwt.exception.UserNotDealerException;
 import com.spring.jwt.exception.UserNotFoundExceptions;
 import com.spring.jwt.repository.UserRepository;
-import com.spring.jwt.service.ProfilePhotoService;
+import com.spring.jwt.Interfaces.ProfilePhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -1,18 +1,17 @@
 package com.spring.jwt.controller;
 
 
+import com.spring.jwt.dto.CarDto;
+import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
 import com.spring.jwt.dto.ResponceDto;
-import com.spring.jwt.dto.ResponseDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
-import com.spring.jwt.entity.Status;
 import com.spring.jwt.exception.DealerNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
-import com.spring.jwt.service.PendingBookingService;
-import lombok.Data;
+import com.spring.jwt.Interfaces.PendingBookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,20 +41,23 @@ public class PendingBookingController {
             pendingBookingDTO.setDate(LocalDate.now());
             pendingBookingDTO.setPrice(car.getPrice());
             pendingBookingDTO.setStatus(pendingBookingDTO.getStatus());
-
+            pendingBookingDTO.setDealerId(car.getDealerId());
             car.setCarStatus(pendingBookingDTO.getStatus());
 
             int dealerId = car.getDealerId();
-            Dealer dealer = dealerRepository.findById(dealerId).orElseThrow(() -> new DealerNotFoundException("Dealer not found"));
+            Optional<Dealer> optionalDealer = dealerRepository.findById(dealerId);
 
-            if (dealer != null) {
+            if (optionalDealer.isPresent()) {
+                Dealer dealer = optionalDealer.get();
                 pendingBookingDTO.setAskingPrice(pendingBookingDTO.getAskingPrice());
 
                 PendingBooking savePendingBooking = pendingBookingService.savePendingBooking(pendingBookingDTO);
 
                 carRepo.save(car);
 
-                ResponceDto responseDto = new ResponceDto("Car booking request is pending.", savePendingBooking);
+                // Create a DTO for the response
+                CarDto carDto = mapToCarDto(car, dealer);
+                ResponceDto responseDto = new ResponceDto("Car booking request is pending.", carDto);
                 return ResponseEntity.ok(responseDto);
             } else {
                 return ResponseEntity.notFound().build();
@@ -63,6 +65,20 @@ public class PendingBookingController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private CarDto mapToCarDto(Car car, Dealer dealer) {
+        CarDto carDto = new CarDto(car);
+
+        if (dealer != null) {
+            DealerDto dealerDto = new DealerDto(dealer);
+            carDto.setDealer(dealerDto);
+        }
+
+
+        carDto.setDealer_id(car.getDealerId());
+
+        return carDto;
     }
 
 }

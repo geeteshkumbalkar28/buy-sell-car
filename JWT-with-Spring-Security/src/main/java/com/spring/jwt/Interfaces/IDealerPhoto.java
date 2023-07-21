@@ -1,4 +1,4 @@
-package com.spring.jwt.service;
+package com.spring.jwt.Interfaces;
 
 public interface IDealerPhoto {
     public long addphoto(byte[] data);

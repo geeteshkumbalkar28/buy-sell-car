@@ -1,10 +1,8 @@
-package com.spring.jwt.service.security;
+package com.spring.jwt.security;
 
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.User;
-import com.spring.jwt.entity.Userprofile;
 import com.spring.jwt.exception.BaseException;
-import com.spring.jwt.repository.UserProfileRepository;
 import com.spring.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

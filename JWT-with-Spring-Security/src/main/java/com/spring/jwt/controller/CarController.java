@@ -4,7 +4,7 @@ package com.spring.jwt.controller;
 import com.spring.jwt.dto.*;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
-import com.spring.jwt.service.ICarRegister;
+import com.spring.jwt.Interfaces.ICarRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

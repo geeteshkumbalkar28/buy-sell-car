@@ -1,6 +1,6 @@
 package com.spring.jwt.controller.file;
 //
-//import com.spring.jwt.service.CarPhotoService;
+//import com.spring.jwt.Interfaces.CarPhotoService;
 //import org.springframework.http.MediaType;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.web.bind.annotation.*;
@@ -83,8 +83,7 @@ package com.spring.jwt.controller.file;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.exception.DealerNotFoundException;
 import com.spring.jwt.repository.DealerRepository;
-import com.spring.jwt.service.CarPhotoService;
-import com.spring.jwt.service.IDealerPhoto;
+import com.spring.jwt.Interfaces.IDealerPhoto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,28 @@
 package com.spring.jwt.entity;
 
 public enum Status {
-    PENDING,
-    ACTIVE,
-    SOLD
+    PENDING("Pending"),
+    ACTIVE("Active"),
+    SOLD("Sold");
+
+    private final String status;
+
+    Status(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    // Add a static method to get the enum from a string representation
+    public static Status fromString(String status) {
+        for (Status s : Status.values()) {
+            if (s.getStatus().equalsIgnoreCase(status)) {
+                return s;
+            }
+        }
+        throw new IllegalArgumentException("Invalid status: " + status);
+    }
 }
+

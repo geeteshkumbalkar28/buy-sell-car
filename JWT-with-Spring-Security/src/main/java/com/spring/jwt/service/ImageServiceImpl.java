@@ -1,4 +1,4 @@
-package com.spring.jwt.service.impl;
+package com.spring.jwt.service;
 
 
 import com.cloudinary.Cloudinary;
@@ -9,7 +9,7 @@ import com.spring.jwt.entity.CarPhoto;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.NoImageFoundException;
 import com.spring.jwt.repository.ImageRepository;
-import com.spring.jwt.service.security.ImageService;
+import com.spring.jwt.Interfaces.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

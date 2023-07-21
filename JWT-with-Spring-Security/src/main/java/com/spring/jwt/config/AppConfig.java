@@ -6,7 +6,7 @@ import com.spring.jwt.config.filter.JwtUsernamePasswordAuthenticationFilter;
 import com.spring.jwt.exception.CustomAccessDeniedHandler;
 import com.spring.jwt.jwt.JwtConfig;
 import com.spring.jwt.jwt.JwtService;
-import com.spring.jwt.service.security.UserDetailsServiceCustom;
+import com.spring.jwt.security.UserDetailsServiceCustom;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +80,7 @@ public class AppConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/account/**").permitAll()
                 .requestMatchers("/cars/**").permitAll()
-                .requestMatchers("/booking/**").permitAll()
+                .requestMatchers("/booking/**").hasAnyAuthority("USER", "ADMIN","DEALER")
                 .requestMatchers("/userProfilePhoto/**").permitAll()
                 .requestMatchers("/photo/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")

@@ -1,4 +1,4 @@
-package com.spring.jwt.service.impl;
+package com.spring.jwt.service;
 
 import com.spring.jwt.dto.*;
 import com.spring.jwt.entity.Dealer;
@@ -9,7 +9,7 @@ import com.spring.jwt.exception.*;
 import com.spring.jwt.repository.RoleRepository;
 import com.spring.jwt.repository.UserProfileRepository;
 import com.spring.jwt.repository.UserRepository;
-import com.spring.jwt.service.UserService;
+import com.spring.jwt.Interfaces.UserService;
 import com.spring.jwt.utils.BaseResponseDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

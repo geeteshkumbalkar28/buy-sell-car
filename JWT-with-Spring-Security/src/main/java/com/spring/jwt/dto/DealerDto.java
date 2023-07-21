@@ -39,4 +39,7 @@ public class DealerDto {
         this.userId = dealer.getUser().getId();
 
     }
+    public DealerDto(int dealerId) {
+        this.dealer_id = dealerId;
+    }
 }

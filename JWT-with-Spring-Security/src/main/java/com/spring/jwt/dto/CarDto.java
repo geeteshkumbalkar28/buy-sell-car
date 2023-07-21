@@ -63,6 +63,8 @@ public class CarDto {
 
     private int year;
 
+    private DealerDto dealer;
+
     private int dealer_id;
 
     private LocalDate date;
