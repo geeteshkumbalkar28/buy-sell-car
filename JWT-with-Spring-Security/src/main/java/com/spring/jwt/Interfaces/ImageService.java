@@ -1,4 +1,4 @@
-package com.spring.jwt.service.security;
+package com.spring.jwt.Interfaces;
 
 import com.spring.jwt.dto.ImageUploadDto;
 import com.spring.jwt.dto.PhotoResopnseDto;

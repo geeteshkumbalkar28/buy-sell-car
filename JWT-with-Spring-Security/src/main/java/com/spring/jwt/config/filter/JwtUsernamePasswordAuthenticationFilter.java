@@ -5,7 +5,7 @@ import com.spring.jwt.dto.LoginRequest;
 import org.springframework.security.core.GrantedAuthority;
 import com.spring.jwt.jwt.JwtConfig;
 import com.spring.jwt.jwt.JwtService;
-import com.spring.jwt.service.security.UserDetailsCustom;
+import com.spring.jwt.security.UserDetailsCustom;
 import com.spring.jwt.utils.BaseResponseDTO;
 import com.spring.jwt.utils.HelperUtils;
 import jakarta.servlet.FilterChain;

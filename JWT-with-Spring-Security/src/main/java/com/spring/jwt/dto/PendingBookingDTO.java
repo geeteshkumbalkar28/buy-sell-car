@@ -1,9 +1,12 @@
 package com.spring.jwt.dto;
 
+import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.PendingBooking;
 import com.spring.jwt.entity.Status;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class PendingBookingDTO {
@@ -17,8 +20,8 @@ public class PendingBookingDTO {
     private int askingPrice;
     private Status status;
     private Integer carId;
-    private CarDto carDto;
-    private Integer dealerId;
+    private Integer dealerId; // Change the type to int (primitive) here
     private Integer userId;
+    private List<PendingBooking> pendingBookings;
 
 }

@@ -2,7 +2,7 @@ package com.spring.jwt.controller;
 
 import com.spring.jwt.dto.*;
 import com.spring.jwt.exception.*;
-import com.spring.jwt.service.DealerService;
+import com.spring.jwt.Interfaces.DealerService;
 import com.spring.jwt.utils.BaseResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

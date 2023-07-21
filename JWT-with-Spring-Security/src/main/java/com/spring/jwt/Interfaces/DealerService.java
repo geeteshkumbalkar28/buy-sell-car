@@ -1,4 +1,4 @@
-package com.spring.jwt.service;
+package com.spring.jwt.Interfaces;
 
 import com.spring.jwt.dto.ChangePasswordDto;
 import com.spring.jwt.dto.DealerDto;

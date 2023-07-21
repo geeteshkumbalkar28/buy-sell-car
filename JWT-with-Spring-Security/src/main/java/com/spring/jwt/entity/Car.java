@@ -2,10 +2,7 @@ package com.spring.jwt.entity;
 
 import com.spring.jwt.dto.CarDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import java.time.LocalDate;
@@ -140,4 +137,5 @@ private Set<Bidding> biddings = new LinkedHashSet<>();
         this.year = carDto.getYear();
         this.dealerId=carDto.getDealer_id();
     }
+
 }

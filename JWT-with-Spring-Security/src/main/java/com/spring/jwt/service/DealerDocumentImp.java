@@ -1,14 +1,10 @@
-package com.spring.jwt.service.impl;
+package com.spring.jwt.service;
 
-import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.DocumentPhoto;
-import com.spring.jwt.entity.Photo;
-import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.DocumentRepo;
-import com.spring.jwt.repository.PhotoRepo;
-import com.spring.jwt.service.IDealerPhoto;
+import com.spring.jwt.Interfaces.IDealerPhoto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

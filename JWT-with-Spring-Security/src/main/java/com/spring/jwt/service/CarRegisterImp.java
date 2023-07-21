@@ -1,4 +1,4 @@
-package com.spring.jwt.service.impl;
+package com.spring.jwt.service;
 
 
 import com.spring.jwt.dto.CarDto;
@@ -10,7 +10,7 @@ import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.PhotoRepo;
-import com.spring.jwt.service.ICarRegister;
+import com.spring.jwt.Interfaces.ICarRegister;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CarRegisterImp implements ICarRegister {

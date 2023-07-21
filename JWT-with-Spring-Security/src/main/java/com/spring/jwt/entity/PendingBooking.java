@@ -1,11 +1,9 @@
 package com.spring.jwt.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -16,6 +14,7 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Table(name = "pending_booking")
 public class PendingBooking {
     @Id
@@ -30,10 +29,10 @@ public class PendingBooking {
     private int price;
 
     @Column(name = "dealerId", length = 45)
-    private int dealerId;
+    private Integer dealerId;
 
     @Column(name = "userId", length = 45)
-    private int userId;
+    private Integer userId;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -41,11 +40,13 @@ public class PendingBooking {
     @Column (name = "asking_price", nullable = false)
     private int askingPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "car_car_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "car_car_id")
+    @JsonIgnore // Add this annotation to break the bidirectional relationship
     private Car carCar;
 
     @OneToMany(mappedBy = "pendingBookingPendingBooking")
     private Set<Booking> bookings = new LinkedHashSet<>();
+
 
 }

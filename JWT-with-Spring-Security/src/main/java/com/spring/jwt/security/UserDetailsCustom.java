@@ -1,4 +1,4 @@
-package com.spring.jwt.service.security;
+package com.spring.jwt.security;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

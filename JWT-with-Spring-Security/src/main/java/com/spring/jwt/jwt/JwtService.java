@@ -1,6 +1,6 @@
 package com.spring.jwt.jwt;
 
-import com.spring.jwt.service.security.UserDetailsCustom;
+import com.spring.jwt.security.UserDetailsCustom;
 import io.jsonwebtoken.Claims;
 
 import java.security.Key;

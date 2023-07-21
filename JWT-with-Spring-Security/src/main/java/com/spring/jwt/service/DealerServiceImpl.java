@@ -1,4 +1,4 @@
-package com.spring.jwt.service.impl;
+package com.spring.jwt.service;
 
 import com.spring.jwt.dto.ChangePasswordDto;
 import com.spring.jwt.dto.DealerDto;
@@ -9,7 +9,7 @@ import com.spring.jwt.exception.*;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.repository.RoleRepository;
 import com.spring.jwt.repository.UserRepository;
-import com.spring.jwt.service.DealerService;
+import com.spring.jwt.Interfaces.DealerService;
 import com.spring.jwt.utils.BaseResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

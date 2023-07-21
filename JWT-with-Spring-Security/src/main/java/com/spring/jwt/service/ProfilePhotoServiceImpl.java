@@ -1,10 +1,10 @@
-package com.spring.jwt.service.impl;
+package com.spring.jwt.service;
 
 import com.spring.jwt.entity.ProfilePhoto;
 import com.spring.jwt.entity.User;
 import com.spring.jwt.repository.ProfilePhotoRepo;
 import com.spring.jwt.repository.UserRepository;
-import com.spring.jwt.service.ProfilePhotoService;
+import com.spring.jwt.Interfaces.ProfilePhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
