@@ -10,6 +10,5 @@ public class ResponseAllPendingBookingDto {
     private List<PendingBookingDTO> list;
     private String exception;
 
-    public ResponseAllPendingBookingDto(String success) {
-    }
+    public ResponseAllPendingBookingDto(String message) {this.message=message;}
 }
