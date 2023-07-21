@@ -1,6 +1,5 @@
 package com.spring.jwt.controller;
 
-
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
@@ -55,7 +54,6 @@ public class PendingBookingController {
 
                 carRepo.save(car);
 
-                // Create a DTO for the response
                 CarDto carDto = mapToCarDto(car, dealer);
                 ResponceDto responseDto = new ResponceDto("Car booking request is pending.", carDto);
                 return ResponseEntity.ok(responseDto);
@@ -74,7 +72,6 @@ public class PendingBookingController {
             DealerDto dealerDto = new DealerDto(dealer);
             carDto.setDealer(dealerDto);
         }
-
 
         carDto.setDealer_id(car.getDealerId());
 

@@ -34,7 +34,6 @@ import java.util.Optional;
         Optional<Car> optionalCar = carRepository.findById(pendingBookingDTO.getCarId());
         Car car = optionalCar.orElseThrow(() -> new EntityNotFoundException("Car not found"));
 
-        // Ensure dealerId is not null
         int dealerId = Objects.requireNonNullElse(pendingBookingDTO.getDealerId(), -1);
 
         PendingBooking pendingBooking = new PendingBooking();
@@ -42,13 +41,13 @@ import java.util.Optional;
         pendingBooking.setPrice(pendingBookingDTO.getPrice());
         pendingBooking.setStatus(pendingBookingDTO.getStatus());
         pendingBooking.setUserId(pendingBookingDTO.getUserId());
-        pendingBooking.setDealerId(dealerId); // Use the default value (-1) if dealerId is null
+        pendingBooking.setDealerId(dealerId);
         pendingBooking.setAskingPrice(pendingBookingDTO.getAskingPrice());
         pendingBooking.setCarCar(car);
         return pendingBooking;
     }
 
-    // Other methods for mapping CarDto and DealerDto to Car and Dealer entities...
+
 
     private Car mapToCar(CarDto carDto) {
         return new Car(carDto);

@@ -19,7 +19,7 @@ import java.util.Set;
 public class PendingBooking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pending_booking", nullable = false)
+    @Column(name = "id", nullable = false)
     private int id;
 
     @Column(name = "date", nullable = false)

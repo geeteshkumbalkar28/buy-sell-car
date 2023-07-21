@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CarRegisterImp implements ICarRegister {
+public class
+CarRegisterImp implements ICarRegister {
     @Autowired
     private CarRepo carRepo;
     @Autowired

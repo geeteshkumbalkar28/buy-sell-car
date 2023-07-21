@@ -20,7 +20,7 @@ public class PendingBookingDTO {
     private int askingPrice;
     private Status status;
     private Integer carId;
-    private Integer dealerId; // Change the type to int (primitive) here
+    private Integer dealerId;
     private Integer userId;
     private List<PendingBooking> pendingBookings;
 
