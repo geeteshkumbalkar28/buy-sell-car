@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -46,7 +47,7 @@ public class PendingBooking {
     private Car carCar;
 
     @OneToMany(mappedBy = "pendingBookingPendingBooking")
-    private Set<Booking> bookings = new LinkedHashSet<>();
+    private List<Booking> bookings;
 
 
 }
