@@ -2,17 +2,13 @@ package com.spring.jwt.controller;
 
 
 import com.spring.jwt.dto.*;
-import com.spring.jwt.entity.Car;
-import com.spring.jwt.entity.Dealer;
-import com.spring.jwt.entity.PendingBooking;
+import com.spring.jwt.dto.BookingDtos.AllPendingBookingResponseDTO;
+import com.spring.jwt.dto.BookingDtos.PendingBookingResponseForSingleDealerDto;
+import com.spring.jwt.entity.*;
 
-import com.spring.jwt.entity.Status;
-import com.spring.jwt.exception.BookingNotFound;
+import com.spring.jwt.exception.*;
 
 
-import com.spring.jwt.exception.CarNotFoundException;
-import com.spring.jwt.exception.DealerNotFoundException;
-import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
@@ -145,6 +141,72 @@ public class PendingBookingController {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
             responseAllPendingBookingDto.setException("page not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        }
+    }
+
+    @GetMapping("/getpendingBookingDeatailsById")
+    public ResponseEntity<?> getBookingDetailsById(@RequestParam int bookingId) {
+        try {
+            com.spring.jwt.dto.BookingDtos.PendingBookingDTO pendingBookingDTO = pendingBookingService.getPendingBookingId(bookingId);
+            PendingBookingResponseForSingleDealerDto pendingBookingResponseForSingleDealerDto = new PendingBookingResponseForSingleDealerDto("success");
+            pendingBookingResponseForSingleDealerDto.setPendingBookingDTO(pendingBookingDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(pendingBookingResponseForSingleDealerDto);
+        } catch (BookingNotFoundException bookingNotFoundException) {
+            PendingBookingResponseForSingleDealerDto pendingBookingResponseForSingleDealerDto = new PendingBookingResponseForSingleDealerDto("unsuccess");
+            pendingBookingResponseForSingleDealerDto.setException(String.valueOf(bookingNotFoundException));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pendingBookingResponseForSingleDealerDto);
+
+        }
+    }
+    @GetMapping("/getPendingBookingDeatilsByDealerID")
+    public ResponseEntity<?> getBookingDetailsByDealerId(@RequestParam int pageNo,@RequestParam int dealerId) {
+        try {
+            List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getPendingBookingsByDealerId(pageNo,dealerId);
+
+            AllPendingBookingResponseDTO allPendingBookingResponseDTO = new AllPendingBookingResponseDTO("success");
+            allPendingBookingResponseDTO.setList(listOfPendingBooking);
+
+            return ResponseEntity.status(HttpStatus.OK).body(allPendingBookingResponseDTO);
+        } catch (BookingNotFoundException bookingNotFoundException) {
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException(String.valueOf(bookingNotFoundException));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        } catch (PageNotFoundException pageNotFoundException) {
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException(String.valueOf(pageNotFoundException));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        }catch (DealerNotFoundException dealerNotFoundException){
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException(String.valueOf(dealerNotFoundException));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+
+        }
+    }
+    @GetMapping("/getPendingBookingDeatilsByCarID")
+    public ResponseEntity<?> getBookingDetailsByCarId(@RequestParam int pageNo,@RequestParam int CarId) {
+        try {
+
+            List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getPendingBookingsByCarId(pageNo,CarId);
+
+            AllPendingBookingResponseDTO allPendingBookingResponseDTO = new AllPendingBookingResponseDTO("success");
+            allPendingBookingResponseDTO.setList(listOfPendingBooking);
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(allPendingBookingResponseDTO);
+        } catch (BookingNotFoundException bookingNotFoundException) {
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException(String.valueOf(bookingNotFoundException));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        } catch (PageNotFoundException pageNotFoundException) {
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException(String.valueOf(pageNotFoundException));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        }catch (CarNotFoundException carNotFoundException){
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            System.err.println(carNotFoundException);
+            responseAllPendingBookingDto.setException(carNotFoundException+" : car not found ");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+
         }
     }
 }
