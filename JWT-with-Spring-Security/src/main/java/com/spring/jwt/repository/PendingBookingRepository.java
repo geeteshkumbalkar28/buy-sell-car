@@ -10,5 +10,7 @@ import java.util.Optional;
 @Repository
 public interface PendingBookingRepository extends JpaRepository<PendingBooking, Integer> {
         public Optional<List<PendingBooking>> findByDealerId(int dealerId);
+
+        public Optional<List<PendingBooking>> getAllPendingBookingByUserId(int userId);
 }
 
