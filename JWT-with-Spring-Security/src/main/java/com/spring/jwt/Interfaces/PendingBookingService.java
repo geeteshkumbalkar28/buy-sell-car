@@ -18,4 +18,6 @@ public interface PendingBookingService {
 
    List<PendingBookingDTO> getAllPendingBookingWithPage(int PageNo);
 
+   List<PendingBookingDTO>getAllPendingBookingByUserIdWithPage(int PageNo);
+
 }

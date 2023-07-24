@@ -103,6 +103,11 @@ import java.util.Optional;
         return listOfPendingBookingdto;
     }
 
+    @Override
+    public List<PendingBookingDTO> getAllPendingBookingByUserIdWithPage(int PageNo) {
+        return null;
+    }
+
 
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {

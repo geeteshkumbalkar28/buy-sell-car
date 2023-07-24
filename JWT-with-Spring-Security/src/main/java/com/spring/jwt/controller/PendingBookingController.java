@@ -123,6 +123,26 @@ public class PendingBookingController {
 
         }
     }
-}
+    @GetMapping("getByUserId")
+    public ResponseEntity<ResponseAllPendingBookingDto> getByUserId(@RequestParam int pageNo)
+    {
+        try
+        {List<PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingWithPage(pageNo);
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("success");
+            responseAllPendingBookingDto.setList(listOfPendingBooking);
+            return ResponseEntity.status(HttpStatus.OK).body(responseAllPendingBookingDto);
+        }catch (CarNotFoundException carNotFoundException) {
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException("Pending Booking not faund");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        }
+        catch (PageNotFoundException pageNotFoundException){
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException("page not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        }
+
+
+}}
 
 
