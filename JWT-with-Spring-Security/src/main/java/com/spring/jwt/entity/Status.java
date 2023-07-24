@@ -15,7 +15,6 @@ public enum Status {
         return status;
     }
 
-    // Add a static method to get the enum from a string representation
     public static Status fromString(String status) {
         for (Status s : Status.values()) {
             if (s.getStatus().equalsIgnoreCase(status)) {

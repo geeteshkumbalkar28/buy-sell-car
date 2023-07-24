@@ -85,6 +85,7 @@ public class PendingBookingController {
     }
 
 
+ Ash99
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBooking(@RequestParam int id) {
         try {
@@ -129,6 +130,7 @@ public class PendingBookingController {
 
     }
 
+
     @GetMapping("getByUserId")
     public ResponseEntity<ResponseAllPendingBookingDto> getByUserId(@RequestParam int pageNo) {
         try {
@@ -147,3 +149,7 @@ public class PendingBookingController {
         }
     }
 }
+
+}
+
+

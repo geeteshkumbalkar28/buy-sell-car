@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CarRegisterImp implements ICarRegister {
+public class
+CarRegisterImp implements ICarRegister {
     @Autowired
     private CarRepo carRepo;
     @Autowired
@@ -38,7 +39,7 @@ public class CarRegisterImp implements ICarRegister {
     @Override
     public String AddCarDetails(CarDto carDto) {
 //        System.out.println(carDto.getDealer_id());
-        Dealer dealer=dealerRepo.findById(carDto.getDealer_id()).orElseThrow(()->new CarNotFoundException(("Dealer Not Found For ID "+carDto.getDealer_id()),HttpStatus.NOT_FOUND));
+        Dealer dealer=dealerRepo.findById(carDto.getDealer_id()).orElseThrow(()->new CarNotFoundException(("Dealer Not Found For ID" +carDto.getDealer_id()),HttpStatus.NOT_FOUND));
 //        System.out.println(dealer.toString());
 //        List<Car> dealerCar = new ArrayList<>();
 
@@ -74,9 +75,7 @@ public class CarRegisterImp implements ICarRegister {
     public String editCarDetails(CarDto carDto, int id) {
         System.err.println(carDto.getCarStatus()+""+id);
         Car car = carRepo.findById(id).orElseThrow(()->new CarNotFoundException(("car not found"),HttpStatus.NOT_FOUND));
-        System.err.println(car.toString());
 
-            System.err.println();
         car.setAcFeature(carDto.getAcFeature());
         car.setMusicFeature(carDto.getMusicFeature());
         car.setArea(carDto.getArea());

@@ -3,18 +3,11 @@ package com.spring.jwt.service;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
-import com.spring.jwt.entity.Booking;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
-
-import com.spring.jwt.entity.Status;
-import com.spring.jwt.exception.BookingNotFound;
-import com.spring.jwt.exception.CarNotFoundException;
-
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
-
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.PendingBookingRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
@@ -22,7 +15,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
