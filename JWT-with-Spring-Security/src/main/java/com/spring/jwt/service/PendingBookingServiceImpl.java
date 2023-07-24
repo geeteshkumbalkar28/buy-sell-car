@@ -28,6 +28,39 @@ import java.util.Optional;
         private final CarRepo carRepository;
 
 
+
+    @Override
+
+    public void deleteBooking(int id) {
+       Optional<PendingBooking> pendingBooking= pendingBookingRepository.findById(id);
+       if (pendingBooking.isPresent()){
+           pendingBookingRepository.deleteById(id);
+       }else {
+           throw new BookingNotFound("Booking not found");
+       }
+    }
+
+    @Override
+    public void statusUpdate(PendingBookingDTO pendingBookingDTO) {
+        Optional<PendingBooking> pendingBookingOptional= pendingBookingRepository.findById(pendingBookingDTO.getId());
+        if (pendingBookingOptional.isPresent()) {
+            PendingBooking pendingBooking = pendingBookingOptional.get();
+            pendingBooking.setStatus(pendingBookingDTO.getStatus());
+            Optional<Car> carOptional = carRepository.findById(pendingBookingDTO.getCarId());
+            if (carOptional.isPresent()) {
+                Car car = carOptional.get();
+                car.setCarStatus(pendingBookingDTO.getStatus());
+                carRepository.save(car);
+            }else {
+                throw new CarNotFoundException("No car found with this id");
+            }
+            pendingBookingRepository.save(pendingBooking);
+        }else {
+            throw new BookingNotFound("Booking not found");
+        }
+    }
+
+
     public List<PendingBookingDTO> getAllPendingBookingWithPage(int PageNo) {
 
         List<PendingBooking> listofPendingBooking = pendingBookingRepository.findAll();
@@ -36,7 +69,7 @@ import java.util.Optional;
 
         }
         if(listofPendingBooking.size()<=0){throw new CarNotFoundException("Pending Booking not found", HttpStatus.NOT_FOUND);}
-//        System.out.println("list of de"+listOfCar.size());
+
         List<PendingBookingDTO> listOfPendingBookingdto = new ArrayList<>();
 
         int pageStart=PageNo*10;
@@ -45,7 +78,7 @@ import java.util.Optional;
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
             if(pageStart>listofPendingBooking.size()){break;}
 
-//            System.out.println("*");
+
             PendingBookingDTO pendingBookingDTO = new PendingBookingDTO (listofPendingBooking.get(counter));
             pendingBookingDTO.setCarId(listofPendingBooking.get(counter).getId());
             listOfPendingBookingdto.add(pendingBookingDTO);
@@ -72,7 +105,7 @@ import java.util.Optional;
         Optional<Car> optionalCar = carRepository.findById(pendingBookingDTO.getCarId());
         Car car = optionalCar.orElseThrow(() -> new EntityNotFoundException("Car not found"));
 
-        // Ensure dealerId is not null
+
         int dealerId = Objects.requireNonNullElse(pendingBookingDTO.getDealerId(), -1);
 
         PendingBooking pendingBooking = new PendingBooking();
@@ -80,7 +113,7 @@ import java.util.Optional;
         pendingBooking.setPrice(pendingBookingDTO.getPrice());
         pendingBooking.setStatus(pendingBookingDTO.getStatus());
         pendingBooking.setUserId(pendingBookingDTO.getUserId());
-        pendingBooking.setDealerId(dealerId); // Use the default value (-1) if dealerId is null
+        pendingBooking.setDealerId(dealerId);
         pendingBooking.setAskingPrice(pendingBookingDTO.getAskingPrice());
         pendingBooking.setCarCar(car);
         return pendingBooking;
