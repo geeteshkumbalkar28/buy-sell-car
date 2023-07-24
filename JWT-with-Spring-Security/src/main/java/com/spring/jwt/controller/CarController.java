@@ -14,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/car")
-public class CarController {
+public class
+CarController {
     @Autowired
     private ICarRegister iCarRegister;
 

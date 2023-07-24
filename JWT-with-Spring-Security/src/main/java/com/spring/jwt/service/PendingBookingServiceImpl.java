@@ -66,6 +66,11 @@ import java.util.Optional;
         return listOfPendingBookingdto;
     }
 
+    @Override
+    public List<PendingBookingDTO> getAllPendingBookingByUserIdWithPage(int PageNo) {
+        return null;
+    }
+
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {
         Optional<Car> optionalCar = carRepository.findById(pendingBookingDTO.getCarId());
