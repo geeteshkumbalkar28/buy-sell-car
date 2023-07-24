@@ -25,6 +25,8 @@ public class PendingBookingDTO {
     private Integer userId;
     private List<Booking> pendingBookings;
 
+    public PendingBookingDTO() {
+    }
 
     public PendingBookingDTO(PendingBooking pendingBooking) {
         this.date = pendingBooking.getDate();

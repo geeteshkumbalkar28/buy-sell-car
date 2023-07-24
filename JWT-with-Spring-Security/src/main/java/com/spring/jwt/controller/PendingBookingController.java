@@ -86,24 +86,28 @@ public class PendingBookingController {
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteBooking(@RequestParam int id){
+    public ResponseEntity<?> deleteBooking(@RequestParam int id) {
         try {
             pendingBookingService.deleteBooking(id);
             return ResponseEntity.status(HttpStatus.OK).body("Successful");
-        }catch (BookingNotFound e){
+        } catch (BookingNotFound e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unsuccessful");
         }
     }
 
     @PatchMapping("/bookingStatus")
-    public ResponseEntity<?> statusUpdate(@RequestBody PendingBookingDTO pendingBookingDTO){
+    public ResponseEntity<?> statusUpdate(@RequestBody PendingBookingDTO pendingBookingDTO) {
         try {
             pendingBookingService.statusUpdate(pendingBookingDTO);
             return ResponseEntity.status(HttpStatus.OK).body("Successful");
-        }catch (BookingNotFound | CarNotFoundException e){
+        } catch (BookingNotFound | CarNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unsuccessful");
 
-    @GetMapping("getAllpendingBookings")
+        }
+
+    }
+
+    @GetMapping("/getAllpendingBookings")
     public ResponseEntity<ResponseAllPendingBookingDto> getAllpendingBookings(@RequestParam int pageNo) {
         try {
             List<PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingWithPage(pageNo);
@@ -115,34 +119,31 @@ public class PendingBookingController {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
             responseAllPendingBookingDto.setException("Pending Booking not faund");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
-        }
-        catch (PageNotFoundException pageNotFoundException){
+        } catch (PageNotFoundException pageNotFoundException) {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
             responseAllPendingBookingDto.setException("page not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
 
         }
+
+
     }
+
     @GetMapping("getByUserId")
-    public ResponseEntity<ResponseAllPendingBookingDto> getByUserId(@RequestParam int pageNo)
-    {
-        try
-        {List<PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingWithPage(pageNo);
+    public ResponseEntity<ResponseAllPendingBookingDto> getByUserId(@RequestParam int pageNo) {
+        try {
+            List<PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingWithPage(pageNo);
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("success");
             responseAllPendingBookingDto.setList(listOfPendingBooking);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllPendingBookingDto);
-        }catch (CarNotFoundException carNotFoundException) {
+        } catch (CarNotFoundException carNotFoundException) {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
             responseAllPendingBookingDto.setException("Pending Booking not faund");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
-        }
-        catch (PageNotFoundException pageNotFoundException){
+        } catch (PageNotFoundException pageNotFoundException) {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
             responseAllPendingBookingDto.setException("page not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
         }
-
-
-}}
-
-
+    }
+}

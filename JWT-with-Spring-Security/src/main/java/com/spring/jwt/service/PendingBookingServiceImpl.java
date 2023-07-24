@@ -36,11 +36,6 @@ import java.util.Optional;
         private final CarRepo carRepository;
 
 
-    @Override
-    public PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO) {
-        PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
-        return pendingBookingRepository.save(pendingBooking);
-    }
 
     @Override
 
@@ -82,7 +77,7 @@ import java.util.Optional;
 
         }
         if(listofPendingBooking.size()<=0){throw new CarNotFoundException("Pending Booking not found", HttpStatus.NOT_FOUND);}
-//        System.out.println("list of de"+listOfCar.size());
+
         List<PendingBookingDTO> listOfPendingBookingdto = new ArrayList<>();
 
         int pageStart=PageNo*10;
@@ -91,7 +86,7 @@ import java.util.Optional;
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
             if(pageStart>listofPendingBooking.size()){break;}
 
-//            System.out.println("*");
+
             PendingBookingDTO pendingBookingDTO = new PendingBookingDTO (listofPendingBooking.get(counter));
             pendingBookingDTO.setCarId(listofPendingBooking.get(counter).getId());
             listOfPendingBookingdto.add(pendingBookingDTO);
@@ -108,13 +103,17 @@ import java.util.Optional;
         return null;
     }
 
-
+    @Override
+    public PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO) {
+        PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
+        return pendingBookingRepository.save(pendingBooking);
+    }
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {
         Optional<Car> optionalCar = carRepository.findById(pendingBookingDTO.getCarId());
         Car car = optionalCar.orElseThrow(() -> new EntityNotFoundException("Car not found"));
 
-        // Ensure dealerId is not null
+
         int dealerId = Objects.requireNonNullElse(pendingBookingDTO.getDealerId(), -1);
 
         PendingBooking pendingBooking = new PendingBooking();
@@ -122,7 +121,7 @@ import java.util.Optional;
         pendingBooking.setPrice(pendingBookingDTO.getPrice());
         pendingBooking.setStatus(pendingBookingDTO.getStatus());
         pendingBooking.setUserId(pendingBookingDTO.getUserId());
-        pendingBooking.setDealerId(dealerId); // Use the default value (-1) if dealerId is null
+        pendingBooking.setDealerId(dealerId);
         pendingBooking.setAskingPrice(pendingBookingDTO.getAskingPrice());
         pendingBooking.setCarCar(car);
         return pendingBooking;
