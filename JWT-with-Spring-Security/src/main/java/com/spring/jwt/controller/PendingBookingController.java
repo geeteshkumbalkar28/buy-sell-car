@@ -8,7 +8,6 @@ import com.spring.jwt.dto.ResponceDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
-import com.spring.jwt.exception.DealerNotFoundException;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
@@ -55,7 +54,7 @@ public class PendingBookingController {
 
                 carRepo.save(car);
 
-                // Create a DTO for the response
+
                 CarDto carDto = mapToCarDto(car, dealer);
                 ResponceDto responseDto = new ResponceDto("Car booking request is pending.", carDto);
                 return ResponseEntity.ok(responseDto);

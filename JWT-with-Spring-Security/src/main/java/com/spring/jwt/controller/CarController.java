@@ -69,10 +69,8 @@ public class CarController {
 
         }
     }
-//    @GetMapping("/getAllCars")
-//    public List<CarDto> getAllCars(@RequestParam int pageNo){
-//        return iCarRegister.getAllCarsWithPages(pageNo);
-//    }
+
+
     @DeleteMapping("/removeCar")
     public ResponseEntity<ResponseDto> deleteCar(@RequestParam int carId){
         try {

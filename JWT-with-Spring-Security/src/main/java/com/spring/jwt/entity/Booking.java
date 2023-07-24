@@ -21,7 +21,7 @@ public class Booking {
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "pending_booking_pending_booking", nullable = false)
-    private PendingBooking pendingBookingPendingBooking;
+    @JoinColumn(name = "pending_booking")
+    private PendingBooking pendingBooking;
 
 }

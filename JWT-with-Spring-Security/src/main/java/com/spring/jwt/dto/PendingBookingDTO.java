@@ -25,18 +25,5 @@ public class PendingBookingDTO {
     private Integer userId;
     private List<Booking> pendingBookings;
 
-
-    public PendingBookingDTO(PendingBooking pendingBooking) {
-        this.date = pendingBooking.getDate();
-        this.price = pendingBooking.getPrice();
-        this.askingPrice = pendingBooking.getAskingPrice();
-        this.status = pendingBooking.getStatus();
-        this.carId = pendingBooking.getId();
-        this.dealerId = pendingBooking.getDealerId();
-        this.userId = pendingBooking.getUserId();
-        this.pendingBookings = pendingBooking.getBookings();
-    }
-
-
 }
 
