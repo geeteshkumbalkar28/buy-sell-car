@@ -85,7 +85,6 @@ public class PendingBookingController {
     }
 
 
- Ash99
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBooking(@RequestParam int id) {
         try {
