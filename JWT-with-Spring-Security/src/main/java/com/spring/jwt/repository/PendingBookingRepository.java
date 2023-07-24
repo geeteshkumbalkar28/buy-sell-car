@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PendingBookingRepository extends JpaRepository<PendingBooking, Integer> {
 
+
 }
 
