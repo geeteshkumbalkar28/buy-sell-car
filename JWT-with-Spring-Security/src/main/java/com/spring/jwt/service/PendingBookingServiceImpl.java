@@ -3,18 +3,11 @@ package com.spring.jwt.service;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
-import com.spring.jwt.entity.Booking;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
 import com.spring.jwt.entity.PendingBooking;
-
-import com.spring.jwt.entity.Status;
-import com.spring.jwt.exception.BookingNotFound;
-import com.spring.jwt.exception.CarNotFoundException;
-
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
-
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.PendingBookingRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
@@ -22,7 +15,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,44 +26,6 @@ import java.util.Optional;
 
         private final PendingBookingRepository pendingBookingRepository;
         private final CarRepo carRepository;
-
-
-    @Override
-    public PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO) {
-        PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
-        return pendingBookingRepository.save(pendingBooking);
-    }
-
-    @Override
-
-    public void deleteBooking(int id) {
-       Optional<PendingBooking> pendingBooking= pendingBookingRepository.findById(id);
-       if (pendingBooking.isPresent()){
-           pendingBookingRepository.deleteById(id);
-       }else {
-           throw new BookingNotFound("Booking not found");
-       }
-    }
-
-    @Override
-    public void statusUpdate(PendingBookingDTO pendingBookingDTO) {
-        Optional<PendingBooking> pendingBookingOptional= pendingBookingRepository.findById(pendingBookingDTO.getId());
-        if (pendingBookingOptional.isPresent()) {
-            PendingBooking pendingBooking = pendingBookingOptional.get();
-            pendingBooking.setStatus(pendingBookingDTO.getStatus());
-            Optional<Car> carOptional = carRepository.findById(pendingBookingDTO.getCarId());
-            if (carOptional.isPresent()) {
-                Car car = carOptional.get();
-                car.setCarStatus(pendingBookingDTO.getStatus());
-                carRepository.save(car);
-            }else {
-                throw new CarNotFoundException("No car found with this id");
-            }
-            pendingBookingRepository.save(pendingBooking);
-        }else {
-            throw new BookingNotFound("Booking not found");
-        }
-    }
 
 
     public List<PendingBookingDTO> getAllPendingBookingWithPage(int PageNo) {
@@ -108,7 +62,11 @@ import java.util.Optional;
         return null;
     }
 
-
+    @Override
+    public PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO) {
+        PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
+        return pendingBookingRepository.save(pendingBooking);
+    }
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {
         Optional<Car> optionalCar = carRepository.findById(pendingBookingDTO.getCarId());

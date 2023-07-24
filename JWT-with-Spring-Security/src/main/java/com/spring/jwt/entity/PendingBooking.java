@@ -6,9 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -43,10 +42,10 @@ public class PendingBooking {
 
     @ManyToOne
     @JoinColumn(name = "car_car_id")
-    @JsonIgnore // Add this annotation to break the bidirectional relationship
+    @JsonIgnore
     private Car carCar;
 
-    @OneToMany(mappedBy = "pendingBookingPendingBooking")
+    @OneToMany(mappedBy = "pendingBooking")
     private List<Booking> bookings;
 
 

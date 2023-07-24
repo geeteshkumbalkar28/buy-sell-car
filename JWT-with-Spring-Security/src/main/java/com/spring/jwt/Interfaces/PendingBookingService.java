@@ -12,10 +12,6 @@ public interface PendingBookingService {
     PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO);
 
 
-    void deleteBooking(int id);
-
-    void statusUpdate(PendingBookingDTO pendingBookingDTO);
-
    List<PendingBookingDTO> getAllPendingBookingWithPage(int PageNo);
 
    List<PendingBookingDTO>getAllPendingBookingByUserIdWithPage(int PageNo);

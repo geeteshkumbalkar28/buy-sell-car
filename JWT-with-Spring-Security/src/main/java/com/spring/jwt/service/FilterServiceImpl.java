@@ -60,7 +60,7 @@ public class FilterServiceImpl implements FilterService {
         };
 //        spec
 
-        Pageable pageable = PageRequest.of(pageNo - 1, 5);
+        Pageable pageable = PageRequest.of(pageNo  -0, 10);
 
         Page<Car> carPage = carRepo.findAll(spec, pageable);
         if(carPage.isEmpty()){
