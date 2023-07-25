@@ -75,10 +75,15 @@ public class PendingBookingController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBooking(@RequestParam int id) {
         try {
+
             pendingBookingService.deleteBooking(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Successful");
+            DeleteResponseDto dto = new DeleteResponseDto("success");
+
+            return ResponseEntity.status(HttpStatus.OK).body(dto);
         } catch (BookingNotFound e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Unsuccessful");
+            DeleteResponseDto dto = new DeleteResponseDto("unsuccess");
+            dto.setException(String.valueOf(e));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
         }
     }
 
