@@ -38,5 +38,6 @@ public class PendingBookingDTO {
         this.userId = pendingBooking.getUserId();
         this.status = String.valueOf(pendingBooking.getStatus());
         this.askingPrice = pendingBooking.getAskingPrice();
+        this.dealerId = pendingBooking.getDealerId();
     }
 }
