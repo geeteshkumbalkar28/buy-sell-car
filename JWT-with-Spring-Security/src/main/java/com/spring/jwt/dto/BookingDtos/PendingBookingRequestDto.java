@@ -1,6 +1,5 @@
 package com.spring.jwt.dto.BookingDtos;
 
-import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Status;
 import lombok.Data;
@@ -56,7 +55,7 @@ public class PendingBookingRequestDto {
 
     private int year;
 
-    private PendingBookingResponseDealerDto pendingBookingResponseDealerDto;
+    private DealerDetails dealerDetails;
 
     private int dealer_id;
 
