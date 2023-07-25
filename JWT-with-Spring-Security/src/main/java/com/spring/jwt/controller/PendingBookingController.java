@@ -12,6 +12,7 @@ import com.spring.jwt.exception.*;
 import com.spring.jwt.repository.CarRepo;
 import com.spring.jwt.repository.DealerRepository;
 import com.spring.jwt.Interfaces.PendingBookingService;
+import com.spring.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,10 @@ public class PendingBookingController {
 
     private final DealerRepository dealerRepository;
 
+    private final UserRepository userRepository;
+
     private final PendingBookingService pendingBookingService;
+
 
     @PostMapping("/request")
     public ResponseEntity<ResponceDto> requestCarBooking(@RequestBody PendingBookingDTO pendingBookingDTO) {
@@ -127,20 +131,27 @@ public class PendingBookingController {
 
 
     @GetMapping("getByUserId")
-    public ResponseEntity<ResponseAllPendingBookingDto> getByUserId(@RequestParam int pageNo) {
+    public ResponseEntity<?> getByUserId(@RequestParam int pageNo,@RequestParam int userId) {
         try {
-            List<PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingWithPage(pageNo);
-            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("success");
-            responseAllPendingBookingDto.setList(listOfPendingBooking);
-            return ResponseEntity.status(HttpStatus.OK).body(responseAllPendingBookingDto);
-        } catch (CarNotFoundException carNotFoundException) {
+            List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingByUserId(pageNo,userId);
+
+            AllPendingBookingResponseDTO allPendingBookingResponseDTO = new AllPendingBookingResponseDTO("success");
+            allPendingBookingResponseDTO.setList(listOfPendingBooking);
+
+            return ResponseEntity.status(HttpStatus.OK).body(allPendingBookingResponseDTO);
+        } catch (BookingNotFoundException bookingNotFoundException) {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
-            responseAllPendingBookingDto.setException("Pending Booking not faund");
+            responseAllPendingBookingDto.setException(String.valueOf(bookingNotFoundException));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
         } catch (PageNotFoundException pageNotFoundException) {
             ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
-            responseAllPendingBookingDto.setException("page not found");
+            responseAllPendingBookingDto.setException(String.valueOf(pageNotFoundException));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+        }catch (UserNotFoundExceptions userNotFoundExceptions){
+            ResponseAllPendingBookingDto responseAllPendingBookingDto = new ResponseAllPendingBookingDto("unsuccess");
+            responseAllPendingBookingDto.setException(String.valueOf(userNotFoundExceptions));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllPendingBookingDto);
+
         }
     }
 
