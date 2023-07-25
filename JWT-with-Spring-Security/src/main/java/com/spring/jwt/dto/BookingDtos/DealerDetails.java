@@ -2,7 +2,8 @@ package com.spring.jwt.dto.BookingDtos;
 
 import com.spring.jwt.entity.Dealer;
 
-public class PendingBookingResponseDealerDto {
+
+public class DealerDetails {
     public String address;
     public int document;
     public String area;
@@ -16,10 +17,10 @@ public class PendingBookingResponseDealerDto {
     private Integer userId;
     private Boolean status;
 
-    public PendingBookingResponseDealerDto() {
+    public DealerDetails() {
     }
 
-    public PendingBookingResponseDealerDto(Dealer dealer) {
+    public DealerDetails(Dealer dealer) {
         this.address = dealer.getAddress();
         this.status=dealer.getStatus();
         this.area = dealer.getArea();

@@ -43,17 +43,17 @@ public class PendingBookingController {
             return ResponseEntity.status(HttpStatus.OK).body(pendingBooking);
 
         }catch (CarNotFoundException carNotFoundException){
-            ResponsePendingBookingRequestDto responsePendingBookingRequestDto = new ResponsePendingBookingRequestDto("success");
+            ResponsePendingBookingRequestDto responsePendingBookingRequestDto = new ResponsePendingBookingRequestDto("unsuccess");
             responsePendingBookingRequestDto.setException(String.valueOf(carNotFoundException));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responsePendingBookingRequestDto);
 
         }catch (UserNotFoundExceptions userNotFoundExceptions){
-            ResponsePendingBookingRequestDto responsePendingBookingRequestDto = new ResponsePendingBookingRequestDto("success");
+            ResponsePendingBookingRequestDto responsePendingBookingRequestDto = new ResponsePendingBookingRequestDto("unsuccess");
             responsePendingBookingRequestDto.setException(String.valueOf(userNotFoundExceptions));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responsePendingBookingRequestDto);
 
         }catch (DealerNotFoundException dealerNotFoundException){
-            ResponsePendingBookingRequestDto responsePendingBookingRequestDto = new ResponsePendingBookingRequestDto("success");
+            ResponsePendingBookingRequestDto responsePendingBookingRequestDto = new ResponsePendingBookingRequestDto("unsuccess");
             responsePendingBookingRequestDto.setException(String.valueOf(dealerNotFoundException));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responsePendingBookingRequestDto);
 
@@ -117,7 +117,7 @@ public class PendingBookingController {
     }
 
 
-    @GetMapping("getByUserId")
+    @GetMapping("/getByUserId")
     public ResponseEntity<?> getByUserId(@RequestParam int pageNo,@RequestParam int userId) {
         try {
             List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingByUserId(pageNo,userId);
@@ -142,7 +142,7 @@ public class PendingBookingController {
         }
     }
 
-    @GetMapping("/getpendingBookingDeatailsById")
+    @GetMapping("/getPendingBookingDetailsById")
     public ResponseEntity<?> getBookingDetailsById(@RequestParam int bookingId) {
         try {
             com.spring.jwt.dto.BookingDtos.PendingBookingDTO pendingBookingDTO = pendingBookingService.getPendingBookingId(bookingId);
@@ -156,7 +156,7 @@ public class PendingBookingController {
 
         }
     }
-    @GetMapping("/getPendingBookingDeatilsByDealerID")
+    @GetMapping("/getPendingBookingDetailsByDealerID")
     public ResponseEntity<?> getBookingDetailsByDealerId(@RequestParam int pageNo,@RequestParam int dealerId) {
         try {
             List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getPendingBookingsByDealerId(pageNo,dealerId);
@@ -180,7 +180,7 @@ public class PendingBookingController {
 
         }
     }
-    @GetMapping("/getPendingBookingDeatilsByCarID")
+    @GetMapping("/getPendingBookingDetailsByCarID")
     public ResponseEntity<?> getBookingDetailsByCarId(@RequestParam int pageNo,@RequestParam int CarId) {
         try {
 

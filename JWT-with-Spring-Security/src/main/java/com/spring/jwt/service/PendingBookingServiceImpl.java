@@ -1,8 +1,7 @@
 package com.spring.jwt.service;
 
 import com.spring.jwt.dto.BookingDtos.PendingBookingRequestDto;
-import com.spring.jwt.dto.BookingDtos.PendingBookingResponseDealerDto;
-import com.spring.jwt.dto.BookingDtos.PendingBookingResponseForSingleDealerDto;
+import com.spring.jwt.dto.BookingDtos.DealerDetails;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
@@ -125,8 +124,8 @@ public class PendingBookingServiceImpl implements PendingBookingService {
         pendingBookingRepository.save(pendingBooking);
 
         PendingBookingRequestDto pendingBookingRequestDto = new PendingBookingRequestDto(car.get());
-        PendingBookingResponseDealerDto pendingBookingResponseDealerDto = new PendingBookingResponseDealerDto(dealer.get());
-        pendingBookingRequestDto.setPendingBookingResponseDealerDto(pendingBookingResponseDealerDto);
+        DealerDetails dealerDetails = new DealerDetails(dealer.get());
+        pendingBookingRequestDto.setDealerDetails(dealerDetails);
         return pendingBookingRequestDto;
 
 
@@ -241,7 +240,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
     public List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> getAllPendingBookingByUserId(int pageNo, int userId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) {
-            throw new UserNotDealerException("User  not found by id");
+            throw new UserNotFoundExceptions("User  not found by id");
         }
         Optional<List<PendingBooking>> listofPendingBooking = pendingBookingRepository.getAllPendingBookingByUserId(userId);
         if ((pageNo * 10) > listofPendingBooking.get().size() - 1) {
