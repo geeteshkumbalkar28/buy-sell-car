@@ -11,25 +11,14 @@ public class PendingBookingDTO {
 
     private int pendingBookingId;
     private LocalDate date;
-
-
     private int price;
-
-
     private Integer dealerId;
     private Integer carId;
-
-
     private Integer userId;
-
-
     private String status;
-
     private int askingPrice;
-
     public PendingBookingDTO() {
     }
-
     public PendingBookingDTO(PendingBooking pendingBooking) {
         this.pendingBookingId = pendingBooking.getId();
         this.carId = pendingBooking.getCarCar().getId();
@@ -38,5 +27,6 @@ public class PendingBookingDTO {
         this.userId = pendingBooking.getUserId();
         this.status = String.valueOf(pendingBooking.getStatus());
         this.askingPrice = pendingBooking.getAskingPrice();
+        this.dealerId = pendingBooking.getDealerId();
     }
 }
