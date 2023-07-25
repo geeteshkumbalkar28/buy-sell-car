@@ -66,14 +66,13 @@ public class CarDto {
     private DealerDto dealer;
 
     private int dealer_id;
-
     private LocalDate date;
+
 
 
     public CarDto(Car car){
         this.acFeature = car.getAcFeature();
         this.musicFeature = car.getMusicFeature();
-        this.date=car.getDate();
         this.area = car.getArea();
         this.bodyType =car.getBodyType();
         this.brand = car.getBrand();
@@ -96,6 +95,7 @@ public class CarDto {
         this.tyre = car.getTyre();
         this.year = car.getYear();
         this.dealer_id=car.getDealerId();
+        this.date = car.getDate();
 
     }
 }

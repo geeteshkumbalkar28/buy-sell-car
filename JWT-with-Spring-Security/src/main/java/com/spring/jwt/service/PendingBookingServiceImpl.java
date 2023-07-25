@@ -39,8 +39,6 @@ public class PendingBookingServiceImpl implements PendingBookingService {
     @Autowired
     private DealerRepository dealerRepository;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
 
@@ -106,6 +104,8 @@ public class PendingBookingServiceImpl implements PendingBookingService {
 
         return listOfPendingBookingdto;
     }
+
+
 
 
     @Override
