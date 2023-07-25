@@ -1,20 +1,13 @@
-package com.spring.jwt.dto;
+package com.spring.jwt.dto.BookingDtos;
 
-
+import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class CarDto {
+public class PendingBookingRequestDto {
     private int carId;
 
     private Boolean acFeature;
@@ -63,16 +56,18 @@ public class CarDto {
 
     private int year;
 
-    private DealerDto dealer;
+    private PendingBookingResponseDealerDto pendingBookingResponseDealerDto;
 
     private int dealer_id;
+
     private LocalDate date;
 
 
-
-    public CarDto(Car car){
+    public PendingBookingRequestDto(Car car){
+        this.carId = car.getId();
         this.acFeature = car.getAcFeature();
         this.musicFeature = car.getMusicFeature();
+        this.date=car.getDate();
         this.area = car.getArea();
         this.bodyType =car.getBodyType();
         this.brand = car.getBrand();
@@ -95,7 +90,6 @@ public class CarDto {
         this.tyre = car.getTyre();
         this.year = car.getYear();
         this.dealer_id=car.getDealerId();
-        this.date = car.getDate();
 
     }
 }

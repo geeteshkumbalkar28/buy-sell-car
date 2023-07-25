@@ -1,5 +1,7 @@
 package com.spring.jwt.service;
 
+import com.spring.jwt.dto.BookingDtos.PendingBookingRequestDto;
+import com.spring.jwt.dto.BookingDtos.PendingBookingResponseDealerDto;
 import com.spring.jwt.dto.BookingDtos.PendingBookingResponseForSingleDealerDto;
 import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.DealerDto;
@@ -31,11 +33,12 @@ public class PendingBookingServiceImpl implements PendingBookingService {
 
     private final PendingBookingRepository pendingBookingRepository;
     private final CarRepo carRepository;
-    @Autowired
-    private DealerRepository dealerRepository;
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DealerRepository dealerRepository;
+
 
     @Override
 
@@ -103,10 +106,33 @@ public class PendingBookingServiceImpl implements PendingBookingService {
     }
 
 
+
+
     @Override
-    public PendingBooking savePendingBooking(PendingBookingDTO pendingBookingDTO) {
-        PendingBooking pendingBooking = mapToPendingBooking(pendingBookingDTO);
-        return pendingBookingRepository.save(pendingBooking);
+    public PendingBookingRequestDto savePendingBooking(PendingBookingDTO pendingBookingDTO) {
+        Optional<Car> car = carRepository.findById(pendingBookingDTO.getCarId());
+        if (car.isEmpty()){throw new CarNotFoundException("car not found by id");}
+
+        Optional<Dealer> dealer = dealerRepository.findById(car.get().getDealerId());
+        if(dealer.isEmpty()){throw new DealerNotFoundException("dealer not found by id");}
+
+        Optional<User> user=userRepository.findById(pendingBookingDTO.getUserId());
+        if(user.isEmpty()){throw new UserNotFoundExceptions("user not found by id");}
+
+        PendingBooking pendingBooking = new PendingBooking(pendingBookingDTO);
+        pendingBooking.setCarCar(car.get());
+        pendingBooking.setDealerId(pendingBookingDTO.getDealerId());
+        pendingBookingRepository.save(pendingBooking);
+
+        PendingBookingRequestDto pendingBookingRequestDto = new PendingBookingRequestDto(car.get());
+        PendingBookingResponseDealerDto pendingBookingResponseDealerDto = new PendingBookingResponseDealerDto(dealer.get());
+        pendingBookingRequestDto.setPendingBookingResponseDealerDto(pendingBookingResponseDealerDto);
+        return pendingBookingRequestDto;
+
+
+
+
+
     }
 
     private PendingBooking mapToPendingBooking(PendingBookingDTO pendingBookingDTO) {
