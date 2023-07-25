@@ -131,9 +131,9 @@ public class PendingBookingController {
 
 
     @GetMapping("getByUserId")
-    public ResponseEntity<?> getByUserId(@RequestParam int pageNo,@RequestParam int userid) {
+    public ResponseEntity<?> getByUserId(@RequestParam int pageNo,@RequestParam int userId) {
         try {
-            List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingByUserId(pageNo,userid);
+            List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBooking = pendingBookingService.getAllPendingBookingByUserId(pageNo,userId);
 
             AllPendingBookingResponseDTO allPendingBookingResponseDTO = new AllPendingBookingResponseDTO("success");
             allPendingBookingResponseDTO.setList(listOfPendingBooking);
