@@ -141,7 +141,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
 
         int dealerId = Objects.requireNonNullElse(pendingBookingDTO.getDealerId(), -1);
 
-        PendingBooking pendingBooking = new PendingBooking();
+        PendingBooking pendingBooking = new PendingBooking(pendingBookingDTO);
         pendingBooking.setDate(pendingBookingDTO.getDate());
         pendingBooking.setPrice(pendingBookingDTO.getPrice());
         pendingBooking.setStatus(pendingBookingDTO.getStatus());
