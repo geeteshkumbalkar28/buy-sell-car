@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface PendingBookingRepository extends JpaRepository<PendingBooking, Integer> {
         public Optional<List<PendingBooking>> findByDealerId(int dealerId);
 
+        void deleteByCarCarId(Integer carId);
+
+        List<PendingBooking> findByCarCarId(Integer carId);
         public Optional<List<PendingBooking>> getAllPendingBookingByUserId(int userId);
 }
 

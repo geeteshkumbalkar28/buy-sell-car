@@ -11,6 +11,7 @@ public interface ICarRegister {
     public List<CarDto> getAllCarsWithPages(int PageNo);
     public String deleteCar(int id);
 
+    CarDto getCarById(int carId);
 
 //    public Optional<List<Car>> FindByArea(String area);
 
@@ -18,4 +19,6 @@ public interface ICarRegister {
 
     public CarDto findById(int carId);
     List<CarDto> getCarsByDealerIdWithStatus(int dealerId, String status,int pageNo);
+
+    public String editCarDetails(CarDto carDto);
 }

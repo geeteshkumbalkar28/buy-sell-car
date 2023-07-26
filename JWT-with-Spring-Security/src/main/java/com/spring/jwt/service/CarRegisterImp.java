@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class
-CarRegisterImp implements ICarRegister {
+public class CarRegisterImp implements ICarRegister {
     @Autowired
     private CarRepo carRepo;
     @Autowired
@@ -153,27 +152,14 @@ CarRegisterImp implements ICarRegister {
         carRepo.deleteById(id);
         return "car details deleted";
     }
-//    @Override
-//    public Optional<List<Car>> FindByArea(String area) {
-//        Optional<List<Car>> cars = carRepo.FindByArea(area);
-//        if (cars.isPresent()) {
-//
-//            try {
-//
-//                return cars;
-//
-//            } catch (Exception r)
-//            {
-//                System.err.println(r);
-//            }
-//        } else {
-//            System.err.println("car is not present");
-//
-//        }
-////        System.out.println("11");
-////        return carRepo.FindByArea(area);
-//        return cars;
-//    }
+
+
+    @Override
+    public CarDto getCarById(int carId) {
+        Optional<Car> car = carRepo.findById(carId);
+        return car.map(CarDto::new).orElse(null);
+    }
+
     @Override
     public List<CarDto> searchByFilter(FilterDto filterDto, int pageNo) {
         Specification<Car> spec = (root, query, criteriaBuilder) -> {
@@ -266,6 +252,11 @@ CarRegisterImp implements ICarRegister {
 //        System.out.println(listOfCar);
         return listOfCarDto;
 
+    }
+
+    @Override
+    public String editCarDetails(CarDto carDto) {
+        return null;
     }
 
     private CarDto convertToDto(Car car) {

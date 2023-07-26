@@ -2,12 +2,12 @@ package com.spring.jwt.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spring.jwt.dto.DealerDto;
 import com.spring.jwt.dto.PendingBookingDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 @Getter
@@ -46,9 +46,6 @@ public class PendingBooking {
     @JsonIgnore
     private Car carCar;
 
-    @OneToMany(mappedBy = "pendingBooking")
-    private List<Booking> bookings;
-
     public PendingBooking(PendingBookingDTO pendingBookingDTO) {
         this.date = pendingBookingDTO.getDate();
         this.price = pendingBookingDTO.getPrice();
@@ -56,6 +53,10 @@ public class PendingBooking {
         this.userId = pendingBookingDTO.getUserId();
         this.status = pendingBookingDTO.getStatus();
         this.askingPrice = pendingBookingDTO.getAskingPrice();
-
     }
+
+    //    @OneToMany(mappedBy = "pendingBooking")
+//    private List<Booking> bookings;
+
+
 }

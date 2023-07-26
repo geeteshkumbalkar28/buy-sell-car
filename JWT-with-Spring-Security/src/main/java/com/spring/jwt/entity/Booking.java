@@ -3,6 +3,7 @@ package com.spring.jwt.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.time.LocalDate;
 
 @Data
@@ -18,10 +19,19 @@ public class Booking {
     private LocalDate date;
 
     @Column(name = "price", length = 45)
-    private int price;
+    private Integer price;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "pending_booking")
-    private PendingBooking pendingBooking;
+    @Column(name = "userId", length = 45)
+    private Integer userId;
+
+    @Column(name = "dealerId", length = 45)
+    private Integer dealerId;
+
+    @Column(name = "carId", length = 45)
+    private Integer carId;
+
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "pending_booking")
+//    private PendingBooking pendingBooking;
 
 }
