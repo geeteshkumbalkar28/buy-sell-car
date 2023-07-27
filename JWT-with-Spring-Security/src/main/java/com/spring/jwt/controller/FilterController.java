@@ -107,12 +107,12 @@ public class FilterController {
         catch (CarNotFoundException carNotFoundException){
 //            List<CarDto> emptyList;
             ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("unsuccess");
-            responseAllCarDto.setException("car not found");
+            responseAllCarDto.setException(String.valueOf(carNotFoundException));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
         }
         catch (PageNotFoundException pageNotFoundException){
             ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("unsuccess");
-            responseAllCarDto.setException("page not found");
+            responseAllCarDto.setException(String.valueOf(pageNotFoundException));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseAllCarDto);
         }
     }

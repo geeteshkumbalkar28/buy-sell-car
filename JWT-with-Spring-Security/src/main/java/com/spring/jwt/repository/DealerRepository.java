@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface DealerRepository extends JpaRepository<Dealer, Integer> {
     void deleteById(int dealerId);
     public Optional<Dealer> findByEmail(String email);
+
+
 }

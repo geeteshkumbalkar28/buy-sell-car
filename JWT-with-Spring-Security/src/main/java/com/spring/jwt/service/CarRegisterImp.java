@@ -108,8 +108,7 @@ public class CarRegisterImp implements ICarRegister {
 
     @Override
     public List<CarDto> getAllCarsWithPages(int PageNo) {
-        List<Car> listOfCar = carRepo.findAll();
-        CarNotFoundException carNotFoundException;
+        List<Car> listOfCar = carRepo.getPendingAndActivateCar();
         if((PageNo*10)>listOfCar.size()-1){
             throw new PageNotFoundException("page not found");
 
@@ -124,10 +123,12 @@ public class CarRegisterImp implements ICarRegister {
         for(int counter=pageStart,i=1;counter<pageEnd;counter++,i++){
             if(pageStart>listOfCar.size()){break;}
 
-//            System.out.println("*");
-            CarDto carDto = new CarDto(listOfCar.get(counter));
-            carDto.setCarId(listOfCar.get(counter).getId());
-            listOfCarDto.add(carDto);
+
+                CarDto carDto = new CarDto(listOfCar.get(counter));
+                carDto.setCarId(listOfCar.get(counter).getId());
+                listOfCarDto.add(carDto);
+
+
             if(diff == i){
                 break;
             }
