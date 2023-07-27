@@ -62,6 +62,12 @@ public class FilterServiceImpl implements FilterService {
                 predicates.add(criteriaBuilder.equal(root.get("fuelType"), filterDto.getFuelType()));
             }
 
+            Predicate statusPerdicate = criteriaBuilder. or (
+                    criteriaBuilder.equal(root.get("carStatus"), Status.ACTIVE),
+                    criteriaBuilder.equal(root.get("carStatus"), Status.PENDING)
+            );
+            predicates.add(statusPerdicate);
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
 //        spec
