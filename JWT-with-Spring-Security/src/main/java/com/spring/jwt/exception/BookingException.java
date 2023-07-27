@@ -8,7 +8,7 @@ public class BookingException extends RuntimeException{
 
     private HttpStatus httpStatus;
 
-    public BookingException(String message, HttpStatus httpStatus) {
+    public BookingException(String message) {
         this.message = message;
         this.httpStatus = httpStatus;
     }

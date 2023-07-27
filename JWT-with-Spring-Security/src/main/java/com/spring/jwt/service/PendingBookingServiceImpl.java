@@ -46,7 +46,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
         if (pendingBooking.isPresent()) {
             pendingBookingRepository.deleteById(id);
         } else {
-            throw new BookingNotFound("Booking not found");
+            throw new BookingNotFound("Booking not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -66,7 +66,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
             }
             pendingBookingRepository.save(pendingBooking);
         } else {
-            throw new BookingNotFound("Booking not found");
+            throw new BookingNotFound("Booking not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -165,7 +165,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
     public com.spring.jwt.dto.BookingDtos.PendingBookingDTO getPendingBookingId(int bookingId) {
         Optional<PendingBooking> pendingBooking = pendingBookingRepository.findById(bookingId);
         if (pendingBooking.isEmpty()) {
-            throw new BookingNotFoundException("pending booking not found");
+            throw new BookingNotFoundException("pending booking not found", HttpStatus.NOT_FOUND);
         }
         com.spring.jwt.dto.BookingDtos.PendingBookingDTO pendingBookingDTO = new com.spring.jwt.dto.BookingDtos.PendingBookingDTO(pendingBooking.get());
 
@@ -185,7 +185,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
 
         }
         if (listofPendingBooking.isEmpty()) {
-            throw new BookingNotFoundException("pending booking not found by dealer Id");
+            throw new BookingNotFoundException("pending booking not found by dealer Id", HttpStatus.NOT_FOUND);
         }
         List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBookingdto = new ArrayList<>();
         int pageStart = pageNo * 10;
@@ -217,7 +217,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
             throw new PageNotFoundException("page not found");
         }
         if (listofPendingBooking.isEmpty()) {
-            throw new BookingNotFoundException("pending booking not found by car Id");
+            throw new BookingNotFoundException("pending booking not found by car Id", HttpStatus.NOT_FOUND);
         }
         List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBookingdto = new ArrayList<>();
         int pageStart = pageNo * 10;
@@ -247,7 +247,7 @@ public class PendingBookingServiceImpl implements PendingBookingService {
             throw new PageNotFoundException("page not found");
         }
         if (listofPendingBooking.isEmpty()) {
-            throw new BookingNotFoundException("pending booking not found by User id");
+            throw new BookingNotFoundException("pending booking not found by User id", HttpStatus.NOT_FOUND);
         }
         List<com.spring.jwt.dto.BookingDtos.PendingBookingDTO> listOfPendingBookingdto = new ArrayList<>();
         int pageStart = pageNo * 10;

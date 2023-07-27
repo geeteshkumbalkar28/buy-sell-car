@@ -1,6 +1,8 @@
 package com.spring.jwt.entity;
 
 
+import com.spring.jwt.dto.BookingDto;
+import com.spring.jwt.dto.BookingResponse;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,5 +35,6 @@ public class Booking {
 //    @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //    @JoinColumn(name = "pending_booking")
 //    private PendingBooking pendingBooking;
+
 
 }
