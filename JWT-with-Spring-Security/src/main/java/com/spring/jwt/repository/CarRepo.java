@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CarRepo extends JpaRepository<Car,Integer> , JpaSpecificationExecutor<Car> {
+public interface CarRepo extends JpaRepository<Car, Integer>, JpaSpecificationExecutor<Car> {
 
     @Query(value = "SELECT * FROM car WHERE area = ?1", nativeQuery = true)
     Optional<List<Car>> FindByArea(@Param("area") String area);
@@ -25,6 +25,10 @@ public interface CarRepo extends JpaRepository<Car,Integer> , JpaSpecificationEx
 
     List<Car> findByDealerIdAndCarStatus(Integer dealerId, String carStatus);
 
+    @Query("SELECT c FROM Car c WHERE carStatus='active' OR carStatus='pending'")
+    public List<Car> getPendingAndActivateCar();
+
+    public Optional<List<Car>> getByDealerId(Integer dealerId);
 }
 
 

@@ -3,7 +3,9 @@ package com.spring.jwt.entity;
 public enum Status {
     PENDING("Pending"),
     ACTIVE("Active"),
-    SOLD("Sold");
+    SOLD("Sold"),
+    DEACTIVATE("Deactivate");
+
 
     private final String status;
 

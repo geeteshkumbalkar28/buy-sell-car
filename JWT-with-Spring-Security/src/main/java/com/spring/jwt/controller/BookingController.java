@@ -12,6 +12,7 @@ import com.spring.jwt.exception.BookingNotFound;
 import com.spring.jwt.exception.BookingNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/confirmBooking")
 public class BookingController {
 
+    @Autowired
     private final BookingService bookingService;
 
     @PostMapping("/book")

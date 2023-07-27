@@ -1,6 +1,7 @@
 package com.spring.jwt.controller;
 
 import com.spring.jwt.dto.*;
+import com.spring.jwt.dto.DealerResponseDtos.DealerStatusDto;
 import com.spring.jwt.exception.*;
 import com.spring.jwt.Interfaces.DealerService;
 import com.spring.jwt.utils.BaseResponseDTO;
@@ -129,6 +130,23 @@ public class DealerController {
             return ResponseEntity.status(HttpStatus.OK).body(id);
         }catch (EmailNotExistException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email Not Exist Exception");
+
+        }
+    }
+    @PatchMapping("/statusUpdate")
+    public ResponseEntity<DealerStatusDto> dealerStatusUpdate(@RequestParam Integer dealerId, @RequestParam Boolean status) {
+        try {
+            dealerService.updateStatus(dealerId, status);
+
+            DealerStatusDto dealerStatusDto = new DealerStatusDto("success");
+            dealerStatusDto.setMessage("dealer status updated");
+
+            return ResponseEntity.status(HttpStatus.OK).body(dealerStatusDto);
+        } catch (DealerNotFoundException dealerNotFoundException) {
+            DealerStatusDto dealerStatusDto = new DealerStatusDto("unsuccess");
+            dealerStatusDto.setException(String.valueOf(dealerNotFoundException));
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dealerStatusDto);
 
         }
     }
