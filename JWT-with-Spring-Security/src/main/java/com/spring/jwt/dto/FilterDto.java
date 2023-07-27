@@ -1,5 +1,6 @@
 package com.spring.jwt.dto;
 
+import com.spring.jwt.entity.Status;
 import lombok.*;
 
 @Data
