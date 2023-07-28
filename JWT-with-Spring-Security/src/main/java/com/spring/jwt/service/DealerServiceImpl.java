@@ -243,6 +243,7 @@ public class DealerServiceImpl implements DealerService {
         }
         else if(status == false){
             for (int counter=0;counter<carList.get().size();counter++){
+                if(carList.get().get(counter).getCarStatus().equals(Status.ACTIVE) || carList.get().get(counter).getCarStatus().equals(Status.PENDING))
                 carList.get().get(counter).setCarStatus(Status.DEACTIVATE);
 
             }
@@ -250,7 +251,8 @@ public class DealerServiceImpl implements DealerService {
         }else if(status == true){
 
             for (int counter=0;counter<carList.get().size();counter++){
-                carList.get().get(counter).setCarStatus(Status.ACTIVE);
+                if(carList.get().get(counter).getCarStatus().equals(Status.DEACTIVATE) || carList.get().get(counter).getCarStatus().equals(Status.PENDING))
+                    carList.get().get(counter).setCarStatus(Status.ACTIVE);
 
             }
             carRepo.saveAll(carList.get());
