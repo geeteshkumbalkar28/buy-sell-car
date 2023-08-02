@@ -2,6 +2,7 @@ package com.spring.jwt.controller;
 
 
 import com.spring.jwt.dto.*;
+import com.spring.jwt.entity.Status;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.Interfaces.ICarRegister;
@@ -123,12 +124,16 @@ CarController {
     @GetMapping("/dealer/{dealerId}/status/{carStatus}")
     public ResponseEntity<ResponseAllCarDto> getCarsByDealerIdAndStatus(
             @PathVariable("dealerId") Integer dealerId,
-            @PathVariable("carStatus") String carStatus,
+            @PathVariable("carStatus") Status carStatus,
             @RequestParam int pageNo
-    ) {
+    )
+    {
+
         try{
 
+
             List<CarDto> cars = iCarRegister.getCarsByDealerIdWithStatus(dealerId, carStatus,pageNo);
+
             ResponseAllCarDto responseAllCarDto = new ResponseAllCarDto("success");
             responseAllCarDto.setList(cars);
             return ResponseEntity.status(HttpStatus.OK).body(responseAllCarDto);

@@ -2,6 +2,7 @@ package com.spring.jwt.repository;
 
 
 import com.spring.jwt.entity.Car;
+import com.spring.jwt.entity.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -22,8 +23,9 @@ public interface CarRepo extends JpaRepository<Car, Integer>, JpaSpecificationEx
 
 //    @Query("SELECT c FROM Car c WHERE c.dealerId = :dealerId AND c.carStatus = :status")
 //    List<Car> findCarsByDealerIdAndStatus(@Param("dealerId") int dealerId, @Param("status") String status);
-
-    List<Car> findByDealerIdAndCarStatus(Integer dealerId, String carStatus);
+//    @Query("SELECT c FROM Car c WHERE dealerId = :dealerId and carStatus = 'pending'")
+//    @Query("SELECT c FROM Car c WHERE c.dealerId= :dealerId AND c.carStatus= :carStatus")
+    public List<Car> findByDealerIdAndCarStatus(int dealerId, Status carStatus);
 
     @Query("SELECT c FROM Car c WHERE carStatus='active' OR carStatus='pending'")
     public List<Car> getPendingAndActivateCar();

@@ -5,6 +5,7 @@ import com.spring.jwt.dto.CarDto;
 import com.spring.jwt.dto.FilterDto;
 import com.spring.jwt.entity.Car;
 import com.spring.jwt.entity.Dealer;
+import com.spring.jwt.entity.Status;
 import com.spring.jwt.exception.CarNotFoundException;
 import com.spring.jwt.exception.PageNotFoundException;
 import com.spring.jwt.repository.CarRepo;
@@ -224,8 +225,12 @@ public class CarRegisterImp implements ICarRegister {
         return carDto;
     }
     @Override
-    public List<CarDto> getCarsByDealerIdWithStatus(int dealerId, String status,int pageNo) {
+    public List<CarDto> getCarsByDealerIdWithStatus(int dealerId, Status status,int pageNo) {
+
+
         List<Car> listOfCar = carRepo.findByDealerIdAndCarStatus(dealerId, status);
+
+        System.err.println(listOfCar.size());
 
         if((pageNo*10)>listOfCar.size()-1){
             throw new PageNotFoundException("page not found");
