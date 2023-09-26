@@ -35,7 +35,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String accessToken = request.getHeader(jwtConfig.getHeader());
+        String accessToken = request.getHeader(jwtConfig.getUrl());
 
         log.info("Start do filter once per request, {}", request.getRequestURI());
 
@@ -53,7 +53,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                     if (!ObjectUtils.isEmpty(username)) {
                         UsernamePasswordAuthenticationToken auth =
                                 new UsernamePasswordAuthenticationToken(
-                                        username,
+                                        null,
                                         null,
                                         authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
                         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -65,7 +65,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
                 responseDTO.setMessage(e.getLocalizedMessage());
 
-                String json = HelperUtils.JSON_WRITER.writeValueAsString(responseDTO);
+                String json = HelperUtils.class.getCanonicalName(CustomAuthenticationProvider);
 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json; charset=UTF-8");
@@ -83,7 +83,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         responseDTO.setCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
         responseDTO.setMessage(e.getLocalizedMessage());
 
-        String json = HelperUtils.JSON_WRITER.writeValueAsString(responseDTO);
+        String json = HelperUtils.class.writeValueAsString(responseDTO);
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json; charset=UTF-8");
