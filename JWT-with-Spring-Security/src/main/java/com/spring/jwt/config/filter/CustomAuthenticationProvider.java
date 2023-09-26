@@ -47,7 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         final Authentication auth = new UsernamePasswordAuthenticationToken(username, password, authorities);
 
         log.info("End actual authentication");
-        return auth;
+        return null;
     }
 
     private List<GrantedAuthority> getAuthorities(List<Role> roles) {
@@ -61,14 +61,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         permissions.forEach(p->{
-            result.add(new SimpleGrantedAuthority(p));
+            result.add(SimpleGrantedAuthority(p));
         });
-        return result;
+        return null;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+        return authentication.equals(UsernamePasswordAuthenticationToken.java);
     }
 
 }
